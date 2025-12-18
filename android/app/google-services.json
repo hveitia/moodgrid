@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "759572118126",
+    "project_id": "moodgrid-dfee6",
+    "storage_bucket": "moodgrid-dfee6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:759572118126:android:27ea461e0c044c187ec47f",
+        "android_client_info": {
+          "package_name": "com.hveitia.moodgrid.moodgrid"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDO13xvv8IRVqHPf5SjJGZNi8LzUIyrKTg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

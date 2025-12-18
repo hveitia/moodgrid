@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
+import 'package:moodgrid/app/modules/auth/controllers/auth_controller.dart';
 import 'package:moodgrid/app/modules/home/controllers/home_controller.dart';
+import 'package:moodgrid/app/routes/app_routes.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -12,55 +15,51 @@ class HomeView extends GetView<HomeController> {
       appBar: AppBar(
         title: const Text('MoodGrid'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.file_upload),
-            onPressed: controller.exportData,
-            tooltip: 'Exportar datos',
-          ),
-          IconButton(
-            icon: const Icon(Icons.file_download),
-            onPressed: controller.importData,
-            tooltip: 'Importar datos',
-          ),
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              if (value == 'stats') {
-                _showStatistics(context);
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'stats',
-                child: Row(
-                  children: [
-                    Icon(Icons.bar_chart),
-                    SizedBox(width: 8),
-                    Text('Estadísticas'),
-                  ],
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: GestureDetector(
+              onTap: () => Get.toNamed(Routes.profile),
+              child: CircleAvatar(
+                backgroundColor: AppColors.moodExcellent,
+                child: Text(
+                  _getUserInitial(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ],
+            ),
           ),
         ],
       ),
+      drawer: _buildDrawer(),
       body: Obx(() {
         if (controller.isLoading.value && controller.records.isEmpty) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Leyenda de colores
-              _buildLegend(),
-              const SizedBox(height: 24),
+        return Column(
+          children: [
+            // Leyenda de colores
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: _buildLegend(),
+            ),
+            const SizedBox(height: 16),
 
-              // Matriz de vida
-              _buildMoodGrid(),
-            ],
-          ),
+            // Header fijo de días de la semana
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: _buildWeekdayHeader(),
+            ),
+            const SizedBox(height: 8),
+
+            // Matriz de vida scrolleable
+            Expanded(
+              child: _buildMoodGrid(),
+            ),
+          ],
         );
       }),
     );
@@ -114,26 +113,126 @@ class HomeView extends GetView<HomeController> {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
-    // Calcular cuántas semanas mostrar (últimas 52 semanas = 1 año)
-    const weeksToShow = 52;
+    // Determinar fecha de inicio basada en el primer registro o el mes actual
+    DateTime rangeStartDate;
 
-    // Calcular el primer día (hace 52 semanas desde hoy)
-    final startDate = today.subtract(Duration(days: weeksToShow * 7));
+    if (controller.records.isNotEmpty) {
+      // Si hay registros, usar el primer día del mes del primer registro
+      final firstRecord = controller.records.last;
+      rangeStartDate = DateTime(firstRecord.date.year, firstRecord.date.month, 1);
+    } else {
+      // Si no hay registros, usar el primer día del mes actual
+      rangeStartDate = DateTime(now.year, now.month, 1);
+    }
 
-    // Ajustar al lunes más cercano
-    final daysToMonday = (startDate.weekday - DateTime.monday) % 7;
-    final firstMonday = startDate.subtract(Duration(days: daysToMonday));
+    // Encontrar el lunes de la semana donde cae rangeStartDate
+    // weekday: 1=lunes, 2=martes, ..., 7=domingo
+    final daysFromMonday = rangeStartDate.weekday - DateTime.monday;
+    final firstMonday = rangeStartDate.subtract(Duration(days: daysFromMonday));
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Encabezado de días de la semana
-        _buildWeekdayHeader(),
-        const SizedBox(height: 8),
+    // Calcular cuántas semanas hay desde firstMonday hasta hoy
+    final daysDifference = today.difference(firstMonday).inDays;
+    final weeksToShow = (daysDifference / 7).ceil() + 1;
 
-        // Grid de semanas
-        _buildWeeksGrid(firstMonday, weeksToShow),
-      ],
+    // Agrupar semanas por mes
+    final monthBlocks = _groupWeeksByMonth(firstMonday, weeksToShow, rangeStartDate, today);
+
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      itemCount: monthBlocks.length,
+      itemBuilder: (context, index) {
+        final block = monthBlocks[index];
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Separador de mes
+            _buildMonthSeparator(block['month'] as DateTime),
+            const SizedBox(height: 12),
+
+            // Semanas del mes
+            ...block['weeks'].map((week) => Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: _buildWeekRow(week as DateTime, rangeStartDate),
+            )),
+
+            const SizedBox(height: 16),
+          ],
+        );
+      },
+    );
+  }
+
+  // Agrupar semanas por mes
+  List<Map<String, dynamic>> _groupWeeksByMonth(
+    DateTime firstMonday,
+    int weeksToShow,
+    DateTime rangeStartDate,
+    DateTime today,
+  ) {
+    final List<Map<String, dynamic>> monthBlocks = [];
+    DateTime? currentMonth;
+    List<DateTime> currentWeeks = [];
+
+    for (int weekIndex = 0; weekIndex < weeksToShow; weekIndex++) {
+      final weekStart = firstMonday.add(Duration(days: weekIndex * 7));
+
+      // Determinar el mes de esta semana (usar el primer día válido de la semana)
+      DateTime? weekMonth;
+      for (int dayIndex = 0; dayIndex < 7; dayIndex++) {
+        final date = weekStart.add(Duration(days: dayIndex));
+        if (!date.isBefore(rangeStartDate) && !date.isAfter(today)) {
+          weekMonth = DateTime(date.year, date.month, 1);
+          break;
+        }
+      }
+
+      if (weekMonth == null) continue;
+
+      // Si cambiamos de mes, crear nuevo bloque
+      if (currentMonth == null || currentMonth.month != weekMonth.month || currentMonth.year != weekMonth.year) {
+        if (currentMonth != null && currentWeeks.isNotEmpty) {
+          monthBlocks.add({
+            'month': currentMonth,
+            'weeks': List<DateTime>.from(currentWeeks),
+          });
+        }
+        currentMonth = weekMonth;
+        currentWeeks = [];
+      }
+
+      currentWeeks.add(weekStart);
+    }
+
+    // Agregar el último bloque
+    if (currentMonth != null && currentWeeks.isNotEmpty) {
+      monthBlocks.add({
+        'month': currentMonth,
+        'weeks': List<DateTime>.from(currentWeeks),
+      });
+    }
+
+    return monthBlocks;
+  }
+
+  // Construir separador de mes
+  Widget _buildMonthSeparator(DateTime month) {
+    final monthName = DateFormat('MMMM', 'es_ES').format(month);
+    final year = month.year;
+    final capitalizedMonth = monthName[0].toUpperCase() + monthName.substring(1);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      decoration: BoxDecoration(
+        color: AppColors.moodExcellent.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        '$capitalizedMonth - $year',
+        style: Get.textTheme.titleMedium?.copyWith(
+          color: AppColors.moodExcellent,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
     );
   }
 
@@ -157,28 +256,34 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  // Construir grid de semanas
-  Widget _buildWeeksGrid(DateTime firstMonday, int weeksToShow) {
-    return Column(
-      children: List.generate(weeksToShow, (weekIndex) {
-        final weekStart = firstMonday.add(Duration(days: weekIndex * 7));
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 4),
-          child: _buildWeekRow(weekStart),
+  // Construir fila de semana
+  Widget _buildWeekRow(DateTime weekStart, DateTime rangeStartDate) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    return Row(
+      children: List.generate(7, (dayIndex) {
+        final date = weekStart.add(Duration(days: dayIndex));
+        final isBeforeRange = date.isBefore(rangeStartDate);
+        final isAfterToday = date.isAfter(today);
+
+        return Expanded(
+          child: isBeforeRange || isAfterToday
+              ? _buildEmptyCell()
+              : _buildDayCell(date),
         );
       }),
     );
   }
 
-  // Construir fila de semana
-  Widget _buildWeekRow(DateTime weekStart) {
-    return Row(
-      children: List.generate(7, (dayIndex) {
-        final date = weekStart.add(Duration(days: dayIndex));
-        return Expanded(
-          child: _buildDayCell(date),
-        );
-      }),
+  // Construir celda vacía
+  Widget _buildEmptyCell() {
+    return Container(
+      margin: const EdgeInsets.all(2),
+      child: const AspectRatio(
+        aspectRatio: 1,
+        child: SizedBox.shrink(),
+      ),
     );
   }
 
@@ -190,13 +295,12 @@ class HomeView extends GetView<HomeController> {
     final isToday = date.year == today.year &&
         date.month == today.month &&
         date.day == today.day;
-    final isFuture = date.isAfter(today);
 
     final colorIndex = record?.colorIndex ?? 5;
-    final cellColor = isFuture ? Colors.transparent : AppColors.getMoodColor(colorIndex);
+    final cellColor = AppColors.getMoodColor(colorIndex);
 
     return GestureDetector(
-      onTap: isFuture ? null : () => controller.showRecordDialog(date),
+      onTap: () => controller.showRecordDialog(date),
       child: Container(
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
@@ -205,7 +309,7 @@ class HomeView extends GetView<HomeController> {
           border: isToday
               ? Border.all(color: AppColors.textPrimary, width: 2)
               : Border.all(
-                  color: isFuture ? Colors.transparent : AppColors.divider,
+                  color: AppColors.divider,
                   width: 0.5,
                 ),
         ),
@@ -228,77 +332,63 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  // Mostrar estadísticas
-  void _showStatistics(BuildContext context) async {
-    final stats = await controller.getMoodStatistics();
-    final total = stats.values.reduce((a, b) => a + b);
+  Widget _buildDrawer() {
+    final authController = Get.find<AuthController>();
+    final email = authController.user?.email ?? 'Usuario';
 
-    Get.dialog(
-      AlertDialog(
-        title: const Text('Estadísticas'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Total de registros: $total',
-              style: Get.textTheme.titleMedium,
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: AppColors.moodExcellent,
             ),
-            const SizedBox(height: 16),
-            ...List.generate(5, (index) {
-              final count = stats[index] ?? 0;
-              final percentage = total > 0 ? (count / total * 100).toStringAsFixed(1) : '0.0';
-
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: AppColors.getMoodColor(index),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.white,
+                  child: Text(
+                    _getUserInitial(),
+                    style: TextStyle(
+                      color: AppColors.moodExcellent,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            AppColors.getMoodText(index),
-                            style: Get.textTheme.bodyMedium,
-                          ),
-                          const SizedBox(height: 4),
-                          LinearProgressIndicator(
-                            value: total > 0 ? count / total : 0,
-                            backgroundColor: AppColors.divider,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              AppColors.getMoodColor(index),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      '$count ($percentage%)',
-                      style: Get.textTheme.bodySmall,
-                    ),
-                  ],
+                  ),
                 ),
-              );
-            }),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cerrar'),
+                const SizedBox(height: 12),
+                Text(
+                  email,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.backup),
+            title: const Text('Respaldo de Datos'),
+            onTap: () {
+              Get.back();
+              Get.toNamed(Routes.backup);
+            },
           ),
         ],
       ),
     );
+  }
+
+  String _getUserInitial() {
+    final authController = Get.find<AuthController>();
+    final email = authController.user?.email ?? '';
+    if (email.isEmpty) return 'U';
+    return email[0].toUpperCase();
   }
 }
