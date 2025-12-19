@@ -1,9 +1,14 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:moodgrid/app/core/values/app_colors.dart';
 import 'package:moodgrid/app/data/models/daily_record.dart';
 import 'package:moodgrid/app/data/providers/database_helper.dart';
+import 'package:moodgrid/app/modules/home/widgets/month_export_widget.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -220,6 +225,82 @@ class HomeController extends GetxController {
     return await _databaseHelper.getMoodStatistics();
   }
 
+  // Verificar si hay registros en un mes
+  bool hasRecordsInMonth(DateTime month) {
+    return records.any((record) =>
+        record.date.year == month.year && record.date.month == month.month);
+  }
+
+  // Exportar mes como imagen
+  Future<void> exportMonthAsImage({
+    required DateTime month,
+    required List<DateTime> weeks,
+  }) async {
+    try {
+      isLoading.value = true;
+
+      // Crear controller de screenshot
+      final screenshotController = ScreenshotController();
+
+      // Calcular rangeStartDate
+      DateTime rangeStartDate;
+      if (records.isNotEmpty) {
+        final firstRecord = records.last;
+        rangeStartDate =
+            DateTime(firstRecord.date.year, firstRecord.date.month, 1);
+      } else {
+        final now = DateTime.now();
+        rangeStartDate = DateTime(now.year, now.month, 1);
+      }
+
+      // Capturar widget
+      final Uint8List imageBytes =
+          await screenshotController.captureFromWidget(
+        MonthExportWidget(
+          month: month,
+          weeks: weeks,
+          recordsMap: recordsMap,
+          rangeStartDate: rangeStartDate,
+        ),
+        pixelRatio: 3.0,
+        delay: const Duration(milliseconds: 10),
+      );
+
+      // Guardar en archivo temporal
+      final tempDir = await getTemporaryDirectory();
+      final monthName = DateFormat('MMMM', 'es_ES').format(month);
+      final fileName = 'moodgrid_${monthName}_${month.year}.png';
+      final file = File('${tempDir.path}/$fileName');
+      await file.writeAsBytes(imageBytes);
+
+      // Compartir archivo
+      await Share.shareXFiles(
+        [XFile(file.path)],
+        subject: 'MoodGrid - $monthName ${month.year}',
+        text: 'Mi registro de estado de ánimo de $monthName ${month.year}',
+      );
+
+      Get.snackbar(
+        'Éxito',
+        'Imagen exportada correctamente',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green.shade400,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 2),
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Error al exportar imagen: $e',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red.shade400,
+        colorText: Colors.white,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   // Mostrar diálogo de registro
   void showRecordDialog(DateTime date) {
     selectedDate.value = _getDateKey(date);
@@ -270,6 +351,7 @@ class HomeController extends GetxController {
                       'Mal'
                     ];
                     final isSelected = selectedMoodIndex == index;
+                    final moodColor = AppColors.getMoodColor(index);
 
                     return ChoiceChip(
                       label: Text(moods[index]),
@@ -279,6 +361,12 @@ class HomeController extends GetxController {
                           selectedMoodIndex = selected ? index : null;
                         });
                       },
+                      selectedColor: moodColor,
+                      backgroundColor: moodColor.withValues(alpha: 0.3),
+                      labelStyle: TextStyle(
+                        color: isSelected ? Colors.white : Colors.black87,
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                      ),
                     );
                   }),
                 ),

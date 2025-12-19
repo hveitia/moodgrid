@@ -42,10 +42,8 @@ class HomeView extends GetView<HomeController> {
         return Column(
           children: [
             // Leyenda de colores
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-              child: _buildLegend(),
-            ),
+            const SizedBox(height: 8),
+            _buildLegend(),
             const SizedBox(height: 16),
 
             // Header fijo de días de la semana
@@ -69,7 +67,7 @@ class HomeView extends GetView<HomeController> {
   Widget _buildLegend() {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -146,7 +144,10 @@ class HomeView extends GetView<HomeController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Separador de mes
-            _buildMonthSeparator(block['month'] as DateTime),
+            _buildMonthSeparator(
+              block['month'] as DateTime,
+              block['weeks'] as List<dynamic>,
+            ),
             const SizedBox(height: 12),
 
             // Semanas del mes
@@ -215,10 +216,11 @@ class HomeView extends GetView<HomeController> {
   }
 
   // Construir separador de mes
-  Widget _buildMonthSeparator(DateTime month) {
+  Widget _buildMonthSeparator(DateTime month, List<dynamic> weeks) {
     final monthName = DateFormat('MMMM', 'es_ES').format(month);
     final year = month.year;
     final capitalizedMonth = monthName[0].toUpperCase() + monthName.substring(1);
+    final hasRecords = controller.hasRecordsInMonth(month);
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -226,19 +228,40 @@ class HomeView extends GetView<HomeController> {
         color: AppColors.moodExcellent.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Text(
-        '$capitalizedMonth - $year',
-        style: Get.textTheme.titleMedium?.copyWith(
-          color: AppColors.moodExcellent,
-          fontWeight: FontWeight.w600,
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Text(
+              '$capitalizedMonth - $year',
+              style: Get.textTheme.titleMedium?.copyWith(
+                color: AppColors.moodExcellent,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          if (hasRecords)
+            IconButton(
+              icon: const Icon(Icons.share, size: 30),
+              color: AppColors.moodExcellent,
+              tooltip: 'Exportar mes',
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+              onPressed: () {
+                controller.exportMonthAsImage(
+                  month: month,
+                  weeks: weeks.cast<DateTime>(),
+                );
+              },
+            ),
+        ],
       ),
     );
   }
 
   // Construir encabezado de días de la semana
   Widget _buildWeekdayHeader() {
-    final weekdays = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
+    final weekdays = ['LU', 'MA', 'MI', 'JU', 'VI', 'SA', 'DO'];
 
     return Row(
       children: weekdays.map((day) {
