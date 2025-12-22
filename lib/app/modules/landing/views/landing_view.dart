@@ -18,10 +18,11 @@ class LandingView extends StatelessWidget {
             children: [
               const Spacer(),
 
-              Icon(
-                Icons.grid_4x4,
-                size: 100,
-                color: AppColors.moodExcellent,
+              Image.asset(
+                'assets/moodgrid.png',
+                width: 120,
+                height: 120,
+                fit: BoxFit.contain,
               ),
               const SizedBox(height: 24),
 
@@ -36,7 +37,7 @@ class LandingView extends StatelessWidget {
               const SizedBox(height: 16),
 
               Text(
-                'Registra tu estado de ánimo día a día y visualiza patrones en tu bienestar emocional',
+                'Registra tu estado de ánimo día a día y visualiza patrones en tu bienestar emocional.',
                 style: Get.textTheme.bodyLarge?.copyWith(
                   color: AppColors.textSecondary,
                 ),

@@ -1,0 +1,17 @@
+# dart run icons_launcher:create
+
+icons_launcher:
+  platforms:
+    android:
+      enable: true
+      image_path: "assets/moodgrid.png"
+      notification_image: "assets/moodgrid.png"
+      adaptive_background_image: "assets/moodgrid.png"
+      adaptive_foreground_image: "assets/moodgrid.png"
+      adaptive_round_image: "assets/moodgrid.png"
+      adaptive_monochrome_image: "assets/moodgrid.png"
+    ios:
+      enable: true
+      image_path: "assets/moodgrid.png"
+      dark_path: "assets/moodgrid.png"
+      tinted_path: "assets/moodgrid.png"

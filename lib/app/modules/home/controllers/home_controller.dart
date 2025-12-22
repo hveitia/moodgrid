@@ -324,10 +324,27 @@ class HomeController extends GetxController {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Título
-                Text(
-                  DateFormat('EEEE, d MMMM yyyy', 'es_ES').format(date),
-                  style: Get.textTheme.titleLarge,
+                // Título con botón eliminar
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        DateFormat('EEEE, d MMMM yyyy', 'es_ES').format(date),
+                        style: Get.textTheme.titleLarge,
+                      ),
+                    ),
+                    if (existingRecord != null)
+                      IconButton(
+                        onPressed: () {
+                          Get.back();
+                          deleteRecord(date);
+                        },
+                        icon: const Icon(Icons.delete_outline),
+                        color: Colors.red,
+                        tooltip: 'Eliminar registro',
+                      ),
+                  ],
                 ),
                 const SizedBox(height: 24),
 
@@ -389,45 +406,27 @@ class HomeController extends GetxController {
 
                 // Botones de acción
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    if (existingRecord != null)
-                      TextButton.icon(
-                        onPressed: () {
-                          Get.back();
-                          deleteRecord(date);
-                        },
-                        icon: const Icon(Icons.delete),
-                        label: const Text('Eliminar'),
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.red,
-                        ),
-                      )
-                    else
-                      const SizedBox(),
-                    Row(
-                      children: [
-                        TextButton(
-                          onPressed: () => Get.back(),
-                          child: const Text('Cancelar'),
-                        ),
-                        const SizedBox(width: 8),
-                        ElevatedButton(
-                          onPressed: selectedMoodIndex == null
-                              ? null
-                              : () {
-                                  Get.back();
-                                  saveRecord(
-                                    date: date,
-                                    colorIndex: selectedMoodIndex!,
-                                    comment: commentController.text.isEmpty
-                                        ? null
-                                        : commentController.text,
-                                  );
-                                },
-                          child: const Text('Guardar'),
-                        ),
-                      ],
+                    TextButton(
+                      onPressed: () => Get.back(),
+                      child: const Text('Cancelar'),
+                    ),
+                    const SizedBox(width: 8),
+                    ElevatedButton(
+                      onPressed: selectedMoodIndex == null
+                          ? null
+                          : () {
+                              Get.back();
+                              saveRecord(
+                                date: date,
+                                colorIndex: selectedMoodIndex!,
+                                comment: commentController.text.isEmpty
+                                    ? null
+                                    : commentController.text,
+                              );
+                            },
+                      child: const Text('Guardar'),
                     ),
                   ],
                 ),

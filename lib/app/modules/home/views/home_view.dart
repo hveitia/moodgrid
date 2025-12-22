@@ -5,6 +5,7 @@ import 'package:moodgrid/app/core/values/app_colors.dart';
 import 'package:moodgrid/app/modules/auth/controllers/auth_controller.dart';
 import 'package:moodgrid/app/modules/home/controllers/home_controller.dart';
 import 'package:moodgrid/app/routes/app_routes.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -401,6 +402,24 @@ class HomeView extends GetView<HomeController> {
             onTap: () {
               Get.back();
               Get.toNamed(Routes.backup);
+            },
+          ),
+          const Divider(),
+          FutureBuilder<PackageInfo>(
+            future: PackageInfo.fromPlatform(),
+            builder: (context, snapshot) {
+              final version = snapshot.data?.version ?? '...';
+              final buildNumber = snapshot.data?.buildNumber ?? '...';
+              return Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  'Versión $version ($buildNumber)',
+                  style: Get.textTheme.bodySmall?.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              );
             },
           ),
         ],

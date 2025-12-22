@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
 import 'package:moodgrid/app/modules/auth/controllers/auth_controller.dart';
 import 'package:moodgrid/app/modules/profile/controllers/profile_controller.dart';
+import 'package:moodgrid/app/routes/app_routes.dart';
 
 class ProfileView extends GetView<ProfileController> {
   const ProfileView({super.key});
@@ -162,10 +163,10 @@ class ProfileView extends GetView<ProfileController> {
             child: const Text('Cancelar'),
           ),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               final authController = Get.find<AuthController>();
-              authController.signOut();
-              Get.back();
+              await authController.signOut();
+              Get.offAllNamed(Routes.landing);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
