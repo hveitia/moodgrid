@@ -580,7 +580,9 @@ class HomeView extends GetView<HomeController> {
               width: 28,
             ),
             const SizedBox(width: 12),
-            const Text('Acerca de MoodGrid'),
+            const Expanded(
+              child: Text('Acerca de MoodGrid'),
+            ),
           ],
         ),
         content: Column(

@@ -68,8 +68,10 @@ class _PinInputWidgetState extends State<PinInputWidget>
       _pin = '';
     });
     if (widget.onClear != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        widget.onClear?.call();
+      Future.delayed(const Duration(seconds: 2), () {
+        if (mounted) {
+          widget.onClear?.call();
+        }
       });
     }
   }
