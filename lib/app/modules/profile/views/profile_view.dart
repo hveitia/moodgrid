@@ -123,6 +123,19 @@ class ProfileView extends GetView<ProfileController> {
               ),
               const SizedBox(height: 24),
 
+              ElevatedButton.icon(
+                onPressed: () => Get.toNamed(Routes.securitySettings),
+                icon: const Icon(Icons.lock),
+                label: const Text('Seguridad'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
               OutlinedButton.icon(
                 onPressed: _showLogoutDialog,
                 icon: const Icon(Icons.logout),

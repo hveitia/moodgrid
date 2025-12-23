@@ -28,6 +28,10 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -36,5 +40,9 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>MoodGrid necesita acceso a tu biblioteca de fotos para permitirte importar archivos de respaldo de tus datos de estado de ánimo.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Usa Face ID para desbloquear tu diario de emociones de forma rápida y segura</string>
 </dict>
 </plist>

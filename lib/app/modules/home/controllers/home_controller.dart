@@ -162,10 +162,12 @@ class HomeController extends GetxController {
       );
 
       // Compartir archivo
-      await Share.shareXFiles(
-        [XFile(file.path)],
-        subject: 'MoodGrid Backup',
-        text: 'Respaldo de mis registros de MoodGrid',
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path)],
+          subject: 'MoodGrid Backup',
+          text: 'Respaldo de mis registros de MoodGrid',
+        ),
       );
     } catch (e) {
       Get.snackbar(
@@ -274,10 +276,12 @@ class HomeController extends GetxController {
       await file.writeAsBytes(imageBytes);
 
       // Compartir archivo
-      await Share.shareXFiles(
-        [XFile(file.path)],
-        subject: 'MoodGrid - $monthName ${month.year}',
-        text: 'Mi registro de estado de ánimo de $monthName ${month.year}',
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path)],
+          subject: 'MoodGrid - $monthName ${month.year}',
+          text: 'Mi registro de estado de ánimo de $monthName ${month.year}',
+        ),
       );
 
       Get.snackbar(

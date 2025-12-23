@@ -8,6 +8,9 @@ import 'package:moodgrid/app/modules/login/views/login_view.dart';
 import 'package:moodgrid/app/modules/profile/bindings/profile_binding.dart';
 import 'package:moodgrid/app/modules/profile/views/profile_view.dart';
 import 'package:moodgrid/app/modules/register/views/register_view.dart';
+import 'package:moodgrid/app/modules/security/bindings/security_binding.dart';
+import 'package:moodgrid/app/modules/security/views/pin_setup_view.dart';
+import 'package:moodgrid/app/modules/security/views/security_settings_view.dart';
 import 'package:moodgrid/app/routes/app_routes.dart';
 
 class AppPages {
@@ -52,6 +55,20 @@ class AppPages {
     GetPage(
       name: Routes.backup,
       page: () => const BackupView(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
+    ),
+    GetPage(
+      name: Routes.securitySettings,
+      page: () => const SecuritySettingsView(),
+      binding: SecurityBinding(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
+    ),
+    GetPage(
+      name: Routes.pinSetup,
+      page: () => const PinSetupView(),
+      binding: SecurityBinding(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 500),
     ),
