@@ -135,45 +135,6 @@ class SecuritySettingsView extends GetView<SecurityController> {
                 ),
               ),
             ),
-            if (controller.isSecurityEnabled.value &&
-                controller.isBiometricAvailable.value) ...[
-              const SizedBox(height: 24),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Autenticación Biométrica',
-                        style: Get.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Usa tu huella o Face ID para desbloquear más rápido',
-                        style: Get.textTheme.bodyMedium?.copyWith(
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      const Divider(),
-                      SwitchListTile(
-                        title: const Text('Usar Biometría'),
-                        subtitle: controller.isBiometricEnabled.value
-                            ? const Text('Desbloqueo con biometría activado')
-                            : const Text('Usa tu huella o Face ID'),
-                        value: controller.isBiometricEnabled.value,
-                        onChanged: (value) {
-                          controller.toggleBiometric(value);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
             const SizedBox(height: 24),
             Card(
               color: Colors.blue[50],

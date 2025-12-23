@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:moodgrid/app/modules/auth/controllers/auth_controller.dart';
 import 'package:moodgrid/app/modules/security/controllers/security_controller.dart';
-import 'package:moodgrid/app/modules/security/widgets/biometric_button_widget.dart';
 import 'package:moodgrid/app/modules/security/widgets/pin_input_widget.dart';
 
 class LockScreenView extends GetView<SecurityController> {
@@ -23,40 +22,7 @@ class _LockScreenContent extends StatefulWidget {
 
 class _LockScreenContentState extends State<_LockScreenContent> {
   String? errorText;
-  bool isBiometricLoading = false;
   bool showingForgotPinConfirmation = false;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _tryBiometricAuth();
-    });
-  }
-
-  Future<void> _tryBiometricAuth() async {
-    final controller = Get.find<SecurityController>();
-    if (controller.isBiometricEnabled.value &&
-        controller.isBiometricAvailable.value) {
-      if (mounted) {
-        setState(() {
-          isBiometricLoading = true;
-        });
-      }
-
-      final success = await controller.authenticateWithBiometric();
-
-      if (mounted) {
-        setState(() {
-          isBiometricLoading = false;
-        });
-      }
-
-      if (success) {
-        controller.unlockApp();
-      }
-    }
-  }
 
   Future<void> _onPinComplete(String pin) async {
     final controller = Get.find<SecurityController>();
@@ -146,17 +112,6 @@ class _LockScreenContentState extends State<_LockScreenContent> {
                         }
                       },
                     );
-                  }),
-                  const SizedBox(height: 32),
-                  Obx(() {
-                    if (controller.isBiometricEnabled.value &&
-                        controller.isBiometricAvailable.value) {
-                      return BiometricButtonWidget(
-                        onPressed: _tryBiometricAuth,
-                        isLoading: isBiometricLoading,
-                      );
-                    }
-                    return const SizedBox.shrink();
                   }),
                 ] else ...[
                   Card(

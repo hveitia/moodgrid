@@ -100,4 +100,50 @@ class AuthController extends GetxController {
       );
     }
   }
+
+  Future<void> deleteAccount() async {
+    try {
+      isLoading.value = true;
+      final user = _auth.currentUser;
+
+      if (user == null) {
+        throw Exception('No hay usuario autenticado');
+      }
+
+      await user.delete();
+
+      Get.snackbar(
+        'Cuenta Eliminada',
+        'Tu cuenta ha sido eliminada permanentemente',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } on FirebaseAuthException catch (e) {
+      String message = 'Error al eliminar cuenta';
+
+      switch (e.code) {
+        case 'requires-recent-login':
+          message = 'Por seguridad, necesitas iniciar sesión nuevamente para eliminar tu cuenta';
+          break;
+        default:
+          message = 'Error: ${e.message}';
+      }
+
+      Get.snackbar(
+        'Error',
+        message,
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 4),
+      );
+      rethrow;
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Error al eliminar cuenta',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      rethrow;
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

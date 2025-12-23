@@ -366,21 +366,40 @@ class HomeView extends GetView<HomeController> {
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
-              color: AppColors.moodExcellent,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  AppColors.moodExcellent,
+                  AppColors.moodGood,
+                ],
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Colors.white,
-                  child: Text(
-                    _getUserInitial(),
-                    style: TextStyle(
-                      color: AppColors.moodExcellent,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: CircleAvatar(
+                    radius: 32,
+                    backgroundColor: Colors.white,
+                    child: Text(
+                      _getUserInitial(),
+                      style: TextStyle(
+                        color: AppColors.moodExcellent,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -390,40 +409,290 @@ class HomeView extends GetView<HomeController> {
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Bienvenido a MoodGrid',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.9),
+                    fontSize: 13,
                   ),
                 ),
               ],
             ),
           ),
+
+          // Sección Principal
+          Padding(
+            padding: const EdgeInsets.only(left: 16, top: 8, bottom: 4),
+            child: Text(
+              'PRINCIPAL',
+              style: Get.textTheme.bodySmall?.copyWith(
+                color: Colors.grey[600],
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.2,
+              ),
+            ),
+          ),
           ListTile(
-            leading: const Icon(Icons.backup),
+            leading: Icon(Icons.home_rounded, color: AppColors.moodExcellent),
+            title: const Text('Inicio'),
+            onTap: () {
+              Get.back();
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.person, color: AppColors.moodGood),
+            title: const Text('Mi Perfil'),
+            subtitle: const Text('Ver estadísticas y configuración'),
+            onTap: () {
+              Get.back();
+              Get.toNamed(Routes.profile);
+            },
+          ),
+
+          // Sección de Herramientas
+          const Divider(height: 24),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, top: 8, bottom: 4),
+            child: Text(
+              'HERRAMIENTAS',
+              style: Get.textTheme.bodySmall?.copyWith(
+                color: Colors.grey[600],
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.2,
+              ),
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.backup, color: AppColors.moodNeutral),
             title: const Text('Respaldo de Datos'),
+            subtitle: const Text('Exportar e importar'),
             onTap: () {
               Get.back();
               Get.toNamed(Routes.backup);
             },
           ),
-          const Divider(),
+          ListTile(
+            leading: Icon(Icons.lock_outline, color: AppColors.moodDifficult),
+            title: const Text('Seguridad'),
+            subtitle: const Text('Configurar PIN'),
+            onTap: () {
+              Get.back();
+              Get.toNamed(Routes.securitySettings);
+            },
+          ),
+
+          // Sección de Información
+          const Divider(height: 24),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, top: 8, bottom: 4),
+            child: Text(
+              'INFORMACIÓN',
+              style: Get.textTheme.bodySmall?.copyWith(
+                color: Colors.grey[600],
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.2,
+              ),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.info_outline, color: Colors.blue),
+            title: const Text('Acerca de'),
+            subtitle: const Text('Información de la app'),
+            onTap: () {
+              Get.back();
+              _showAboutDialog();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.help_outline, color: Colors.orange),
+            title: const Text('Ayuda'),
+            subtitle: const Text('Guía de uso'),
+            onTap: () {
+              Get.back();
+              _showHelpDialog();
+            },
+          ),
+
+          // Separador visual antes de la versión
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Divider(thickness: 1),
+          ),
+
+          // Información de versión
           FutureBuilder<PackageInfo>(
             future: PackageInfo.fromPlatform(),
             builder: (context, snapshot) {
               final version = snapshot.data?.version ?? '...';
               final buildNumber = snapshot.data?.buildNumber ?? '...';
-              return Padding(
+              return Container(
                 padding: const EdgeInsets.all(16),
-                child: Text(
-                  'Versión $version ($buildNumber)',
-                  style: Get.textTheme.bodySmall?.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-                  textAlign: TextAlign.center,
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/moodgrid.png',
+                      height: 32,
+                      width: 32,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'MoodGrid',
+                      style: Get.textTheme.titleSmall?.copyWith(
+                        color: Colors.grey[700],
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Versión $version ($buildNumber)',
+                      style: Get.textTheme.bodySmall?.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
               );
             },
           ),
+          const SizedBox(height: 8),
         ],
       ),
+    );
+  }
+
+  void _showAboutDialog() {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/moodgrid.png',
+              height: 28,
+              width: 28,
+            ),
+            const SizedBox(width: 12),
+            const Text('Acerca de MoodGrid'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'MoodGrid es una aplicación para rastrear tu estado de ánimo diario de forma visual e intuitiva.',
+              style: TextStyle(height: 1.5),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Características:',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: AppColors.moodExcellent,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              '• Registro diario de emociones\n'
+              '• Visualización en cuadrícula\n'
+              '• Estadísticas detalladas\n'
+              '• Exportación de datos\n'
+              '• Seguridad con PIN',
+              style: TextStyle(height: 1.5),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('Cerrar'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showHelpDialog() {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Row(
+          children: [
+            const Icon(Icons.help_outline, color: Colors.orange),
+            const SizedBox(width: 12),
+            const Text('Guía de Uso'),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHelpSection(
+                'Registrar tu ánimo',
+                'Toca cualquier día en la cuadrícula para registrar cómo te sentiste ese día.',
+              ),
+              const SizedBox(height: 12),
+              _buildHelpSection(
+                'Colores',
+                'Cada color representa un estado de ánimo diferente:\n'
+                '• Verde: Excelente\n'
+                '• Azul: Bien\n'
+                '• Amarillo: Neutral\n'
+                '• Naranja: Difícil\n'
+                '• Rojo: Mal',
+              ),
+              const SizedBox(height: 12),
+              _buildHelpSection(
+                'Comentarios',
+                'Puedes agregar notas a cada día. Los días con comentarios muestran un punto blanco.',
+              ),
+              const SizedBox(height: 12),
+              _buildHelpSection(
+                'Exportar mes',
+                'Toca el ícono de compartir en cada mes para exportar la imagen de ese mes.',
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('Entendido'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHelpSection(String title, String content) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: AppColors.moodExcellent,
+            fontSize: 15,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          content,
+          style: const TextStyle(height: 1.5),
+        ),
+      ],
     );
   }
 

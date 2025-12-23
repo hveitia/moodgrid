@@ -152,14 +152,8 @@ class HomeController extends GetxController {
       isLoading.value = true;
       final file = await _databaseHelper.saveBackupToFile();
 
-      Get.snackbar(
-        'Éxito',
-        'Backup guardado en: ${file.path}',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green.shade400,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 3),
-      );
+      // Primero terminar el loading antes de mostrar el diálogo de compartir
+      isLoading.value = false;
 
       // Compartir archivo
       await SharePlus.instance.share(
@@ -170,6 +164,7 @@ class HomeController extends GetxController {
         ),
       );
     } catch (e) {
+      isLoading.value = false;
       Get.snackbar(
         'Error',
         'Error al exportar: $e',
@@ -177,8 +172,6 @@ class HomeController extends GetxController {
         backgroundColor: Colors.red.shade400,
         colorText: Colors.white,
       );
-    } finally {
-      isLoading.value = false;
     }
   }
 

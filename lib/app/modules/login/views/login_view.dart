@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:moodgrid/app/core/values/app_colors.dart';
 import 'package:moodgrid/app/modules/auth/controllers/auth_controller.dart';
 import 'package:moodgrid/app/routes/app_routes.dart';
 
@@ -54,10 +53,12 @@ class _LoginViewState extends State<LoginView> {
               children: [
                 const SizedBox(height: 32),
 
-                Icon(
-                  Icons.grid_4x4,
-                  size: 80,
-                  color: AppColors.moodExcellent,
+                Center(
+                  child: Image.asset(
+                    'assets/moodgrid.png',
+                    height: 120,
+                    width: 120,
+                  ),
                 ),
                 const SizedBox(height: 48),
 
