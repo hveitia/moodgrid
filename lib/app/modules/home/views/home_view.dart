@@ -7,6 +7,8 @@ import 'package:moodgrid/app/modules/home/controllers/home_controller.dart';
 import 'package:moodgrid/app/routes/app_routes.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../widgets/month_view_widget.dart';
+
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
 
