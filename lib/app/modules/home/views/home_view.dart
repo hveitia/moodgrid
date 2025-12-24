@@ -274,7 +274,7 @@ class HomeView extends GetView<HomeController> {
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
               onPressed: () {
-                controller.exportMonthAsImage(
+                controller.showExportDialog(
                   month: month,
                   weeks: weeks.cast<DateTime>(),
                 );

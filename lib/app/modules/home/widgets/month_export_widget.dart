@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
 import 'package:moodgrid/app/data/models/daily_record.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class MonthExportWidget extends StatelessWidget {
   final DateTime month;
   final List<DateTime> weeks;
-  final Map<String, DailyRecord> recordsMap;
+  final RxMap<String, DailyRecord> recordsMap;
   final DateTime rangeStartDate;
 
   const MonthExportWidget({
@@ -20,44 +20,69 @@ class MonthExportWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 420,
-      padding: const EdgeInsets.all(24),
-      color: Colors.white,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildMonthHeader(),
-          const SizedBox(height: 20),
-          _buildWeekdayHeader(),
-          const SizedBox(height: 12),
-          _buildWeeksGrid(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMonthHeader() {
     final monthName = DateFormat('MMMM', 'es_ES').format(month);
-    final year = month.year;
     final capitalizedMonth = monthName[0].toUpperCase() + monthName.substring(1);
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      decoration: BoxDecoration(
-        color: AppColors.moodExcellent.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(8),
+    return MediaQuery(
+      data: const MediaQueryData(
+        size: Size(800, 600),
+        devicePixelRatio: 3.0,
+        textScaler: TextScaler.linear(1.0),
       ),
-      child: Text(
-        '$capitalizedMonth - $year',
-        style: GoogleFonts.montserrat(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: AppColors.moodExcellent,
+      child: Material(
+        color: Colors.white,
+        child: Container(
+          width: 800,
+          padding: const EdgeInsets.all(30),
+          color: Colors.white,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Header
+              Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'MoodGrid',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        '$capitalizedMonth ${month.year}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+
+              // Grid
+              _buildWeekdayHeader(),
+              const SizedBox(height: 12),
+              _buildWeeksGrid(),
+
+              const SizedBox(height: 24),
+
+              // Footer
+              Text(
+                'Mi registro de estado de ánimo',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
+          ),
         ),
-        textAlign: TextAlign.center,
       ),
     );
   }
@@ -71,7 +96,7 @@ class MonthExportWidget extends StatelessWidget {
           child: Center(
             child: Text(
               day,
-              style: GoogleFonts.montserrat(
+              style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,

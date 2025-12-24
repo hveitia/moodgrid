@@ -7,6 +7,7 @@ import 'package:moodgrid/app/core/values/app_colors.dart';
 import 'package:moodgrid/app/data/models/daily_record.dart';
 import 'package:moodgrid/app/data/providers/database_helper.dart';
 import 'package:moodgrid/app/modules/home/widgets/month_export_widget.dart';
+import 'package:moodgrid/app/modules/home/widgets/month_chart_export_widget.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
@@ -232,10 +233,71 @@ class HomeController extends GetxController {
         record.date.year == month.year && record.date.month == month.month);
   }
 
+  // Mostrar diálogo de selección de exportación
+  void showExportDialog({
+    required DateTime month,
+    required List<DateTime> weeks,
+  }) {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(24),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '¿Qué deseas exportar?',
+              style: Get.textTheme.titleLarge,
+            ),
+            const SizedBox(height: 24),
+            ListTile(
+              leading: const Icon(Icons.grid_on, color: Colors.blue),
+              title: const Text('Vista de cuadrícula'),
+              subtitle: const Text('Exportar la cuadrícula del mes'),
+              onTap: () {
+                Get.back();
+                exportMonthAsImage(
+                  month: month,
+                  weeks: weeks,
+                  exportType: 'grid',
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.show_chart, color: Colors.green),
+              title: const Text('Vista de gráfico'),
+              subtitle: const Text('Exportar el gráfico del mes'),
+              onTap: () {
+                Get.back();
+                exportMonthAsImage(
+                  month: month,
+                  weeks: weeks,
+                  exportType: 'chart',
+                );
+              },
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () => Get.back(),
+              child: const Text('Cancelar'),
+            ),
+          ],
+        ),
+      ),
+      isScrollControlled: true,
+      isDismissible: true,
+    );
+  }
+
   // Exportar mes como imagen
   Future<void> exportMonthAsImage({
     required DateTime month,
     required List<DateTime> weeks,
+    String exportType = 'grid',
   }) async {
     try {
       isLoading.value = true;
@@ -254,15 +316,26 @@ class HomeController extends GetxController {
         rangeStartDate = DateTime(now.year, now.month, 1);
       }
 
-      // Capturar widget
-      final Uint8List imageBytes =
-          await screenshotController.captureFromWidget(
-        MonthExportWidget(
+      // Seleccionar widget según el tipo de exportación
+      Widget exportWidget;
+      if (exportType == 'chart') {
+        exportWidget = MonthChartExportWidget(
+          month: month,
+          recordsMap: recordsMap,
+        );
+      } else {
+        exportWidget = MonthExportWidget(
           month: month,
           weeks: weeks,
           recordsMap: recordsMap,
           rangeStartDate: rangeStartDate,
-        ),
+        );
+      }
+
+      // Capturar widget
+      final Uint8List imageBytes =
+          await screenshotController.captureFromWidget(
+        exportWidget,
         pixelRatio: 3.0,
         delay: const Duration(milliseconds: 10),
       );
@@ -270,7 +343,8 @@ class HomeController extends GetxController {
       // Guardar en archivo temporal
       final tempDir = await getTemporaryDirectory();
       final monthName = DateFormat('MMMM', 'es_ES').format(month);
-      final fileName = 'moodgrid_${monthName}_${month.year}.png';
+      final exportTypeName = exportType == 'chart' ? 'grafico' : 'cuadricula';
+      final fileName = 'moodgrid_${monthName}_${month.year}_$exportTypeName.png';
       final file = File('${tempDir.path}/$fileName');
       await file.writeAsBytes(imageBytes);
 
@@ -283,22 +357,20 @@ class HomeController extends GetxController {
         ),
       );
 
-      Get.snackbar(
-        'Éxito',
-        'Imagen exportada correctamente',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green.shade400,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 2),
-      );
+      // No mostramos snackbar de éxito porque el diálogo de compartir ya da feedback
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Error al exportar imagen: $e',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.shade400,
-        colorText: Colors.white,
-      );
+      // Solo mostramos error si falla antes de compartir
+      try {
+        Get.snackbar(
+          'Error',
+          'Error al exportar imagen: $e',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red.shade400,
+          colorText: Colors.white,
+        );
+      } catch (_) {
+        // Si el snackbar también falla, ignoramos el error
+      }
     } finally {
       isLoading.value = false;
     }
