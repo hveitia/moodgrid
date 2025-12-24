@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
 import 'package:moodgrid/app/modules/auth/controllers/auth_controller.dart';
 import 'package:moodgrid/app/modules/home/controllers/home_controller.dart';
+import 'package:moodgrid/app/modules/home/widgets/month_view_widget.dart';
 import 'package:moodgrid/app/routes/app_routes.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -16,8 +17,28 @@ class HomeView extends GetView<HomeController> {
       appBar: AppBar(
         title: const Text('MoodGrid'),
         actions: [
+          Obx(() => IconButton(
+                icon: Icon(
+                  Icons.grid_on,
+                  color: !controller.isChartView.value
+                      ? AppColors.moodExcellent
+                      : Colors.grey[600],
+                ),
+                onPressed: () => controller.toggleView(false),
+                tooltip: 'Vista de cuadrícula',
+              )),
+          Obx(() => IconButton(
+                icon: Icon(
+                  Icons.show_chart,
+                  color: controller.isChartView.value
+                      ? AppColors.moodExcellent
+                      : Colors.grey[600],
+                ),
+                onPressed: () => controller.toggleView(true),
+                tooltip: 'Vista de gráfico',
+              )),
           Padding(
-            padding: const EdgeInsets.only(right: 8),
+            padding: const EdgeInsets.only(left: 8, right: 8),
             child: GestureDetector(
               onTap: () => Get.toNamed(Routes.profile),
               child: CircleAvatar(
@@ -151,11 +172,15 @@ class HomeView extends GetView<HomeController> {
             ),
             const SizedBox(height: 12),
 
-            // Semanas del mes
-            ...block['weeks'].map((week) => Padding(
-              padding: const EdgeInsets.only(bottom: 4),
-              child: _buildWeekRow(week as DateTime, rangeStartDate),
-            )),
+            // Vista de mes (cuadrícula o gráfico)
+            Obx(() => MonthViewWidget(
+                  month: block['month'] as DateTime,
+                  weeks: (block['weeks'] as List<dynamic>).cast<DateTime>(),
+                  recordsMap: controller.recordsMap,
+                  rangeStartDate: rangeStartDate,
+                  buildWeekRow: _buildWeekRow,
+                  isChartView: controller.isChartView.value,
+                )),
 
             const SizedBox(height: 16),
           ],

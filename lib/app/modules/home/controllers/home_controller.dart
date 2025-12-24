@@ -19,6 +19,7 @@ class HomeController extends GetxController {
   final RxList<DailyRecord> records = <DailyRecord>[].obs;
   final RxBool isLoading = false.obs;
   final RxString selectedDate = ''.obs;
+  final RxBool isChartView = false.obs;
 
   // Mapa de registros por fecha para acceso rápido
   final RxMap<String, DailyRecord> recordsMap = <String, DailyRecord>{}.obs;
@@ -27,6 +28,11 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     loadRecords();
+  }
+
+  // Cambiar entre vista de cuadrícula y gráfico
+  void toggleView(bool showChart) {
+    isChartView.value = showChart;
   }
 
   // Cargar todos los registros
@@ -364,11 +370,25 @@ class HomeController extends GetxController {
                       'Difícil',
                       'Mal'
                     ];
+                    final emojis = [
+                      '😄',
+                      '🙂',
+                      '😐',
+                      '😕',
+                      '😢'
+                    ];
                     final isSelected = selectedMoodIndex == index;
                     final moodColor = AppColors.getMoodColor(index);
 
                     return ChoiceChip(
-                      label: Text(moods[index]),
+                      label: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(moods[index]),
+                          const SizedBox(width: 8),
+                          Text(emojis[index]),
+                        ],
+                      ),
                       selected: isSelected,
                       onSelected: (selected) {
                         setState(() {
