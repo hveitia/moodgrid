@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
 import 'package:moodgrid/app/modules/auth/controllers/auth_controller.dart';
 import 'package:moodgrid/app/modules/home/controllers/home_controller.dart';
-import 'package:moodgrid/app/modules/home/widgets/month_view_widget.dart';
 import 'package:moodgrid/app/routes/app_routes.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
