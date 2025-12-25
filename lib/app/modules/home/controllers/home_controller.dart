@@ -302,6 +302,69 @@ class HomeController extends GetxController {
     try {
       isLoading.value = true;
 
+      // Mostrar diálogo de loading
+      Get.dialog(
+        PopScope(
+          canPop: false,
+          child: Center(
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 40),
+                padding: const EdgeInsets.all(32),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppColors.moodExcellent.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.moodExcellent,
+                        ),
+                        strokeWidth: 3,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'Preparando exportación...',
+                      style: Get.textTheme.titleMedium?.copyWith(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Esto tomará un momento',
+                      style: Get.textTheme.bodySmall?.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        barrierDismissible: false,
+      );
+
       // Crear controller de screenshot
       final screenshotController = ScreenshotController();
 
@@ -348,6 +411,9 @@ class HomeController extends GetxController {
       final file = File('${tempDir.path}/$fileName');
       await file.writeAsBytes(imageBytes);
 
+      // Cerrar diálogo de loading
+      Get.back();
+
       // Compartir archivo
       await SharePlus.instance.share(
         ShareParams(
@@ -359,6 +425,11 @@ class HomeController extends GetxController {
 
       // No mostramos snackbar de éxito porque el diálogo de compartir ya da feedback
     } catch (e) {
+      // Cerrar diálogo de loading si está abierto
+      try {
+        Get.back();
+      } catch (_) {}
+
       // Solo mostramos error si falla antes de compartir
       try {
         Get.snackbar(
