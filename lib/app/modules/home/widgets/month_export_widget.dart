@@ -41,6 +41,12 @@ class MonthExportWidget extends StatelessWidget {
               // Header
               Row(
                 children: [
+                  Image.asset(
+                    'assets/moodgrid.png',
+                    height: 40,
+                    width: 40,
+                  ),
+                  const SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

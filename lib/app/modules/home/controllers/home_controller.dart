@@ -337,7 +337,7 @@ class HomeController extends GetxController {
           await screenshotController.captureFromWidget(
         exportWidget,
         pixelRatio: 3.0,
-        delay: const Duration(milliseconds: 10),
+        delay: const Duration(milliseconds: 300),
       );
 
       // Guardar en archivo temporal
