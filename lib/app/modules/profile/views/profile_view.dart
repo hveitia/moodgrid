@@ -471,11 +471,13 @@ class ProfileView extends GetView<ProfileController> {
                     children: [
                       Icon(Icons.info_outline, size: 16, color: Colors.red[700]),
                       const SizedBox(width: 8),
-                      const Text(
-                        'Esta acción es PERMANENTE',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
+                      const Expanded(
+                        child: Text(
+                          'Esta acción es PERMANENTE',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                     ],

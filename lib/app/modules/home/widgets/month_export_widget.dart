@@ -176,20 +176,8 @@ class MonthExportWidget extends StatelessWidget {
                 width: 0.5,
               ),
       ),
-      child: AspectRatio(
+      child: const AspectRatio(
         aspectRatio: 1,
-        child: record?.comment != null && record!.comment!.isNotEmpty
-            ? Center(
-                child: Container(
-                  width: 4,
-                  height: 4,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              )
-            : null,
       ),
     );
   }

@@ -368,11 +368,22 @@ class HomeView extends GetView<HomeController> {
           child: record?.comment != null && record!.comment!.isNotEmpty
               ? Center(
                   child: Container(
-                    width: 4,
-                    height: 4,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.9),
+                      borderRadius: BorderRadius.circular(3),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 2,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.edit_note,
+                      size: 10,
+                      color: Colors.black87,
                     ),
                   ),
                 )
@@ -629,11 +640,12 @@ class HomeView extends GetView<HomeController> {
             ),
             const SizedBox(height: 8),
             const Text(
-              '• Registro diario de emociones\n'
-              '• Visualización en cuadrícula\n'
-              '• Estadísticas detalladas\n'
-              '• Exportación de datos\n'
-              '• Seguridad con PIN',
+              '• Registro diario de emociones.\n'
+              '• Visualización en cuadrícula y gráfico.\n'
+              '• Estadísticas detalladas.\n'
+              '• Exportación de datos y capturas.\n'
+              '• Exportación de imágenes por mes.\n'
+              '• Seguridad con PIN.',
               style: TextStyle(height: 1.5),
             ),
           ],
@@ -674,21 +686,28 @@ class HomeView extends GetView<HomeController> {
               _buildHelpSection(
                 'Colores',
                 'Cada color representa un estado de ánimo diferente:\n'
-                '• Verde: Excelente\n'
-                '• Azul: Bien\n'
-                '• Amarillo: Neutral\n'
-                '• Naranja: Difícil\n'
-                '• Rojo: Mal',
+                '• Verde: Excelente.\n'
+                '• Azul: Bien.\n'
+                '• Amarillo: Neutral.\n'
+                '• Naranja: Difícil.\n'
+                '• Rojo: Mal.',
               ),
               const SizedBox(height: 12),
               _buildHelpSection(
                 'Comentarios',
-                'Puedes agregar notas a cada día. Los días con comentarios muestran un punto blanco.',
+                'Puedes agregar notas a cada día. Los días con comentarios muestran un pequeño ícono de nota.',
+              ),
+              const SizedBox(height: 12),
+              _buildHelpSection(
+                'Vistas',
+                'Cambia entre vista de cuadrícula y vista de gráfico usando los iconos en la barra superior:\n'
+                '• Cuadrícula: Muestra tus días en formato de calendario.\n'
+                '• Gráfico: Visualiza tus estados de ánimo como un gráfico de barras.',
               ),
               const SizedBox(height: 12),
               _buildHelpSection(
                 'Exportar mes',
-                'Toca el ícono de compartir en cada mes para exportar la imagen de ese mes.',
+                'Toca el ícono de compartir en cada mes para exportar la imagen de ese mes. Puedes compartir la captura en tus apps favoritas.',
               ),
             ],
           ),

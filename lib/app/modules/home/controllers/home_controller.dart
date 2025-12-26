@@ -460,16 +460,21 @@ class HomeController extends GetxController {
     Get.bottomSheet(
       StatefulBuilder(
         builder: (context, setState) {
-          return Container(
-            padding: const EdgeInsets.all(24),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+          return GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                 // Título con botón eliminar
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -590,7 +595,9 @@ class HomeController extends GetxController {
                     ),
                   ],
                 ),
-              ],
+                  ],
+                ),
+              ),
             ),
           );
         },
