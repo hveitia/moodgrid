@@ -24,7 +24,7 @@ class MonthViewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 280,
+      height: 295,
       child: isChartView
           ? MonthChartWidget(
               month: month,
