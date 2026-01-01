@@ -190,53 +190,55 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  // Agrupar semanas por mes
+  // Agrupar semanas por mes (cada mes tiene su propio grid independiente)
   List<Map<String, dynamic>> _groupWeeksByMonth(
     DateTime firstMonday,
     int weeksToShow,
     DateTime rangeStartDate,
     DateTime today,
   ) {
-    final List<Map<String, dynamic>> monthBlocks = [];
-    DateTime? currentMonth;
-    List<DateTime> currentWeeks = [];
+    // Usar un mapa para agrupar semanas por mes
+    final Map<String, List<DateTime>> monthWeeksMap = {};
+    final List<DateTime> monthOrder = [];
 
     for (int weekIndex = 0; weekIndex < weeksToShow; weekIndex++) {
       final weekStart = firstMonday.add(Duration(days: weekIndex * 7));
 
-      // Determinar el mes de esta semana (usar el primer día válido de la semana)
-      DateTime? weekMonth;
+      // Revisar cada día de la semana para determinar a qué meses pertenece
+      final Set<String> monthsInWeek = {};
       for (int dayIndex = 0; dayIndex < 7; dayIndex++) {
         final date = weekStart.add(Duration(days: dayIndex));
         if (!date.isBefore(rangeStartDate) && !date.isAfter(today)) {
-          weekMonth = DateTime(date.year, date.month, 1);
-          break;
+          final monthKey = '${date.year}-${date.month.toString().padLeft(2, '0')}';
+          monthsInWeek.add(monthKey);
         }
       }
 
-      if (weekMonth == null) continue;
-
-      // Si cambiamos de mes, crear nuevo bloque
-      if (currentMonth == null || currentMonth.month != weekMonth.month || currentMonth.year != weekMonth.year) {
-        if (currentMonth != null && currentWeeks.isNotEmpty) {
-          monthBlocks.add({
-            'month': currentMonth,
-            'weeks': List<DateTime>.from(currentWeeks),
-          });
+      // Agregar la semana a cada mes al que pertenece
+      for (final monthKey in monthsInWeek) {
+        if (!monthWeeksMap.containsKey(monthKey)) {
+          monthWeeksMap[monthKey] = [];
+          final parts = monthKey.split('-');
+          monthOrder.add(DateTime(int.parse(parts[0]), int.parse(parts[1]), 1));
         }
-        currentMonth = weekMonth;
-        currentWeeks = [];
+        monthWeeksMap[monthKey]!.add(weekStart);
       }
-
-      currentWeeks.add(weekStart);
     }
 
-    // Agregar el último bloque
-    if (currentMonth != null && currentWeeks.isNotEmpty) {
-      monthBlocks.add({
-        'month': currentMonth,
-        'weeks': List<DateTime>.from(currentWeeks),
-      });
+    // Ordenar meses cronológicamente
+    monthOrder.sort((a, b) => a.compareTo(b));
+
+    // Construir lista de bloques de mes
+    final List<Map<String, dynamic>> monthBlocks = [];
+    for (final month in monthOrder) {
+      final monthKey = '${month.year}-${month.month.toString().padLeft(2, '0')}';
+      final weeks = monthWeeksMap[monthKey] ?? [];
+      if (weeks.isNotEmpty) {
+        monthBlocks.add({
+          'month': month,
+          'weeks': weeks,
+        });
+      }
     }
 
     return monthBlocks;
@@ -306,8 +308,8 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  // Construir fila de semana
-  Widget _buildWeekRow(DateTime weekStart, DateTime rangeStartDate) {
+  // Construir fila de semana (filtrada por mes)
+  Widget _buildWeekRow(DateTime weekStart, DateTime rangeStartDate, DateTime currentMonth) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
 
@@ -316,9 +318,11 @@ class HomeView extends GetView<HomeController> {
         final date = weekStart.add(Duration(days: dayIndex));
         final isBeforeRange = date.isBefore(rangeStartDate);
         final isAfterToday = date.isAfter(today);
+        // Solo mostrar celdas que pertenecen al mes actual
+        final isInCurrentMonth = date.year == currentMonth.year && date.month == currentMonth.month;
 
         return Expanded(
-          child: isBeforeRange || isAfterToday
+          child: isBeforeRange || isAfterToday || !isInCurrentMonth
               ? _buildEmptyCell()
               : _buildDayCell(date),
         );

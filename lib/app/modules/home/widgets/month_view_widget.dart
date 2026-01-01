@@ -8,7 +8,7 @@ class MonthViewWidget extends StatelessWidget {
   final List<DateTime> weeks;
   final RxMap<String, DailyRecord> recordsMap;
   final DateTime rangeStartDate;
-  final Widget Function(DateTime, DateTime) buildWeekRow;
+  final Widget Function(DateTime, DateTime, DateTime) buildWeekRow;
   final bool isChartView;
 
   const MonthViewWidget({
@@ -33,7 +33,7 @@ class MonthViewWidget extends StatelessWidget {
           : Column(
               children: weeks.map((week) => Padding(
                 padding: const EdgeInsets.only(bottom: 4),
-                child: buildWeekRow(week, rangeStartDate),
+                child: buildWeekRow(week, rangeStartDate, month),
               )).toList(),
             ),
     );

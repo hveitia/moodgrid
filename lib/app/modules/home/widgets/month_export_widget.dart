@@ -134,9 +134,11 @@ class MonthExportWidget extends StatelessWidget {
         final date = weekStart.add(Duration(days: dayIndex));
         final isBeforeRange = date.isBefore(rangeStartDate);
         final isAfterToday = date.isAfter(today);
+        // Solo mostrar celdas que pertenecen al mes actual
+        final isInCurrentMonth = date.year == month.year && date.month == month.month;
 
         return Expanded(
-          child: isBeforeRange || isAfterToday
+          child: isBeforeRange || isAfterToday || !isInCurrentMonth
               ? _buildEmptyCell()
               : _buildDayCell(date, today),
         );
