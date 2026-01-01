@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+import 'package:moodgrid/app/routes/app_routes.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
 import 'package:moodgrid/app/modules/auth/controllers/auth_controller.dart';
 import 'package:moodgrid/app/modules/home/controllers/home_controller.dart';
-import 'package:moodgrid/app/routes/app_routes.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 import '../widgets/month_view_widget.dart';
 
@@ -68,13 +68,6 @@ class HomeView extends GetView<HomeController> {
             const SizedBox(height: 8),
             _buildLegend(),
             const SizedBox(height: 16),
-
-            // Header fijo de días de la semana
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: _buildWeekdayHeader(),
-            ),
-            const SizedBox(height: 8),
 
             // Matriz de vida scrolleable
             Expanded(
@@ -172,16 +165,30 @@ class HomeView extends GetView<HomeController> {
               block['weeks'] as List<dynamic>,
             ),
             const SizedBox(height: 12),
+            Obx(() => !controller.isChartView.value
+                ? Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: _buildWeekdayHeader(),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                  )
+                : const SizedBox.shrink()),
 
             // Vista de mes (cuadrícula o gráfico)
-            Obx(() => MonthViewWidget(
-                  month: block['month'] as DateTime,
-                  weeks: (block['weeks'] as List<dynamic>).cast<DateTime>(),
-                  recordsMap: controller.recordsMap,
-                  rangeStartDate: rangeStartDate,
-                  buildWeekRow: _buildWeekRow,
-                  isChartView: controller.isChartView.value,
-                )),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Obx(() => MonthViewWidget(
+                    month: block['month'] as DateTime,
+                    weeks: (block['weeks'] as List<dynamic>).cast<DateTime>(),
+                    recordsMap: controller.recordsMap,
+                    rangeStartDate: rangeStartDate,
+                    buildWeekRow: _buildWeekRow,
+                    isChartView: controller.isChartView.value,
+                  )),
+            ),
 
             const SizedBox(height: 16),
           ],
@@ -297,11 +304,11 @@ class HomeView extends GetView<HomeController> {
         return Expanded(
           child: Center(
             child: Text(
-              day,
-              style: Get.textTheme.bodySmall?.copyWith(
-                fontWeight: FontWeight.w600,
+                day,
+                style: Get.textTheme.bodySmall?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
           ),
         );
       }).toList(),
