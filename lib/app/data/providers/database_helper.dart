@@ -242,6 +242,20 @@ class DatabaseHelper {
     return count ?? 0;
   }
 
+  // Obtener registros con comentarios
+  Future<List<DailyRecord>> getRecordsWithComments() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      _tableName,
+      where: "comment IS NOT NULL AND comment != ''",
+      orderBy: 'date DESC',
+    );
+
+    return List.generate(maps.length, (i) {
+      return DailyRecord.fromMap(maps[i]);
+    });
+  }
+
   // Obtener estadísticas de estados de ánimo
   Future<Map<int, int>> getMoodStatistics() async {
     final records = await getAllRecords();

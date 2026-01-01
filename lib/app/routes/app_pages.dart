@@ -3,6 +3,8 @@ import 'package:moodgrid/app/modules/auth/bindings/auth_binding.dart';
 import 'package:moodgrid/app/modules/backup/views/backup_view.dart';
 import 'package:moodgrid/app/modules/home/bindings/home_binding.dart';
 import 'package:moodgrid/app/modules/home/views/home_view.dart';
+import 'package:moodgrid/app/modules/journal/bindings/journal_binding.dart';
+import 'package:moodgrid/app/modules/journal/views/journal_view.dart';
 import 'package:moodgrid/app/modules/landing/views/landing_view.dart';
 import 'package:moodgrid/app/modules/login/views/login_view.dart';
 import 'package:moodgrid/app/modules/profile/bindings/profile_binding.dart';
@@ -69,6 +71,13 @@ class AppPages {
       name: Routes.pinSetup,
       page: () => const PinSetupView(),
       binding: SecurityBinding(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
+    ),
+    GetPage(
+      name: Routes.journal,
+      page: () => const JournalView(),
+      binding: JournalBinding(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 500),
     ),

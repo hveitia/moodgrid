@@ -9,4 +9,5 @@ class Routes {
   static const String backup = '/backup';
   static const String securitySettings = '/security-settings';
   static const String pinSetup = '/pin-setup';
+  static const String journal = '/journal';
 }

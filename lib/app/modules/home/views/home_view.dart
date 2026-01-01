@@ -494,6 +494,15 @@ class HomeView extends GetView<HomeController> {
               Get.toNamed(Routes.profile);
             },
           ),
+          ListTile(
+            leading: Icon(Icons.book, color: AppColors.moodNeutral),
+            title: const Text('Mi Diario'),
+            subtitle: const Text('Ver comentarios y reflexiones'),
+            onTap: () {
+              Get.back();
+              Get.toNamed(Routes.journal);
+            },
+          ),
 
           // Sección de Herramientas
           const Divider(height: 24),
