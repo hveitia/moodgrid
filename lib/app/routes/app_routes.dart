@@ -10,4 +10,5 @@ class Routes {
   static const String securitySettings = '/security-settings';
   static const String pinSetup = '/pin-setup';
   static const String journal = '/journal';
+  static const String wordCloud = '/word-cloud';
 }

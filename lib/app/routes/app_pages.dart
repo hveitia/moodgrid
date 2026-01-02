@@ -13,6 +13,8 @@ import 'package:moodgrid/app/modules/register/views/register_view.dart';
 import 'package:moodgrid/app/modules/security/bindings/security_binding.dart';
 import 'package:moodgrid/app/modules/security/views/pin_setup_view.dart';
 import 'package:moodgrid/app/modules/security/views/security_settings_view.dart';
+import 'package:moodgrid/app/modules/word_cloud/bindings/word_cloud_binding.dart';
+import 'package:moodgrid/app/modules/word_cloud/views/word_cloud_view.dart';
 import 'package:moodgrid/app/routes/app_routes.dart';
 
 class AppPages {
@@ -78,6 +80,13 @@ class AppPages {
       name: Routes.journal,
       page: () => const JournalView(),
       binding: JournalBinding(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
+    ),
+    GetPage(
+      name: Routes.wordCloud,
+      page: () => const WordCloudView(),
+      binding: WordCloudBinding(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 500),
     ),

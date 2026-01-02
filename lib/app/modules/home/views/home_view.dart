@@ -510,6 +510,15 @@ class HomeView extends GetView<HomeController> {
               Get.toNamed(Routes.journal);
             },
           ),
+          ListTile(
+            leading: Icon(Icons.cloud, color: AppColors.moodDifficult),
+            title: const Text('Nube de Palabras'),
+            subtitle: const Text('Análisis de comentarios'),
+            onTap: () {
+              Get.back();
+              Get.toNamed(Routes.wordCloud);
+            },
+          ),
 
           // Sección de Herramientas
           const Divider(height: 24),
