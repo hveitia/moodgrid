@@ -15,6 +15,8 @@ import 'package:moodgrid/app/modules/security/views/pin_setup_view.dart';
 import 'package:moodgrid/app/modules/security/views/security_settings_view.dart';
 import 'package:moodgrid/app/modules/word_cloud/bindings/word_cloud_binding.dart';
 import 'package:moodgrid/app/modules/word_cloud/views/word_cloud_view.dart';
+import 'package:moodgrid/app/modules/reflections/bindings/reflections_binding.dart';
+import 'package:moodgrid/app/modules/reflections/views/reflections_view.dart';
 import 'package:moodgrid/app/routes/app_routes.dart';
 
 class AppPages {
@@ -87,6 +89,13 @@ class AppPages {
       name: Routes.wordCloud,
       page: () => const WordCloudView(),
       binding: WordCloudBinding(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 500),
+    ),
+    GetPage(
+      name: Routes.reflections,
+      page: () => const ReflectionsView(),
+      binding: ReflectionsBinding(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 500),
     ),

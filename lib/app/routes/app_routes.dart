@@ -11,4 +11,5 @@ class Routes {
   static const String pinSetup = '/pin-setup';
   static const String journal = '/journal';
   static const String wordCloud = '/word-cloud';
+  static const String reflections = '/reflections';
 }
