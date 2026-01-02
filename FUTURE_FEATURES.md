@@ -195,12 +195,12 @@ Implementa Recordatorios Inteligentes para MoodGrid:
 
 ## Prioridad Sugerida
 
-1. **Vista de Diario** - Base necesaria para otras features
-2. **Búsqueda en Comentarios** - Complementa el diario
+1. **Vista de Diario** - Base necesaria para otras features - OK
+2. **Búsqueda en Comentarios** - Complementa el diario - OK
 3. **Estadísticas de Reflexión** - Fácil de integrar en perfil existente
 4. **Exportar como Diario** - Valor agregado tangible
 5. **Recordatorios Inteligentes** - Mejora engagement
-6. **Nube de Palabras** - Visual atractivo
+6. **Nube de Palabras** - Visual atractivo - OK
 7. **Correlación Palabra-Ánimo** - Más complejo, requiere suficientes datos
 
 ---

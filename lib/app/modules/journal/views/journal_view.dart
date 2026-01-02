@@ -11,8 +11,15 @@ class JournalView extends GetView<JournalController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mi Diario'),
+        title: Obx(() => controller.isSearching.value
+            ? _buildSearchField()
+            : const Text('Mi Diario')),
         actions: [
+          Obx(() => IconButton(
+                icon: Icon(controller.isSearching.value ? Icons.close : Icons.search),
+                onPressed: controller.toggleSearch,
+                tooltip: controller.isSearching.value ? 'Cerrar búsqueda' : 'Buscar',
+              )),
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () => controller.loadJournalEntries(),
@@ -29,8 +36,111 @@ class JournalView extends GetView<JournalController> {
           return _buildEmptyState();
         }
 
-        return _buildJournalList();
+        return Column(
+          children: [
+            // Contador de resultados
+            if (controller.hasSearchQuery) _buildResultsCounter(),
+            // Lista de entradas
+            Expanded(
+              child: controller.filteredEntries.isEmpty
+                  ? _buildNoResultsState()
+                  : _buildJournalList(),
+            ),
+          ],
+        );
       }),
+    );
+  }
+
+  Widget _buildSearchField() {
+    return TextField(
+      controller: controller.searchController,
+      autofocus: true,
+      decoration: InputDecoration(
+        hintText: 'Buscar en comentarios...',
+        border: InputBorder.none,
+        hintStyle: TextStyle(color: Colors.grey[400]),
+        suffixIcon: Obx(() => controller.searchQuery.value.isNotEmpty
+            ? IconButton(
+                icon: const Icon(Icons.clear, size: 20),
+                onPressed: controller.clearSearch,
+              )
+            : const SizedBox.shrink()),
+      ),
+      style: const TextStyle(fontSize: 16),
+      onChanged: controller.onSearchChanged,
+    );
+  }
+
+  Widget _buildResultsCounter() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      color: AppColors.moodExcellent.withValues(alpha: 0.1),
+      child: Row(
+        children: [
+          Icon(
+            Icons.search,
+            size: 18,
+            color: AppColors.moodExcellent,
+          ),
+          const SizedBox(width: 8),
+          Obx(() => Text(
+                '${controller.resultCount} ${controller.resultCount == 1 ? 'día encontrado' : 'días encontrados'}',
+                style: TextStyle(
+                  color: AppColors.moodExcellent,
+                  fontWeight: FontWeight.w600,
+                ),
+              )),
+          const Spacer(),
+          Obx(() => Text(
+                '"${controller.searchQuery.value}"',
+                style: TextStyle(
+                  color: AppColors.textSecondary,
+                  fontStyle: FontStyle.italic,
+                ),
+              )),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNoResultsState() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.search_off,
+              size: 80,
+              color: Colors.grey[400],
+            ),
+            const SizedBox(height: 24),
+            Text(
+              'Sin resultados',
+              style: Get.textTheme.titleLarge?.copyWith(
+                color: Colors.grey[600],
+              ),
+            ),
+            const SizedBox(height: 12),
+            Obx(() => Text(
+                  'No se encontraron comentarios con "${controller.searchQuery.value}"',
+                  style: Get.textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey[500],
+                  ),
+                  textAlign: TextAlign.center,
+                )),
+            const SizedBox(height: 24),
+            TextButton.icon(
+              onPressed: controller.clearSearch,
+              icon: const Icon(Icons.clear),
+              label: const Text('Limpiar búsqueda'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -76,14 +186,14 @@ class JournalView extends GetView<JournalController> {
   Widget _buildJournalList() {
     return RefreshIndicator(
       onRefresh: () => controller.loadJournalEntries(),
-      child: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: controller.journalEntries.length,
-        itemBuilder: (context, index) {
-          final entry = controller.journalEntries[index];
-          return _buildJournalCard(entry);
-        },
-      ),
+      child: Obx(() => ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: controller.filteredEntries.length,
+            itemBuilder: (context, index) {
+              final entry = controller.filteredEntries[index];
+              return _buildJournalCard(entry);
+            },
+          )),
     );
   }
 
@@ -172,13 +282,10 @@ class JournalView extends GetView<JournalController> {
                     ),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: Text(
-                        entry.comment ?? '',
-                        style: Get.textTheme.bodyMedium?.copyWith(
-                          height: 1.5,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
+                      child: Obx(() => _buildHighlightedText(
+                            entry.comment ?? '',
+                            controller.searchQuery.value,
+                          )),
                     ),
                   ],
                 ),
@@ -207,5 +314,64 @@ class JournalView extends GetView<JournalController> {
         ),
       ),
     );
+  }
+
+  Widget _buildHighlightedText(String text, String query) {
+    if (query.isEmpty) {
+      return Text(
+        text,
+        style: Get.textTheme.bodyMedium?.copyWith(
+          height: 1.5,
+          color: AppColors.textPrimary,
+        ),
+      );
+    }
+
+    final lowerText = text.toLowerCase();
+    final lowerQuery = query.toLowerCase();
+    final spans = <TextSpan>[];
+
+    int start = 0;
+    int index = lowerText.indexOf(lowerQuery);
+
+    while (index != -1) {
+      // Texto antes de la coincidencia
+      if (index > start) {
+        spans.add(TextSpan(
+          text: text.substring(start, index),
+          style: TextStyle(
+            height: 1.5,
+            color: AppColors.textPrimary,
+          ),
+        ));
+      }
+
+      // Texto resaltado
+      spans.add(TextSpan(
+        text: text.substring(index, index + query.length),
+        style: TextStyle(
+          height: 1.5,
+          color: AppColors.textPrimary,
+          backgroundColor: AppColors.moodNeutral.withValues(alpha: 0.5),
+          fontWeight: FontWeight.w600,
+        ),
+      ));
+
+      start = index + query.length;
+      index = lowerText.indexOf(lowerQuery, start);
+    }
+
+    // Texto restante después de la última coincidencia
+    if (start < text.length) {
+      spans.add(TextSpan(
+        text: text.substring(start),
+        style: TextStyle(
+          height: 1.5,
+          color: AppColors.textPrimary,
+        ),
+      ));
+    }
+
+    return RichText(text: TextSpan(children: spans));
   }
 }

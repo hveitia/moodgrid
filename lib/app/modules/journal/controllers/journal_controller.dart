@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +12,13 @@ class JournalController extends GetxController {
   final DatabaseHelper _databaseHelper = DatabaseHelper();
 
   final RxList<DailyRecord> journalEntries = <DailyRecord>[].obs;
+  final RxList<DailyRecord> filteredEntries = <DailyRecord>[].obs;
   final RxBool isLoading = false.obs;
+  final RxString searchQuery = ''.obs;
+  final RxBool isSearching = false.obs;
+
+  final TextEditingController searchController = TextEditingController();
+  Timer? _debounceTimer;
 
   @override
   void onInit() {
@@ -18,11 +26,19 @@ class JournalController extends GetxController {
     loadJournalEntries();
   }
 
+  @override
+  void onClose() {
+    searchController.dispose();
+    _debounceTimer?.cancel();
+    super.onClose();
+  }
+
   Future<void> loadJournalEntries() async {
     try {
       isLoading.value = true;
       final entries = await _databaseHelper.getRecordsWithComments();
       journalEntries.value = entries;
+      _applySearch();
     } catch (e) {
       Get.snackbar(
         'Error',
@@ -35,6 +51,44 @@ class JournalController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  void onSearchChanged(String query) {
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+      searchQuery.value = query.trim();
+      _applySearch();
+    });
+  }
+
+  void _applySearch() {
+    if (searchQuery.value.isEmpty) {
+      filteredEntries.value = journalEntries;
+      return;
+    }
+
+    final query = searchQuery.value.toLowerCase();
+    filteredEntries.value = journalEntries.where((entry) {
+      final comment = entry.comment?.toLowerCase() ?? '';
+      return comment.contains(query);
+    }).toList();
+  }
+
+  void clearSearch() {
+    searchController.clear();
+    searchQuery.value = '';
+    _applySearch();
+  }
+
+  void toggleSearch() {
+    isSearching.value = !isSearching.value;
+    if (!isSearching.value) {
+      clearSearch();
+    }
+  }
+
+  int get resultCount => filteredEntries.length;
+
+  bool get hasSearchQuery => searchQuery.value.isNotEmpty;
 
   void showRecordDialog(DateTime date) {
     final homeController = Get.find<HomeController>();
