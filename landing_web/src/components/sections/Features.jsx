@@ -12,8 +12,8 @@ const FEATURES = [
         <rect x="3" y="14" width="7" height="7"/>
       </svg>
     ),
-    title: 'Grid Visual tipo GitHub',
-    description: 'Visualiza tu año emocional como un mapa de calor. Cada celda representa un día coloreado según tu estado de ánimo.',
+    title: 'Mapa de Emociones',
+    description: 'Visualiza tu año emocional en un mosaico colorido. Cada celda representa un día pintado según cómo te sentiste.',
     color: 'var(--color-mood-excellent)',
   },
   {

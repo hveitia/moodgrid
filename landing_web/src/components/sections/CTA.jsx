@@ -53,7 +53,7 @@ export function CTA() {
 
           <div className={styles.buttons}>
             <Button
-              href="#"
+              href="https://apps.apple.com/ec/app/feelmap/id6756886570"
               variant="primary"
               size="large"
               icon={
@@ -65,7 +65,7 @@ export function CTA() {
               Descargar en App Store
             </Button>
             <Button
-              href="#"
+              href="https://play.google.com/store/apps/details?id=com.hveitia.moodgrid.moodgrid"
               variant="secondary"
               size="large"
               icon={

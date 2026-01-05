@@ -49,13 +49,13 @@ export function Hero() {
               Visualiza tus emociones, cuida tu bienestar
             </p>
             <p className={styles.description}>
-              Registra tu estado de ánimo diario con una interfaz visual inspirada en GitHub.
+              Registra tu estado de ánimo diario con una interfaz visual colorida e intuitiva.
               Descubre patrones emocionales, escribe en tu diario y cuida tu salud mental.
             </p>
 
             <div className={styles.buttons}>
               <Button
-                href="#"
+                href="https://apps.apple.com/ec/app/feelmap/id6756886570"
                 variant="primary"
                 size="large"
                 icon={
@@ -67,7 +67,7 @@ export function Hero() {
                 App Store
               </Button>
               <Button
-                href="#"
+                href="https://play.google.com/store/apps/details?id=com.hveitia.moodgrid.moodgrid"
                 variant="secondary"
                 size="large"
                 icon={
@@ -102,7 +102,7 @@ export function Hero() {
             <div className={styles.phoneFrame}>
               <div className={styles.phoneScreen}>
                 <img
-                  src="https://placehold.co/390x844/FAFAFA/88B486?text=Feelmap+App"
+                  src="https://firebasestorage.googleapis.com/v0/b/moodgrid-dfee6.firebasestorage.app/o/IMG_9700.PNG?alt=media&token=a09a1a0d-2070-4ed6-b78f-3c93399a4e8c"
                   alt="Feelmap App Preview"
                   className={styles.mockupImage}
                 />

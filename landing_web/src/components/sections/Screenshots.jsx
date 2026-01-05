@@ -7,31 +7,31 @@ const SCREENSHOTS = [
   {
     id: 1,
     title: 'Grid View',
-    image: 'https://placehold.co/390x844/88B486/FFFFFF?text=Grid+View',
+    image: 'https://firebasestorage.googleapis.com/v0/b/moodgrid-dfee6.firebasestorage.app/o/IMG_9695.PNG?alt=media&token=f19e3f49-f8db-463c-9d3e-1dc705ec38bc',
     color: '#88B486',
   },
   {
     id: 2,
     title: 'Year in Pixels',
-    image: 'https://placehold.co/390x844/90AFCF/FFFFFF?text=Year+Pixels',
+    image: 'https://firebasestorage.googleapis.com/v0/b/moodgrid-dfee6.firebasestorage.app/o/IMG_9696.PNG?alt=media&token=de9ce0fa-5c0b-4edf-b3e6-a891690b32c9',
     color: '#90AFCF',
   },
   {
     id: 3,
     title: 'Journal',
-    image: 'https://placehold.co/390x844/EED694/2C2C2C?text=Journal',
+    image: 'https://firebasestorage.googleapis.com/v0/b/moodgrid-dfee6.firebasestorage.app/o/IMG_9699.PNG?alt=media&token=beaa71be-b399-4cf1-a947-32df55cfb23c',
     color: '#EED694',
   },
   {
     id: 4,
     title: 'Word Cloud',
-    image: 'https://placehold.co/390x844/E3A676/FFFFFF?text=Word+Cloud',
+    image: 'https://firebasestorage.googleapis.com/v0/b/moodgrid-dfee6.firebasestorage.app/o/IMG_9697.PNG?alt=media&token=edc42bc7-1d27-4919-950c-3be566f0ce71',
     color: '#E3A676',
   },
   {
     id: 5,
     title: 'Stats',
-    image: 'https://placehold.co/390x844/D68078/FFFFFF?text=Stats',
+    image: 'https://firebasestorage.googleapis.com/v0/b/moodgrid-dfee6.firebasestorage.app/o/IMG_9698.PNG?alt=media&token=2ca1ee8e-1b40-4a2c-96be-0a35d85bf31d',
     color: '#D68078',
   },
 ];

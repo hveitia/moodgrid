@@ -61,7 +61,7 @@ export function Header() {
 
           <div className={styles.actions}>
             <a
-              href="#"
+              href="https://apps.apple.com/ec/app/feelmap/id6756886570"
               className={styles.downloadButton}
               aria-label="Descargar en App Store"
             >
@@ -71,7 +71,7 @@ export function Header() {
               <span>App Store</span>
             </a>
             <a
-              href="#"
+              href="https://play.google.com/store/apps/details?id=com.hveitia.moodgrid.moodgrid"
               className={styles.downloadButton}
               aria-label="Descargar en Google Play"
             >
