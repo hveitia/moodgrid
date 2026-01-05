@@ -502,6 +502,15 @@ class HomeView extends GetView<HomeController> {
             },
           ),
           ListTile(
+            leading: Icon(Icons.auto_graph, color: AppColors.moodExcellent),
+            title: const Text('Reflexiones'),
+            subtitle: const Text('Estadísticas de escritura'),
+            onTap: () {
+              Get.back();
+              Get.toNamed(Routes.reflections);
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.book, color: AppColors.moodNeutral),
             title: const Text('Mi Diario'),
             subtitle: const Text('Ver comentarios y reflexiones'),
@@ -517,15 +526,6 @@ class HomeView extends GetView<HomeController> {
             onTap: () {
               Get.back();
               Get.toNamed(Routes.wordCloud);
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.auto_graph, color: AppColors.moodExcellent),
-            title: const Text('Reflexiones'),
-            subtitle: const Text('Estadísticas de escritura'),
-            onTap: () {
-              Get.back();
-              Get.toNamed(Routes.reflections);
             },
           ),
 
