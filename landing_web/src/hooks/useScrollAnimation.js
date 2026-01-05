@@ -53,7 +53,8 @@ export function useMultipleScrollAnimation(count, options = {}) {
   } = options;
 
   useEffect(() => {
-    const observers = refs.current.map((element, index) => {
+    const currentRefs = refs.current;
+    const observers = currentRefs.map((element, index) => {
       if (!element) return null;
 
       const observer = new IntersectionObserver(
@@ -90,8 +91,8 @@ export function useMultipleScrollAnimation(count, options = {}) {
 
     return () => {
       observers.forEach((observer, index) => {
-        if (observer && refs.current[index]) {
-          observer.unobserve(refs.current[index]);
+        if (observer && currentRefs[index]) {
+          observer.unobserve(currentRefs[index]);
         }
       });
     };

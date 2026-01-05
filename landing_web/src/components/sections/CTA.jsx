@@ -2,6 +2,14 @@ import { Container, Button } from '../common';
 import { useScrollAnimation } from '../../hooks/useScrollAnimation';
 import styles from './CTA.module.css';
 
+const PARTICLES = [...Array(15)].map((_, i) => ({
+  id: i,
+  delay: `${Math.random() * 5}s`,
+  x: `${Math.random() * 100}%`,
+  y: `${Math.random() * 100}%`,
+  size: `${Math.random() * 20 + 10}px`,
+}));
+
 export function CTA() {
   const [ref, isVisible] = useScrollAnimation({ threshold: 0.2 });
 
@@ -10,15 +18,15 @@ export function CTA() {
       <div className={styles.background}>
         <div className={styles.gradientLayer}></div>
         <div className={styles.particles}>
-          {[...Array(15)].map((_, i) => (
+          {PARTICLES.map((particle) => (
             <span
-              key={i}
+              key={particle.id}
               className={styles.particle}
               style={{
-                '--delay': `${Math.random() * 5}s`,
-                '--x': `${Math.random() * 100}%`,
-                '--y': `${Math.random() * 100}%`,
-                '--size': `${Math.random() * 20 + 10}px`,
+                '--delay': particle.delay,
+                '--x': particle.x,
+                '--y': particle.y,
+                '--size': particle.size,
               }}
             ></span>
           ))}

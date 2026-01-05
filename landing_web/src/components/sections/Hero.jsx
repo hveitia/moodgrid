@@ -2,6 +2,17 @@ import { Container, Button } from '../common';
 import { useScrollAnimation } from '../../hooks/useScrollAnimation';
 import styles from './Hero.module.css';
 
+const PARTICLE_COLORS = ['#88B486', '#90AFCF', '#EED694', '#E3A676', '#D68078'];
+
+const PARTICLES = [...Array(20)].map((_, i) => ({
+  id: i,
+  delay: `${Math.random() * 5}s`,
+  x: `${Math.random() * 100}%`,
+  y: `${Math.random() * 100}%`,
+  size: `${Math.random() * 10 + 5}px`,
+  color: PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)],
+}));
+
 export function Hero() {
   const [ref, isVisible] = useScrollAnimation({ threshold: 0.1 });
 
@@ -12,16 +23,16 @@ export function Hero() {
         <div className={styles.gradientOrb2}></div>
         <div className={styles.gradientOrb3}></div>
         <div className={styles.particles}>
-          {[...Array(20)].map((_, i) => (
+          {PARTICLES.map((particle) => (
             <span
-              key={i}
+              key={particle.id}
               className={styles.particle}
               style={{
-                '--delay': `${Math.random() * 5}s`,
-                '--x': `${Math.random() * 100}%`,
-                '--y': `${Math.random() * 100}%`,
-                '--size': `${Math.random() * 10 + 5}px`,
-                '--color': ['#88B486', '#90AFCF', '#EED694', '#E3A676', '#D68078'][Math.floor(Math.random() * 5)],
+                '--delay': particle.delay,
+                '--x': particle.x,
+                '--y': particle.y,
+                '--size': particle.size,
+                '--color': particle.color,
               }}
             ></span>
           ))}

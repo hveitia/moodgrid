@@ -4,7 +4,7 @@ export function Container({
   children,
   size = 'default',
   className = '',
-  as: Component = 'div',
+  as = 'div',
   ...props
 }) {
   const containerClasses = [
@@ -15,10 +15,11 @@ export function Container({
     .filter(Boolean)
     .join(' ');
 
+  const Element = as;
   return (
-    <Component className={containerClasses} {...props}>
+    <Element className={containerClasses} {...props}>
       {children}
-    </Component>
+    </Element>
   );
 }
 
