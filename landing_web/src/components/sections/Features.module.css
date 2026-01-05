@@ -1,0 +1,114 @@
+.features {
+  background: var(--color-background);
+  position: relative;
+  overflow: hidden;
+}
+
+.features::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-divider), transparent);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.featureCard {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease-out;
+}
+
+.featureCard.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.featureContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: color-mix(in srgb, var(--icon-color) 15%, transparent);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-md);
+  color: var(--icon-color);
+  transition: all var(--transition-base);
+}
+
+.iconWrapper svg {
+  width: 28px;
+  height: 28px;
+}
+
+.featureCard:hover .iconWrapper {
+  background: var(--icon-color);
+  color: var(--color-surface);
+  transform: scale(1.1);
+}
+
+.featureTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.featureDescription {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+/* Last item centered if odd number */
+.grid > *:last-child:nth-child(3n + 1) {
+  grid-column: 2;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid > *:last-child:nth-child(3n + 1) {
+    grid-column: auto;
+  }
+
+  .grid > *:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    max-width: 400px;
+    justify-self: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .grid > *:last-child:nth-child(odd) {
+    max-width: 100%;
+  }
+
+  .featureContent {
+    align-items: center;
+    text-align: center;
+  }
+}

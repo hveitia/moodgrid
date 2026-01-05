@@ -1,0 +1,214 @@
+.screenshots {
+  background: var(--color-surface);
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease-out;
+}
+
+.carousel.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.screenshotsContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 500px;
+  width: 100%;
+  max-width: 800px;
+  perspective: 1000px;
+}
+
+.screenshot {
+  position: absolute;
+  cursor: pointer;
+  transform:
+    translateX(calc(var(--offset) * 180px))
+    scale(calc(1 - abs(var(--offset)) * 0.15))
+    rotateY(calc(var(--offset) * -5deg));
+  z-index: calc(10 - abs(var(--offset)));
+  opacity: calc(1 - abs(var(--offset)) * 0.3);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: blur(calc(abs(var(--offset)) * 2px));
+}
+
+.screenshot.active {
+  transform: translateX(0) scale(1) rotateY(0);
+  opacity: 1;
+  filter: blur(0);
+  z-index: 20;
+}
+
+.phoneFrame {
+  width: 220px;
+  height: 460px;
+  background: var(--color-text-primary);
+  border-radius: 36px;
+  padding: 10px;
+  box-shadow: var(--shadow-xl);
+  transition: all var(--transition-base);
+}
+
+.screenshot.active .phoneFrame {
+  box-shadow: var(--shadow-xl), 0 0 40px color-mix(in srgb, var(--color) 40%, transparent);
+}
+
+.phoneScreen {
+  width: 100%;
+  height: 100%;
+  background: var(--color-background);
+  border-radius: 28px;
+  overflow: hidden;
+}
+
+.screenshotImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.screenshotTitle {
+  display: block;
+  text-align: center;
+  margin-top: var(--spacing-md);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+/* Navigation Buttons */
+.navButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  z-index: 30;
+  flex-shrink: 0;
+}
+
+.navButton:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-surface);
+  transform: scale(1.1);
+}
+
+.navButton svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Indicators */
+.indicators {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background: var(--color-divider);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.indicator:hover {
+  background: color-mix(in srgb, var(--color) 50%, transparent);
+}
+
+.indicatorActive {
+  background: var(--color);
+  width: 32px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .screenshotsContainer {
+    height: 400px;
+  }
+
+  .phoneFrame {
+    width: 180px;
+    height: 380px;
+    border-radius: 30px;
+  }
+
+  .phoneScreen {
+    border-radius: 24px;
+  }
+
+  .screenshot {
+    transform:
+      translateX(calc(var(--offset) * 120px))
+      scale(calc(1 - abs(var(--offset)) * 0.2));
+  }
+
+  .navButton {
+    width: 40px;
+    height: 40px;
+  }
+
+  .navButton svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .screenshotsContainer {
+    height: 350px;
+  }
+
+  .phoneFrame {
+    width: 150px;
+    height: 320px;
+    border-radius: 26px;
+    padding: 8px;
+  }
+
+  .phoneScreen {
+    border-radius: 20px;
+  }
+
+  .screenshot {
+    transform:
+      translateX(calc(var(--offset) * 80px))
+      scale(calc(1 - abs(var(--offset)) * 0.25));
+  }
+
+  .navButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .navPrev {
+    left: 0;
+  }
+
+  .navNext {
+    right: 0;
+  }
+}

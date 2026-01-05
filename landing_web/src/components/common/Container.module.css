@@ -1,0 +1,23 @@
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* Sizes */
+.default {
+  max-width: var(--container-max-width);
+}
+
+.small {
+  max-width: 800px;
+}
+
+.large {
+  max-width: 1400px;
+}
+
+.full {
+  max-width: 100%;
+  padding: 0;
+}
