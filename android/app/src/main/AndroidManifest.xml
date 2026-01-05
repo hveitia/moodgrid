@@ -4,7 +4,7 @@
     <!-- Remover permiso AD_ID agregado por Firebase - la app no usa publicidad -->
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove" />
     <application
-        android:label="Moodgrid"
+        android:label="Feelmap"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
 		android:roundIcon="@mipmap/ic_launcher_round">

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
+import 'package:moodgrid/app/data/models/daily_record.dart';
 import 'package:moodgrid/app/modules/reflections/controllers/reflections_controller.dart';
+import 'package:moodgrid/app/modules/reflections/widgets/year_in_pixels_widget.dart';
 
 class ReflectionsView extends GetView<ReflectionsController> {
   const ReflectionsView({super.key});
@@ -31,6 +33,8 @@ class ReflectionsView extends GetView<ReflectionsController> {
             children: [
               _buildHeader(),
               const SizedBox(height: 24),
+              _buildYearInPixels(),
+              const SizedBox(height: 16),
               Obx(() => controller.hasComments
                   ? _buildStatsContent()
                   : _buildNoCommentsMessage()),
@@ -83,6 +87,45 @@ class ReflectionsView extends GetView<ReflectionsController> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildYearInPixels() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              onPressed: controller.previousYear,
+              icon: const Icon(Icons.chevron_left),
+              tooltip: 'Año anterior',
+            ),
+            Obx(() => Text(
+              '${controller.selectedYear.value}',
+              style: Get.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            )),
+            Obx(() => IconButton(
+              onPressed: controller.selectedYear.value < DateTime.now().year
+                  ? controller.nextYear
+                  : null,
+              icon: const Icon(Icons.chevron_right),
+              tooltip: 'Año siguiente',
+            )),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Obx(() {
+          final _ = controller.yearRecordsMap.length;
+          return YearInPixelsWidget(
+            year: controller.selectedYear.value,
+            recordsMap: Map<String, DailyRecord>.from(controller.yearRecordsMap),
+            onExport: controller.exportYearAsImage,
+          );
+        }),
+      ],
     );
   }
 

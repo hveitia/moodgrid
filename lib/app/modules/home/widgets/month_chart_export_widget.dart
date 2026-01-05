@@ -47,7 +47,7 @@ class MonthChartExportWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'MoodGrid',
+                    'Feelmap',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

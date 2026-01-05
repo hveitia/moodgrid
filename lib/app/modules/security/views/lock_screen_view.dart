@@ -84,7 +84,7 @@ class _LockScreenContentState extends State<_LockScreenContent> {
                   children: [
                 const SizedBox(height: 12),
                 Text(
-                  'MoodGrid',
+                  'Feelmap',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),

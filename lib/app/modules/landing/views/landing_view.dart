@@ -27,7 +27,7 @@ class LandingView extends StatelessWidget {
               const SizedBox(height: 24),
 
               Text(
-                'MoodGrid',
+                'Feelmap',
                 style: Get.textTheme.displayLarge?.copyWith(
                   color: AppColors.moodExcellent,
                   fontWeight: FontWeight.bold,

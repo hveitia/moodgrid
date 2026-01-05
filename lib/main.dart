@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
     final securityController = Get.find<SecurityController>();
 
     return GetMaterialApp(
-      title: 'MoodGrid',
+      title: 'Feelmap',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       builder: (context, child) {

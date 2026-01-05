@@ -166,8 +166,8 @@ class HomeController extends GetxController {
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(file.path)],
-          subject: 'MoodGrid Backup',
-          text: 'Respaldo de mis registros de MoodGrid',
+          subject: 'Feelmap Backup',
+          text: 'Respaldo de mis registros de Feelmap',
         ),
       );
     } catch (e) {
@@ -418,7 +418,7 @@ class HomeController extends GetxController {
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(file.path)],
-          subject: 'MoodGrid - $monthName ${month.year}',
+          subject: 'Feelmap - $monthName ${month.year}',
           text: 'Mi registro de estado de ánimo de $monthName ${month.year}',
         ),
       );

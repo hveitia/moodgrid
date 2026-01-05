@@ -1,7 +1,16 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:moodgrid/app/core/values/app_colors.dart';
 import 'package:moodgrid/app/data/models/daily_record.dart';
 import 'package:moodgrid/app/data/providers/database_helper.dart';
+import 'package:moodgrid/app/modules/reflections/widgets/year_in_pixels_export_widget.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ReflectionsController extends GetxController {
   final DatabaseHelper _databaseHelper = DatabaseHelper();
@@ -18,10 +27,15 @@ class ReflectionsController extends GetxController {
   final RxString topCommentMonth = ''.obs;
   final RxInt topCommentMonthCount = 0.obs;
 
+  // Año en píxeles
+  final RxInt selectedYear = DateTime.now().year.obs;
+  final RxMap<String, DailyRecord> yearRecordsMap = <String, DailyRecord>{}.obs;
+
   @override
   void onInit() {
     super.onInit();
     loadStatistics();
+    loadYearRecords();
   }
 
   Future<void> loadStatistics() async {
@@ -181,4 +195,152 @@ class ReflectionsController extends GetxController {
   }
 
   bool get hasComments => totalDaysWithComments.value > 0;
+
+  Future<void> loadYearRecords() async {
+    try {
+      final startDate = DateTime(selectedYear.value, 1, 1);
+      final endDate = DateTime(selectedYear.value, 12, 31);
+      final records = await _databaseHelper.getRecordsByDateRange(startDate, endDate);
+
+      final newMap = <String, DailyRecord>{};
+      for (final record in records) {
+        final dateKey = DateFormat('yyyy-MM-dd').format(record.date);
+        newMap[dateKey] = record;
+      }
+      yearRecordsMap.assignAll(newMap);
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Error al cargar datos del año',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
+
+  void changeYear(int year) {
+    selectedYear.value = year;
+    loadYearRecords();
+  }
+
+  void previousYear() {
+    changeYear(selectedYear.value - 1);
+  }
+
+  void nextYear() {
+    if (selectedYear.value < DateTime.now().year) {
+      changeYear(selectedYear.value + 1);
+    }
+  }
+
+  Future<void> exportYearAsImage() async {
+    try {
+      isLoading.value = true;
+
+      Get.dialog(
+        PopScope(
+          canPop: false,
+          child: Center(
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 40),
+                padding: const EdgeInsets.all(32),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 10),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppColors.moodExcellent.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.moodExcellent,
+                        ),
+                        strokeWidth: 3,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'Preparando exportación...',
+                      style: Get.textTheme.titleMedium?.copyWith(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Esto tomará un momento',
+                      style: Get.textTheme.bodySmall?.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        barrierDismissible: false,
+      );
+
+      final screenshotController = ScreenshotController();
+
+      final exportWidget = YearInPixelsExportWidget(
+        year: selectedYear.value,
+        recordsMap: Map<String, DailyRecord>.from(yearRecordsMap),
+      );
+
+      final Uint8List imageBytes = await screenshotController.captureFromWidget(
+        exportWidget,
+        pixelRatio: 3.0,
+        delay: const Duration(milliseconds: 300),
+      );
+
+      final tempDir = await getTemporaryDirectory();
+      final fileName = 'moodgrid_año_${selectedYear.value}.png';
+      final file = File('${tempDir.path}/$fileName');
+      await file.writeAsBytes(imageBytes);
+
+      Get.back();
+
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path)],
+          subject: 'Feelmap - Mi Año en Píxeles ${selectedYear.value}',
+          text: 'Mi registro de estado de ánimo del año ${selectedYear.value}',
+        ),
+      );
+    } catch (e) {
+      try {
+        Get.back();
+      } catch (_) {}
+
+      try {
+        Get.snackbar(
+          'Error',
+          'Error al exportar imagen: $e',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red.shade400,
+          colorText: Colors.white,
+        );
+      } catch (_) {}
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }

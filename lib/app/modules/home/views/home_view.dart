@@ -16,7 +16,7 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MoodGrid'),
+        title: const Text('Feelmap'),
         actions: [
           Obx(() => IconButton(
                 icon: Icon(
@@ -463,7 +463,7 @@ class HomeView extends GetView<HomeController> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Bienvenido a MoodGrid',
+                  'Bienvenido a Feelmap',
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.9),
                     fontSize: 13,
@@ -616,7 +616,7 @@ class HomeView extends GetView<HomeController> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'MoodGrid',
+                      'Feelmap',
                       style: Get.textTheme.titleSmall?.copyWith(
                         color: Colors.grey[700],
                         fontWeight: FontWeight.bold,
@@ -656,7 +656,7 @@ class HomeView extends GetView<HomeController> {
             ),
             const SizedBox(width: 12),
             const Expanded(
-              child: Text('Acerca de MoodGrid'),
+              child: Text('Acerca de Feelmap'),
             ),
           ],
         ),
@@ -665,7 +665,7 @@ class HomeView extends GetView<HomeController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'MoodGrid es una aplicación para rastrear tu estado de ánimo diario de forma visual e intuitiva.',
+              'Feelmap es una aplicación para rastrear tu estado de ánimo diario de forma visual e intuitiva.',
               style: TextStyle(height: 1.5),
             ),
             const SizedBox(height: 16),
