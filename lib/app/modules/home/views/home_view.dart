@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:moodgrid/app/core/utils/date_format_helper.dart';
+import 'package:moodgrid/app/core/widgets/ad_banner.dart';
 import 'package:moodgrid/app/routes/app_routes.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
@@ -16,7 +17,7 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Feelmap'),
+        title: const Text('EmotionsMap'),
         actions: [
           Obx(() => IconButton(
                 icon: Icon(
@@ -26,7 +27,7 @@ class HomeView extends GetView<HomeController> {
                       : Colors.grey[600],
                 ),
                 onPressed: () => controller.toggleView(false),
-                tooltip: 'Vista de cuadrícula',
+                tooltip: 'home.appbar.tooltip.grid'.tr,
               )),
           Obx(() => IconButton(
                 icon: Icon(
@@ -36,7 +37,7 @@ class HomeView extends GetView<HomeController> {
                       : Colors.grey[600],
                 ),
                 onPressed: () => controller.toggleView(true),
-                tooltip: 'Vista de gráfico',
+                tooltip: 'home.appbar.tooltip.chart'.tr,
               )),
           Padding(
             padding: const EdgeInsets.only(left: 8, right: 8),
@@ -57,6 +58,7 @@ class HomeView extends GetView<HomeController> {
         ],
       ),
       drawer: _buildDrawer(),
+      bottomNavigationBar: const AdBanner(),
       body: Obx(() {
         if (controller.isLoading.value && controller.records.isEmpty) {
           return const Center(child: CircularProgressIndicator());
@@ -88,7 +90,7 @@ class HomeView extends GetView<HomeController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Leyenda',
+              'home.legend.title'.tr,
               style: Get.textTheme.titleMedium,
             ),
             const SizedBox(height: 12),
@@ -253,7 +255,7 @@ class HomeView extends GetView<HomeController> {
 
   // Construir separador de mes
   Widget _buildMonthSeparator(DateTime month, List<dynamic> weeks) {
-    final monthName = DateFormat('MMMM', 'es_ES').format(month);
+    final monthName = appDateFormat(month, 'MMMM');
     final year = month.year;
     final capitalizedMonth = monthName[0].toUpperCase() + monthName.substring(1);
     final hasRecords = controller.hasRecordsInMonth(month);
@@ -280,7 +282,7 @@ class HomeView extends GetView<HomeController> {
             IconButton(
               icon: const Icon(Icons.share, size: 30),
               color: AppColors.moodExcellent,
-              tooltip: 'Exportar mes',
+              tooltip: 'home.month.tooltip.export'.tr,
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
               onPressed: () {
@@ -297,7 +299,15 @@ class HomeView extends GetView<HomeController> {
 
   // Construir encabezado de días de la semana
   Widget _buildWeekdayHeader() {
-    final weekdays = ['LU', 'MA', 'MI', 'JU', 'VI', 'SA', 'DO'];
+    final weekdays = [
+      'home.weekday.short.mon'.tr,
+      'home.weekday.short.tue'.tr,
+      'home.weekday.short.wed'.tr,
+      'home.weekday.short.thu'.tr,
+      'home.weekday.short.fri'.tr,
+      'home.weekday.short.sat'.tr,
+      'home.weekday.short.sun'.tr,
+    ];
 
     return Row(
       children: weekdays.map((day) {
@@ -406,7 +416,7 @@ class HomeView extends GetView<HomeController> {
 
   Widget _buildDrawer() {
     final authController = Get.find<AuthController>();
-    final email = authController.user?.email ?? 'Usuario';
+    final email = authController.user?.email ?? 'profile.user_default'.tr;
 
     return Drawer(
       child: ListView(
@@ -463,7 +473,7 @@ class HomeView extends GetView<HomeController> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Bienvenido a Feelmap',
+                  'drawer.welcome'.tr,
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.9),
                     fontSize: 13,
@@ -477,7 +487,7 @@ class HomeView extends GetView<HomeController> {
           Padding(
             padding: const EdgeInsets.only(left: 16, top: 8, bottom: 4),
             child: Text(
-              'PRINCIPAL',
+              'drawer.section.main'.tr,
               style: Get.textTheme.bodySmall?.copyWith(
                 color: Colors.grey[600],
                 fontWeight: FontWeight.bold,
@@ -487,15 +497,15 @@ class HomeView extends GetView<HomeController> {
           ),
           ListTile(
             leading: Icon(Icons.home_rounded, color: AppColors.moodExcellent),
-            title: const Text('Inicio'),
+            title: Text('drawer.item.home'.tr),
             onTap: () {
               Get.back();
             },
           ),
           ListTile(
             leading: Icon(Icons.person, color: AppColors.moodGood),
-            title: const Text('Mi Perfil'),
-            subtitle: const Text('Ver estadísticas y configuración'),
+            title: Text('drawer.item.profile.title'.tr),
+            subtitle: Text('drawer.item.profile.subtitle'.tr),
             onTap: () {
               Get.back();
               Get.toNamed(Routes.profile);
@@ -503,8 +513,8 @@ class HomeView extends GetView<HomeController> {
           ),
           ListTile(
             leading: Icon(Icons.auto_graph, color: AppColors.moodExcellent),
-            title: const Text('Reflexiones'),
-            subtitle: const Text('Estadísticas de escritura'),
+            title: Text('drawer.item.reflections.title'.tr),
+            subtitle: Text('drawer.item.reflections.subtitle'.tr),
             onTap: () {
               Get.back();
               Get.toNamed(Routes.reflections);
@@ -512,8 +522,8 @@ class HomeView extends GetView<HomeController> {
           ),
           ListTile(
             leading: Icon(Icons.book, color: AppColors.moodNeutral),
-            title: const Text('Mi Diario'),
-            subtitle: const Text('Ver comentarios y reflexiones'),
+            title: Text('drawer.item.journal.title'.tr),
+            subtitle: Text('drawer.item.journal.subtitle'.tr),
             onTap: () {
               Get.back();
               Get.toNamed(Routes.journal);
@@ -521,8 +531,8 @@ class HomeView extends GetView<HomeController> {
           ),
           ListTile(
             leading: Icon(Icons.cloud, color: AppColors.moodDifficult),
-            title: const Text('Nube de Palabras'),
-            subtitle: const Text('Análisis de comentarios'),
+            title: Text('drawer.item.wordcloud.title'.tr),
+            subtitle: Text('drawer.item.wordcloud.subtitle'.tr),
             onTap: () {
               Get.back();
               Get.toNamed(Routes.wordCloud);
@@ -534,7 +544,7 @@ class HomeView extends GetView<HomeController> {
           Padding(
             padding: const EdgeInsets.only(left: 16, top: 8, bottom: 4),
             child: Text(
-              'HERRAMIENTAS',
+              'drawer.section.tools'.tr,
               style: Get.textTheme.bodySmall?.copyWith(
                 color: Colors.grey[600],
                 fontWeight: FontWeight.bold,
@@ -544,8 +554,8 @@ class HomeView extends GetView<HomeController> {
           ),
           ListTile(
             leading: Icon(Icons.backup, color: AppColors.moodNeutral),
-            title: const Text('Respaldo de Datos'),
-            subtitle: const Text('Exportar e importar'),
+            title: Text('drawer.item.backup.title'.tr),
+            subtitle: Text('drawer.item.backup.subtitle'.tr),
             onTap: () {
               Get.back();
               Get.toNamed(Routes.backup);
@@ -553,8 +563,8 @@ class HomeView extends GetView<HomeController> {
           ),
           ListTile(
             leading: Icon(Icons.lock_outline, color: AppColors.moodDifficult),
-            title: const Text('Seguridad'),
-            subtitle: const Text('Configurar PIN'),
+            title: Text('drawer.item.security.title'.tr),
+            subtitle: Text('drawer.item.security.subtitle'.tr),
             onTap: () {
               Get.back();
               Get.toNamed(Routes.securitySettings);
@@ -566,7 +576,7 @@ class HomeView extends GetView<HomeController> {
           Padding(
             padding: const EdgeInsets.only(left: 16, top: 8, bottom: 4),
             child: Text(
-              'INFORMACIÓN',
+              'drawer.section.info'.tr,
               style: Get.textTheme.bodySmall?.copyWith(
                 color: Colors.grey[600],
                 fontWeight: FontWeight.bold,
@@ -576,8 +586,8 @@ class HomeView extends GetView<HomeController> {
           ),
           ListTile(
             leading: const Icon(Icons.info_outline, color: Colors.blue),
-            title: const Text('Acerca de'),
-            subtitle: const Text('Información de la app'),
+            title: Text('drawer.item.about.title'.tr),
+            subtitle: Text('drawer.item.about.subtitle'.tr),
             onTap: () {
               Get.back();
               _showAboutDialog();
@@ -585,8 +595,8 @@ class HomeView extends GetView<HomeController> {
           ),
           ListTile(
             leading: const Icon(Icons.help_outline, color: Colors.orange),
-            title: const Text('Ayuda'),
-            subtitle: const Text('Guía de uso'),
+            title: Text('drawer.item.help.title'.tr),
+            subtitle: Text('drawer.item.help.subtitle'.tr),
             onTap: () {
               Get.back();
               _showHelpDialog();
@@ -616,7 +626,7 @@ class HomeView extends GetView<HomeController> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Feelmap',
+                      'EmotionsMap',
                       style: Get.textTheme.titleSmall?.copyWith(
                         color: Colors.grey[700],
                         fontWeight: FontWeight.bold,
@@ -624,7 +634,10 @@ class HomeView extends GetView<HomeController> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Versión $version ($buildNumber)',
+                      'drawer.version'.trParams({
+                        'version': version,
+                        'build': buildNumber,
+                      }),
                       style: Get.textTheme.bodySmall?.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -655,8 +668,8 @@ class HomeView extends GetView<HomeController> {
               width: 28,
             ),
             const SizedBox(width: 12),
-            const Expanded(
-              child: Text('Acerca de Feelmap'),
+            Expanded(
+              child: Text('about.title'.tr),
             ),
           ],
         ),
@@ -664,34 +677,29 @@ class HomeView extends GetView<HomeController> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Feelmap es una aplicación para rastrear tu estado de ánimo diario de forma visual e intuitiva.',
-              style: TextStyle(height: 1.5),
+            Text(
+              'about.description'.tr,
+              style: const TextStyle(height: 1.5),
             ),
             const SizedBox(height: 16),
             Text(
-              'Características:',
+              'about.features.title'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: AppColors.moodExcellent,
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              '• Registro diario de emociones.\n'
-              '• Visualización en cuadrícula y gráfico.\n'
-              '• Estadísticas detalladas.\n'
-              '• Exportación de datos y capturas.\n'
-              '• Exportación de imágenes por mes.\n'
-              '• Seguridad con PIN.',
-              style: TextStyle(height: 1.5),
+            Text(
+              'about.features.bullets'.tr,
+              style: const TextStyle(height: 1.5),
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Cerrar'),
+            child: Text('common.close'.tr),
           ),
         ],
       ),
@@ -708,7 +716,7 @@ class HomeView extends GetView<HomeController> {
           children: [
             const Icon(Icons.help_outline, color: Colors.orange),
             const SizedBox(width: 12),
-            const Text('Guía de Uso'),
+            Text('help.title'.tr),
           ],
         ),
         content: SingleChildScrollView(
@@ -717,35 +725,28 @@ class HomeView extends GetView<HomeController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildHelpSection(
-                'Registrar tu ánimo',
-                'Toca cualquier día en la cuadrícula para registrar cómo te sentiste ese día.',
+                'help.section.log.title'.tr,
+                'help.section.log.body'.tr,
               ),
               const SizedBox(height: 12),
               _buildHelpSection(
-                'Colores',
-                'Cada color representa un estado de ánimo diferente:\n'
-                '• Verde: Excelente.\n'
-                '• Azul: Bien.\n'
-                '• Amarillo: Neutral.\n'
-                '• Naranja: Difícil.\n'
-                '• Rojo: Mal.',
+                'help.section.colors.title'.tr,
+                'help.section.colors.body'.tr,
               ),
               const SizedBox(height: 12),
               _buildHelpSection(
-                'Comentarios',
-                'Puedes agregar notas a cada día. Los días con comentarios muestran un pequeño ícono de nota.',
+                'help.section.comments.title'.tr,
+                'help.section.comments.body'.tr,
               ),
               const SizedBox(height: 12),
               _buildHelpSection(
-                'Vistas',
-                'Cambia entre vista de cuadrícula y vista de gráfico usando los iconos en la barra superior:\n'
-                '• Cuadrícula: Muestra tus días en formato de calendario.\n'
-                '• Gráfico: Visualiza tus estados de ánimo como un gráfico de barras.',
+                'help.section.views.title'.tr,
+                'help.section.views.body'.tr,
               ),
               const SizedBox(height: 12),
               _buildHelpSection(
-                'Exportar mes',
-                'Toca el ícono de compartir en cada mes para exportar la imagen de ese mes. Puedes compartir la captura en tus apps favoritas.',
+                'help.section.export.title'.tr,
+                'help.section.export.body'.tr,
               ),
             ],
           ),
@@ -753,7 +754,7 @@ class HomeView extends GetView<HomeController> {
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Entendido'),
+            child: Text('help.button.understood'.tr),
           ),
         ],
       ),

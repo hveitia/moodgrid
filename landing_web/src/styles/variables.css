@@ -5,26 +5,39 @@
   --color-mood-neutral: #EED694;
   --color-mood-difficult: #E3A676;
   --color-mood-bad: #D68078;
-  --color-mood-empty: #F0F0F0;
+  --color-mood-empty: #ECECEC;
 
-  /* UI Colors */
-  --color-background: #FAFAFA;
+  /* Mood RGB (para alphas) */
+  --color-mood-excellent-rgb: 136, 180, 134;
+  --color-mood-good-rgb: 144, 175, 207;
+  --color-mood-neutral-rgb: 238, 214, 148;
+  --color-mood-difficult-rgb: 227, 166, 118;
+  --color-mood-bad-rgb: 214, 128, 120;
+
+  /* UI Colors - cálidos */
+  --color-background: #FAF8F4;
+  --color-background-warm: #F5F0E8;
   --color-surface: #FFFFFF;
-  --color-text-primary: #2C2C2C;
-  --color-text-secondary: #757575;
-  --color-divider: #E0E0E0;
+  --color-surface-soft: #FBF9F4;
+  --color-text-primary: #1F2D1F;
+  --color-text-secondary: #5A6760;
+  --color-text-muted: #8A958E;
+  --color-divider: #E8E2D6;
+  --color-border-soft: rgba(31, 45, 31, 0.08);
 
   /* Primary Colors */
   --color-primary: #88B486;
-  --color-primary-dark: #6a9668;
-  --color-primary-light: #a8c9a6;
+  --color-primary-dark: #5E8A5C;
+  --color-primary-light: #B5D2B3;
 
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, var(--color-mood-excellent) 0%, var(--color-mood-good) 100%);
   --gradient-warm: linear-gradient(135deg, var(--color-mood-neutral) 0%, var(--color-mood-difficult) 100%);
-  --gradient-hero: linear-gradient(180deg, var(--color-background) 0%, rgba(136, 180, 134, 0.1) 100%);
+  --gradient-hero: radial-gradient(60% 80% at 50% 0%, rgba(136, 180, 134, 0.18) 0%, rgba(144, 175, 207, 0.08) 40%, transparent 80%);
   --gradient-cta: linear-gradient(135deg, var(--color-mood-excellent) 0%, var(--color-mood-good) 50%, var(--color-mood-neutral) 100%);
-  --gradient-text: linear-gradient(135deg, var(--color-mood-excellent) 0%, var(--color-mood-good) 100%);
+  --gradient-text: linear-gradient(135deg, #5E8A5C 0%, #6F8FB0 60%, #C49A4F 100%);
+  --gradient-cream: linear-gradient(180deg, #FAF8F4 0%, #F5F0E8 100%);
+  --gradient-mood-strip: linear-gradient(90deg, #88B486 0%, #90AFCF 25%, #EED694 50%, #E3A676 75%, #D68078 100%);
 
   /* Spacing */
   --spacing-xs: 4px;
@@ -36,25 +49,30 @@
   --spacing-3xl: 64px;
   --spacing-4xl: 80px;
   --spacing-5xl: 100px;
+  --spacing-6xl: 140px;
 
   /* Border Radius */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 20px;
-  --radius-2xl: 24px;
+  --radius-2xl: 28px;
+  --radius-3xl: 36px;
   --radius-full: 9999px;
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
-  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
-  --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --shadow-sm: 0 1px 2px rgba(31, 45, 31, 0.04);
+  --shadow-md: 0 6px 16px rgba(31, 45, 31, 0.06);
+  --shadow-lg: 0 14px 28px rgba(31, 45, 31, 0.08);
+  --shadow-xl: 0 24px 48px rgba(31, 45, 31, 0.12);
+  --shadow-card: 0 4px 24px rgba(31, 45, 31, 0.05);
+  --shadow-card-hover: 0 16px 40px rgba(31, 45, 31, 0.10);
+  --shadow-glow-primary: 0 0 0 1px rgba(136, 180, 134, 0.15), 0 12px 32px rgba(136, 180, 134, 0.20);
+  --shadow-mockup: 0 30px 80px rgba(31, 45, 31, 0.18), 0 8px 24px rgba(31, 45, 31, 0.10);
 
   /* Typography */
   --font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Fraunces', 'Montserrat', Georgia, serif;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -62,9 +80,10 @@
   --font-size-xl: 1.25rem;
   --font-size-2xl: 1.5rem;
   --font-size-3xl: 2rem;
-  --font-size-4xl: 2.5rem;
-  --font-size-5xl: 3rem;
-  --font-size-6xl: 3.75rem;
+  --font-size-4xl: 2.75rem;
+  --font-size-5xl: 3.5rem;
+  --font-size-6xl: 4.5rem;
+  --font-size-7xl: 5.5rem;
 
   /* Font Weights */
   --font-weight-normal: 400;
@@ -73,15 +92,28 @@
   --font-weight-bold: 700;
 
   /* Line Heights */
-  --line-height-tight: 1.2;
+  --line-height-tight: 1.15;
+  --line-height-snug: 1.25;
   --line-height-normal: 1.5;
-  --line-height-relaxed: 1.75;
+  --line-height-relaxed: 1.7;
+
+  /* Letter Spacing */
+  --tracking-tight: -0.03em;
+  --tracking-snug: -0.015em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.04em;
+
+  /* Custom Easing Curves (Emil Kowalski) */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Transitions */
-  --transition-fast: 150ms ease;
-  --transition-base: 300ms ease;
-  --transition-slow: 500ms ease;
-  --transition-bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --transition-fast: 160ms var(--ease-out);
+  --transition-base: 240ms var(--ease-out);
+  --transition-slow: 480ms var(--ease-out);
+  --transition-press: 120ms var(--ease-out);
 
   /* Z-Index */
   --z-dropdown: 100;

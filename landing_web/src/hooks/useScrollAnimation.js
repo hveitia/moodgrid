@@ -1,41 +1,35 @@
 import { useEffect, useRef, useState } from 'react';
 
+const ioSupported = () => typeof IntersectionObserver !== 'undefined';
+
 export function useScrollAnimation(options = {}) {
   const {
-    threshold = 0.1,
-    rootMargin = '0px',
+    threshold = 0.15,
+    rootMargin = '0px 0px -10% 0px',
     triggerOnce = true,
   } = options;
 
   const elementRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(() => !ioSupported());
 
   useEffect(() => {
     const element = elementRef.current;
-    if (!element) return;
+    if (!element || !ioSupported()) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          if (triggerOnce) {
-            observer.unobserve(element);
-          }
+          if (triggerOnce) observer.unobserve(element);
         } else if (!triggerOnce) {
           setIsVisible(false);
         }
       },
-      {
-        threshold,
-        rootMargin,
-      }
+      { threshold, rootMargin }
     );
 
     observer.observe(element);
-
-    return () => {
-      observer.unobserve(element);
-    };
+    return () => observer.disconnect();
   }, [threshold, rootMargin, triggerOnce]);
 
   return [elementRef, isVisible];
@@ -43,16 +37,20 @@ export function useScrollAnimation(options = {}) {
 
 export function useMultipleScrollAnimation(count, options = {}) {
   const refs = useRef([]);
-  const [visibleItems, setVisibleItems] = useState(new Array(count).fill(false));
+  const [visibleItems, setVisibleItems] = useState(() =>
+    new Array(count).fill(!ioSupported())
+  );
 
   const {
-    threshold = 0.1,
-    rootMargin = '0px',
+    threshold = 0.15,
+    rootMargin = '0px 0px -10% 0px',
     triggerOnce = true,
-    staggerDelay = 100,
+    staggerDelay = 60,
   } = options;
 
   useEffect(() => {
+    if (!ioSupported()) return;
+
     const currentRefs = refs.current;
     const observers = currentRefs.map((element, index) => {
       if (!element) return null;
@@ -60,29 +58,26 @@ export function useMultipleScrollAnimation(count, options = {}) {
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
-            setTimeout(() => {
+            const delay = index * staggerDelay;
+            window.setTimeout(() => {
               setVisibleItems((prev) => {
-                const newState = [...prev];
-                newState[index] = true;
-                return newState;
+                if (prev[index]) return prev;
+                const next = [...prev];
+                next[index] = true;
+                return next;
               });
-            }, index * staggerDelay);
+            }, delay);
 
-            if (triggerOnce) {
-              observer.unobserve(element);
-            }
+            if (triggerOnce) observer.unobserve(element);
           } else if (!triggerOnce) {
             setVisibleItems((prev) => {
-              const newState = [...prev];
-              newState[index] = false;
-              return newState;
+              const next = [...prev];
+              next[index] = false;
+              return next;
             });
           }
         },
-        {
-          threshold,
-          rootMargin,
-        }
+        { threshold, rootMargin }
       );
 
       observer.observe(element);
@@ -90,11 +85,7 @@ export function useMultipleScrollAnimation(count, options = {}) {
     });
 
     return () => {
-      observers.forEach((observer, index) => {
-        if (observer && currentRefs[index]) {
-          observer.unobserve(currentRefs[index]);
-        }
-      });
+      observers.forEach((observer) => observer && observer.disconnect());
     };
   }, [count, threshold, rootMargin, triggerOnce, staggerDelay]);
 

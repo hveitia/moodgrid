@@ -27,7 +27,7 @@ class LandingView extends StatelessWidget {
               const SizedBox(height: 24),
 
               Text(
-                'Feelmap',
+                'EmotionsMap',
                 style: Get.textTheme.displayLarge?.copyWith(
                   color: AppColors.moodExcellent,
                   fontWeight: FontWeight.bold,
@@ -37,7 +37,7 @@ class LandingView extends StatelessWidget {
               const SizedBox(height: 16),
 
               Text(
-                'Registra tu estado de ánimo día a día y visualiza patrones en tu bienestar emocional.',
+                'landing.tagline'.tr,
                 style: Get.textTheme.bodyLarge?.copyWith(
                   color: AppColors.textSecondary,
                 ),
@@ -48,7 +48,7 @@ class LandingView extends StatelessWidget {
 
               ElevatedButton(
                 onPressed: () => Get.toNamed(Routes.login),
-                child: const Text('Iniciar Sesión'),
+                child: Text('landing.button.signin'.tr),
               ),
               const SizedBox(height: 16),
 
@@ -62,7 +62,7 @@ class LandingView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text('Crear Cuenta'),
+                child: Text('landing.button.signup'.tr),
               ),
 
               const SizedBox(height: 48),

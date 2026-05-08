@@ -1,8 +1,9 @@
 .container {
   margin-bottom: var(--spacing-3xl);
   opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.6s ease-out;
+  transform: translateY(12px);
+  transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
+  will-change: opacity, transform;
 }
 
 .container.visible {
@@ -14,11 +15,38 @@
   text-align: center;
 }
 
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 6px 14px;
+  margin-bottom: var(--spacing-md);
+  border-radius: var(--radius-full);
+  background: rgba(var(--color-mood-excellent-rgb), 0.10);
+  color: var(--color-primary-dark);
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.eyebrowDot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+}
+
 .title {
-  font-size: var(--font-size-4xl);
-  font-weight: var(--font-weight-bold);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.15;
+  letter-spacing: var(--tracking-tight);
   color: var(--color-text-primary);
   margin-bottom: var(--spacing-md);
+  padding-bottom: 0.1em;
 }
 
 .title.gradient {
@@ -29,9 +57,10 @@
 }
 
 .subtitle {
+  font-family: var(--font-family);
   font-size: var(--font-size-lg);
   color: var(--color-text-secondary);
-  max-width: 600px;
+  max-width: 640px;
   line-height: var(--line-height-relaxed);
 }
 
@@ -39,23 +68,12 @@
   margin: 0 auto;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .container {
     margin-bottom: var(--spacing-2xl);
   }
 
-  .title {
-    font-size: var(--font-size-3xl);
-  }
-
   .subtitle {
     font-size: var(--font-size-base);
-  }
-}
-
-@media (max-width: 480px) {
-  .title {
-    font-size: var(--font-size-2xl);
   }
 }

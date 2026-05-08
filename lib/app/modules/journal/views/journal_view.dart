@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
+import 'package:moodgrid/app/core/widgets/ad_banner.dart';
 import 'package:moodgrid/app/data/models/daily_record.dart';
 import 'package:moodgrid/app/modules/journal/controllers/journal_controller.dart';
 
@@ -13,20 +14,23 @@ class JournalView extends GetView<JournalController> {
       appBar: AppBar(
         title: Obx(() => controller.isSearching.value
             ? _buildSearchField()
-            : const Text('Mi Diario')),
+            : Text('journal.title'.tr)),
         actions: [
           Obx(() => IconButton(
                 icon: Icon(controller.isSearching.value ? Icons.close : Icons.search),
                 onPressed: controller.toggleSearch,
-                tooltip: controller.isSearching.value ? 'Cerrar búsqueda' : 'Buscar',
+                tooltip: controller.isSearching.value
+                    ? 'journal.tooltip.search.close'.tr
+                    : 'journal.tooltip.search.open'.tr,
               )),
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () => controller.loadJournalEntries(),
-            tooltip: 'Actualizar',
+            tooltip: 'journal.tooltip.refresh'.tr,
           ),
         ],
       ),
+      bottomNavigationBar: const AdBanner(),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -57,7 +61,7 @@ class JournalView extends GetView<JournalController> {
       controller: controller.searchController,
       autofocus: true,
       decoration: InputDecoration(
-        hintText: 'Buscar en comentarios...',
+        hintText: 'journal.search.hint'.tr,
         border: InputBorder.none,
         hintStyle: TextStyle(color: Colors.grey[400]),
         suffixIcon: Obx(() => controller.searchQuery.value.isNotEmpty
@@ -86,7 +90,11 @@ class JournalView extends GetView<JournalController> {
           ),
           const SizedBox(width: 8),
           Obx(() => Text(
-                '${controller.resultCount} ${controller.resultCount == 1 ? 'día encontrado' : 'días encontrados'}',
+                'journal.results.one'.trPluralParams(
+                  'journal.results.other',
+                  controller.resultCount,
+                  {'count': '${controller.resultCount}'},
+                ),
                 style: TextStyle(
                   color: AppColors.moodExcellent,
                   fontWeight: FontWeight.w600,
@@ -119,14 +127,16 @@ class JournalView extends GetView<JournalController> {
             ),
             const SizedBox(height: 24),
             Text(
-              'Sin resultados',
+              'journal.no_results.title'.tr,
               style: Get.textTheme.titleLarge?.copyWith(
                 color: Colors.grey[600],
               ),
             ),
             const SizedBox(height: 12),
             Obx(() => Text(
-                  'No se encontraron comentarios con "${controller.searchQuery.value}"',
+                  'journal.no_results.subtitle'.trParams(
+                    {'query': controller.searchQuery.value},
+                  ),
                   style: Get.textTheme.bodyMedium?.copyWith(
                     color: Colors.grey[500],
                   ),
@@ -136,7 +146,7 @@ class JournalView extends GetView<JournalController> {
             TextButton.icon(
               onPressed: controller.clearSearch,
               icon: const Icon(Icons.clear),
-              label: const Text('Limpiar búsqueda'),
+              label: Text('journal.no_results.clear'.tr),
             ),
           ],
         ),
@@ -158,14 +168,14 @@ class JournalView extends GetView<JournalController> {
             ),
             const SizedBox(height: 24),
             Text(
-              'Tu diario está vacío',
+              'journal.empty.title'.tr,
               style: Get.textTheme.titleLarge?.copyWith(
                 color: Colors.grey[600],
               ),
             ),
             const SizedBox(height: 12),
             Text(
-              'Agrega comentarios a tus registros de ánimo para verlos aquí como un diario personal.',
+              'journal.empty.body'.tr,
               style: Get.textTheme.bodyMedium?.copyWith(
                 color: Colors.grey[500],
               ),
@@ -175,7 +185,7 @@ class JournalView extends GetView<JournalController> {
             ElevatedButton.icon(
               onPressed: () => Get.back(),
               icon: const Icon(Icons.grid_on),
-              label: const Text('Ir a la cuadrícula'),
+              label: Text('journal.empty.button'.tr),
             ),
           ],
         ),
@@ -301,7 +311,7 @@ class JournalView extends GetView<JournalController> {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    'Toca para editar',
+                    'journal.touch_hint'.tr,
                     style: TextStyle(
                       fontSize: 11,
                       color: Colors.grey[400],

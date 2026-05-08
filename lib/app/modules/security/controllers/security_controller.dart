@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:moodgrid/app/core/services/security_service.dart';
+import 'package:moodgrid/app/core/utils/snackbar_helper.dart';
 
 class SecurityController extends GetxController {
   final SecurityService _securityService = SecurityService.instance;
@@ -57,17 +58,17 @@ class SecurityController extends GetxController {
       _securityService.isSecurityEnabled = true;
       _securityService.pinLength = pin.length;
       _loadSecuritySettings();
-      Get.snackbar(
-        'Seguridad Activada',
-        'Tu PIN ha sido configurado correctamente',
-        snackPosition: SnackPosition.BOTTOM,
+      appSnackBar(
+        title: 'security.snack.enabled.title'.tr,
+        message: 'security.snack.enabled.message'.tr,
+        kind: AppSnackKind.success,
       );
       return true;
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'No se pudo activar la seguridad. Intenta nuevamente.',
-        snackPosition: SnackPosition.BOTTOM,
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: 'security.snack.enable_failed'.tr,
+        kind: AppSnackKind.error,
       );
       return false;
     } finally {
@@ -82,16 +83,16 @@ class SecurityController extends GetxController {
       _securityService.isSecurityEnabled = false;
       _loadSecuritySettings();
       isLocked.value = false;
-      Get.snackbar(
-        'Seguridad Desactivada',
-        'Tu PIN ha sido eliminado',
-        snackPosition: SnackPosition.BOTTOM,
+      appSnackBar(
+        title: 'security.snack.disabled.title'.tr,
+        message: 'security.snack.disabled.message'.tr,
+        kind: AppSnackKind.success,
       );
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'No se pudo desactivar la seguridad. Intenta nuevamente.',
-        snackPosition: SnackPosition.BOTTOM,
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: 'security.snack.disable_failed'.tr,
+        kind: AppSnackKind.error,
       );
     } finally {
       isLoading.value = false;
@@ -104,10 +105,10 @@ class SecurityController extends GetxController {
 
       final isOldPinValid = await _securityService.verifyPin(oldPin);
       if (!isOldPinValid) {
-        Get.snackbar(
-          'Error',
-          'El PIN actual es incorrecto',
-          snackPosition: SnackPosition.BOTTOM,
+        appSnackBar(
+          title: 'common.error'.tr,
+          message: 'security.snack.wrong_old_pin'.tr,
+          kind: AppSnackKind.error,
         );
         return false;
       }
@@ -116,17 +117,17 @@ class SecurityController extends GetxController {
       _securityService.pinLength = newPin.length;
       _loadSecuritySettings();
 
-      Get.snackbar(
-        'PIN Actualizado',
-        'Tu PIN ha sido cambiado correctamente',
-        snackPosition: SnackPosition.BOTTOM,
+      appSnackBar(
+        title: 'security.snack.changed.title'.tr,
+        message: 'security.snack.changed.message'.tr,
+        kind: AppSnackKind.success,
       );
       return true;
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'No se pudo cambiar el PIN. Intenta nuevamente.',
-        snackPosition: SnackPosition.BOTTOM,
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: 'security.snack.change_failed'.tr,
+        kind: AppSnackKind.error,
       );
       return false;
     } finally {

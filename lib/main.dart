@@ -2,11 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:moodgrid/app/core/theme/app_theme.dart';
+import 'package:moodgrid/app/core/services/ads_service.dart';
 import 'package:moodgrid/app/core/services/lifecycle_service.dart';
+import 'package:moodgrid/app/core/services/locale_service.dart';
 import 'package:moodgrid/app/core/services/security_service.dart';
+import 'package:moodgrid/app/core/translations/app_translations.dart';
+import 'package:moodgrid/app/core/utils/snackbar_helper.dart';
 import 'package:moodgrid/app/modules/auth/controllers/auth_controller.dart';
 import 'package:moodgrid/app/modules/security/controllers/security_controller.dart';
 import 'package:moodgrid/app/modules/security/views/lock_screen_view.dart';
@@ -27,8 +31,12 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Inicializar formato de fecha en español
-  await initializeDateFormatting('es_ES', null);
+  // Inicializar locale (carga preferencia + initializeDateFormatting para EN y ES)
+  await LocaleService.instance.init();
+
+  // Inicializar AdMob (NPA por defecto). El ATT prompt se solicita
+  // desde la primera pantalla visible (ver `_HomeWrapper` / `_LandingWrapper`).
+  await AdsService.instance.init();
 
   // Inicializar SecurityService
   await SecurityService.instance.init();
@@ -46,8 +54,23 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    // Solicitar ATT en iOS después del primer frame, cuando ya hay un
+    // árbol Material visible. En Android es no-op.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AdsService.instance.requestATTIfNeeded();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +78,10 @@ class MyApp extends StatelessWidget {
     final securityController = Get.find<SecurityController>();
 
     return GetMaterialApp(
-      title: 'Feelmap',
+      title: 'EmotionsMap',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
+      scaffoldMessengerKey: appScaffoldMessengerKey,
       builder: (context, child) {
         return Obx(() {
           if (securityController.isLocked.value) {
@@ -82,8 +106,15 @@ class MyApp extends StatelessWidget {
       getPages: AppPages.routes,
       defaultTransition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 500),
-      locale: const Locale('es', 'ES'),
-      fallbackLocale: const Locale('es', 'ES'),
+      translations: AppTranslations(),
+      locale: LocaleService.instance.currentLocale,
+      fallbackLocale: LocaleService.fallback,
+      supportedLocales: LocaleService.supportedLocales,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
     );
   }
 }

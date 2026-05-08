@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:moodgrid/app/core/utils/snackbar_helper.dart';
 
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -24,29 +25,29 @@ class AuthController extends GetxController {
         password: password,
       );
     } on FirebaseAuthException catch (e) {
-      String message = 'Error al iniciar sesión';
+      String message;
 
       switch (e.code) {
         case 'user-not-found':
-          message = 'Usuario no encontrado';
+          message = 'auth.signin.error.user_not_found'.tr;
           break;
         case 'wrong-password':
-          message = 'Contraseña incorrecta';
+          message = 'auth.signin.error.wrong_password'.tr;
           break;
         case 'invalid-email':
-          message = 'Email inválido';
+          message = 'auth.signin.error.invalid_email'.tr;
           break;
         case 'user-disabled':
-          message = 'Usuario deshabilitado';
+          message = 'auth.signin.error.user_disabled'.tr;
           break;
         default:
-          message = 'Error: ${e.message}';
+          message = e.message ?? 'auth.signin.error.generic'.tr;
       }
 
-      Get.snackbar(
-        'Error',
-        message,
-        snackPosition: SnackPosition.BOTTOM,
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: message,
+        kind: AppSnackKind.error,
       );
       rethrow;
     } finally {
@@ -62,26 +63,66 @@ class AuthController extends GetxController {
         password: password,
       );
     } on FirebaseAuthException catch (e) {
-      String message = 'Error al crear cuenta';
+      String message;
 
       switch (e.code) {
         case 'email-already-in-use':
-          message = 'El email ya está en uso';
+          message = 'auth.signup.error.email_in_use'.tr;
           break;
         case 'invalid-email':
-          message = 'Email inválido';
+          message = 'auth.signup.error.invalid_email'.tr;
           break;
         case 'weak-password':
-          message = 'La contraseña es muy débil';
+          message = 'auth.signup.error.weak_password'.tr;
           break;
         default:
-          message = 'Error: ${e.message}';
+          message = e.message ?? 'auth.signup.error.generic'.tr;
       }
 
-      Get.snackbar(
-        'Error',
-        message,
-        snackPosition: SnackPosition.BOTTOM,
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: message,
+        kind: AppSnackKind.error,
+      );
+      rethrow;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  /// Envía el email de reset. NO muestra snackbar de éxito —
+  /// el caller debe cerrar primero su UI (bottom sheet, dialog) y
+  /// luego mostrar el snackbar para evitar interferencia de routing.
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      isLoading.value = true;
+      await _auth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      String message;
+
+      switch (e.code) {
+        case 'invalid-email':
+        case 'auth/invalid-email':
+          message = 'auth.signin.error.invalid_email'.tr;
+          break;
+        case 'missing-email':
+          message = 'recovery.error.missing_email'.tr;
+          break;
+        default:
+          message = e.message ?? 'recovery.error.generic'.tr;
+      }
+
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: message,
+        kind: AppSnackKind.error,
+      );
+      rethrow;
+    } catch (e) {
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: 'recovery.error.generic'.tr,
+        kind: AppSnackKind.error,
       );
       rethrow;
     } finally {
@@ -93,10 +134,10 @@ class AuthController extends GetxController {
     try {
       await _auth.signOut();
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Error al cerrar sesión',
-        snackPosition: SnackPosition.BOTTOM,
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: 'auth.signout.error'.tr,
+        kind: AppSnackKind.error,
       );
     }
   }
@@ -107,39 +148,38 @@ class AuthController extends GetxController {
       final user = _auth.currentUser;
 
       if (user == null) {
-        throw Exception('No hay usuario autenticado');
+        throw Exception('auth.error.unauthenticated'.tr);
       }
 
       await user.delete();
 
-      Get.snackbar(
-        'Cuenta Eliminada',
-        'Tu cuenta ha sido eliminada permanentemente',
-        snackPosition: SnackPosition.BOTTOM,
+      appSnackBar(
+        title: 'auth.delete.success.title'.tr,
+        message: 'auth.delete.success.message'.tr,
+        kind: AppSnackKind.success,
       );
     } on FirebaseAuthException catch (e) {
-      String message = 'Error al eliminar cuenta';
+      String message;
 
       switch (e.code) {
         case 'requires-recent-login':
-          message = 'Por seguridad, necesitas iniciar sesión nuevamente para eliminar tu cuenta';
+          message = 'auth.delete.error.recent_login'.tr;
           break;
         default:
-          message = 'Error: ${e.message}';
+          message = e.message ?? 'auth.delete.error.generic'.tr;
       }
 
-      Get.snackbar(
-        'Error',
-        message,
-        snackPosition: SnackPosition.BOTTOM,
-        duration: const Duration(seconds: 4),
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: message,
+        kind: AppSnackKind.error,
       );
       rethrow;
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Error al eliminar cuenta',
-        snackPosition: SnackPosition.BOTTOM,
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: 'auth.delete.error.generic'.tr,
+        kind: AppSnackKind.error,
       );
       rethrow;
     } finally {

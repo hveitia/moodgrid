@@ -2,6 +2,7 @@ import styles from './SectionTitle.module.css';
 import { useScrollAnimation } from '../../hooks/useScrollAnimation';
 
 export function SectionTitle({
+  eyebrow,
   title,
   subtitle,
   centered = true,
@@ -28,6 +29,12 @@ export function SectionTitle({
 
   return (
     <div ref={ref} className={containerClasses}>
+      {eyebrow && (
+        <span className={styles.eyebrow}>
+          <span className={styles.eyebrowDot} />
+          {eyebrow}
+        </span>
+      )}
       <h2 className={titleClasses}>{title}</h2>
       {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
     </div>

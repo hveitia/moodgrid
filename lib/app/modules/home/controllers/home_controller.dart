@@ -3,6 +3,9 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:moodgrid/app/core/services/ads_service.dart';
+import 'package:moodgrid/app/core/utils/date_format_helper.dart';
+import 'package:moodgrid/app/core/utils/snackbar_helper.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
 import 'package:moodgrid/app/data/models/daily_record.dart';
 import 'package:moodgrid/app/data/providers/database_helper.dart';
@@ -50,12 +53,10 @@ class HomeController extends GetxController {
         recordsMap[dateKey] = record;
       }
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Error al cargar registros: $e',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.shade400,
-        colorText: Colors.white,
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: 'home.error.load'.trParams({'e': '$e'}),
+        kind: AppSnackKind.error,
       );
     } finally {
       isLoading.value = false;
@@ -104,21 +105,17 @@ class HomeController extends GetxController {
       // Recargar registros
       await loadRecords();
 
-      Get.snackbar(
-        'Éxito',
-        'Registro guardado correctamente',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green.shade400,
-        colorText: Colors.white,
+      appSnackBar(
+        title: 'common.success'.tr,
+        message: 'home.snack.saved'.tr,
+        kind: AppSnackKind.success,
         duration: const Duration(seconds: 2),
       );
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Error al guardar registro: $e',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.shade400,
-        colorText: Colors.white,
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: 'home.error.save'.trParams({'e': '$e'}),
+        kind: AppSnackKind.error,
       );
     } finally {
       isLoading.value = false;
@@ -132,21 +129,17 @@ class HomeController extends GetxController {
       await _databaseHelper.deleteRecordByDate(date);
       await loadRecords();
 
-      Get.snackbar(
-        'Éxito',
-        'Registro eliminado',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.orange.shade400,
-        colorText: Colors.white,
+      appSnackBar(
+        title: 'common.success'.tr,
+        message: 'home.snack.deleted'.tr,
+        kind: AppSnackKind.warning,
         duration: const Duration(seconds: 2),
       );
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Error al eliminar registro: $e',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.shade400,
-        colorText: Colors.white,
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: 'home.error.delete'.trParams({'e': '$e'}),
+        kind: AppSnackKind.error,
       );
     } finally {
       isLoading.value = false;
@@ -166,18 +159,16 @@ class HomeController extends GetxController {
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(file.path)],
-          subject: 'Feelmap Backup',
-          text: 'Respaldo de mis registros de Feelmap',
+          subject: 'home.share.backup.subject'.tr,
+          text: 'home.share.backup.text'.tr,
         ),
       );
     } catch (e) {
       isLoading.value = false;
-      Get.snackbar(
-        'Error',
-        'Error al exportar: $e',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.shade400,
-        colorText: Colors.white,
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: 'home.error.export'.trParams({'e': '$e'}),
+        kind: AppSnackKind.error,
       );
     }
   }
@@ -201,21 +192,21 @@ class HomeController extends GetxController {
 
       await loadRecords();
 
-      Get.snackbar(
-        'Éxito',
-        'Se importaron $importedCount registros',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green.shade400,
-        colorText: Colors.white,
+      appSnackBar(
+        title: 'common.success'.tr,
+        message: 'home.snack.imported.one'.trPluralParams(
+          'home.snack.imported.other',
+          importedCount,
+          {'count': '$importedCount'},
+        ),
+        kind: AppSnackKind.success,
         duration: const Duration(seconds: 2),
       );
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Error al importar: $e',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.shade400,
-        colorText: Colors.white,
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: 'home.error.import'.trParams({'e': '$e'}),
+        kind: AppSnackKind.error,
       );
     } finally {
       isLoading.value = false;
@@ -250,14 +241,14 @@ class HomeController extends GetxController {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '¿Qué deseas exportar?',
+              'home.export.title'.tr,
               style: Get.textTheme.titleLarge,
             ),
             const SizedBox(height: 24),
             ListTile(
               leading: const Icon(Icons.grid_on, color: Colors.blue),
-              title: const Text('Vista de cuadrícula'),
-              subtitle: const Text('Exportar la cuadrícula del mes'),
+              title: Text('home.export.grid.title'.tr),
+              subtitle: Text('home.export.grid.subtitle'.tr),
               onTap: () {
                 Get.back();
                 exportMonthAsImage(
@@ -269,8 +260,8 @@ class HomeController extends GetxController {
             ),
             ListTile(
               leading: const Icon(Icons.show_chart, color: Colors.green),
-              title: const Text('Vista de gráfico'),
-              subtitle: const Text('Exportar el gráfico del mes'),
+              title: Text('home.export.chart.title'.tr),
+              subtitle: Text('home.export.chart.subtitle'.tr),
               onTap: () {
                 Get.back();
                 exportMonthAsImage(
@@ -283,7 +274,7 @@ class HomeController extends GetxController {
             const SizedBox(height: 8),
             TextButton(
               onPressed: () => Get.back(),
-              child: const Text('Cancelar'),
+              child: Text('common.cancel'.tr),
             ),
           ],
         ),
@@ -341,7 +332,7 @@ class HomeController extends GetxController {
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'Preparando exportación...',
+                      'home.exporting.title'.tr,
                       style: Get.textTheme.titleMedium?.copyWith(
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.w600,
@@ -350,7 +341,7 @@ class HomeController extends GetxController {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Esto tomará un momento',
+                      'home.exporting.subtitle'.tr,
                       style: Get.textTheme.bodySmall?.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -405,9 +396,9 @@ class HomeController extends GetxController {
 
       // Guardar en archivo temporal
       final tempDir = await getTemporaryDirectory();
-      final monthName = DateFormat('MMMM', 'es_ES').format(month);
-      final exportTypeName = exportType == 'chart' ? 'grafico' : 'cuadricula';
-      final fileName = 'moodgrid_${monthName}_${month.year}_$exportTypeName.png';
+      final monthName = appDateFormat(month, 'MMMM');
+      final exportTypeName = exportType == 'chart' ? 'chart' : 'grid';
+      final fileName = 'emotionsmap_${monthName}_${month.year}_$exportTypeName.png';
       final file = File('${tempDir.path}/$fileName');
       await file.writeAsBytes(imageBytes);
 
@@ -418,10 +409,21 @@ class HomeController extends GetxController {
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(file.path)],
-          subject: 'Feelmap - $monthName ${month.year}',
-          text: 'Mi registro de estado de ánimo de $monthName ${month.year}',
+          subject: 'home.share.month.subject'.trParams({
+            'month': monthName,
+            'year': '${month.year}',
+          }),
+          text: 'home.share.month.text'.trParams({
+            'month': monthName,
+            'year': '${month.year}',
+          }),
         ),
       );
+
+      // Mostrar interstitial si está cargado y el cap de frecuencia lo permite.
+      // El usuario acaba de completar una acción de "valor recibido" (export +
+      // share), es el momento de menor fricción para mostrarlo.
+      await AdsService.instance.showInterstitialIfAllowed();
 
       // No mostramos snackbar de éxito porque el diálogo de compartir ya da feedback
     } catch (e) {
@@ -432,12 +434,10 @@ class HomeController extends GetxController {
 
       // Solo mostramos error si falla antes de compartir
       try {
-        Get.snackbar(
-          'Error',
-          'Error al exportar imagen: $e',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red.shade400,
-          colorText: Colors.white,
+        appSnackBar(
+          title: 'common.error'.tr,
+          message: 'home.error.export_image'.trParams({'e': '$e'}),
+          kind: AppSnackKind.error,
         );
       } catch (_) {
         // Si el snackbar también falla, ignoramos el error
@@ -481,7 +481,7 @@ class HomeController extends GetxController {
                   children: [
                     Expanded(
                       child: Text(
-                        DateFormat('EEEE, d MMMM yyyy', 'es_ES').format(date),
+                        appDateFormat(date, 'EEEE, d MMMM yyyy'),
                         style: Get.textTheme.titleLarge,
                       ),
                     ),
@@ -493,7 +493,7 @@ class HomeController extends GetxController {
                         },
                         icon: const Icon(Icons.delete_outline),
                         color: Colors.red,
-                        tooltip: 'Eliminar registro',
+                        tooltip: 'home.record.tooltip.delete'.tr,
                       ),
                   ],
                 ),
@@ -501,7 +501,7 @@ class HomeController extends GetxController {
 
                 // Selección de estado de ánimo
                 Text(
-                  '¿Cómo te sentiste?',
+                  'home.record.title'.tr,
                   style: Get.textTheme.titleMedium,
                 ),
                 const SizedBox(height: 12),
@@ -511,13 +511,6 @@ class HomeController extends GetxController {
                   spacing: 12,
                   runSpacing: 12,
                   children: List.generate(5, (index) {
-                    final moods = [
-                      'Excelente',
-                      'Bien',
-                      'Neutral',
-                      'Difícil',
-                      'Mal'
-                    ];
                     final emojis = [
                       '😄',
                       '🙂',
@@ -532,7 +525,7 @@ class HomeController extends GetxController {
                       label: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(moods[index]),
+                          Text(AppColors.getMoodText(index)),
                           const SizedBox(width: 8),
                           Text(emojis[index]),
                         ],
@@ -556,15 +549,15 @@ class HomeController extends GetxController {
 
                 // Campo de comentario
                 Text(
-                  'Comentario (opcional)',
+                  'home.record.comment.label'.tr,
                   style: Get.textTheme.titleMedium,
                 ),
                 const SizedBox(height: 12),
                 TextField(
                   controller: commentController,
                   maxLines: 3,
-                  decoration: const InputDecoration(
-                    hintText: 'Escribe un comentario...',
+                  decoration: InputDecoration(
+                    hintText: 'home.record.comment.hint'.tr,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -575,7 +568,7 @@ class HomeController extends GetxController {
                   children: [
                     TextButton(
                       onPressed: () => Get.back(),
-                      child: const Text('Cancelar'),
+                      child: Text('common.cancel'.tr),
                     ),
                     const SizedBox(width: 8),
                     ElevatedButton(
@@ -591,7 +584,7 @@ class HomeController extends GetxController {
                                     : commentController.text,
                               );
                             },
-                      child: const Text('Guardar'),
+                      child: Text('home.record.button.save'.tr),
                     ),
                   ],
                 ),

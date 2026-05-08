@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
+import 'package:moodgrid/app/core/widgets/ad_banner.dart';
 import 'package:moodgrid/app/data/models/daily_record.dart';
 import 'package:moodgrid/app/modules/reflections/controllers/reflections_controller.dart';
 import 'package:moodgrid/app/modules/reflections/widgets/year_in_pixels_widget.dart';
@@ -12,15 +13,16 @@ class ReflectionsView extends GetView<ReflectionsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Estadísticas de Reflexión'),
+        title: Text('reflections.title'.tr),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: controller.loadStatistics,
-            tooltip: 'Actualizar',
+            tooltip: 'reflections.tooltip.refresh'.tr,
           ),
         ],
       ),
+      bottomNavigationBar: const AdBanner(),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -69,14 +71,14 @@ class ReflectionsView extends GetView<ReflectionsController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Tus Reflexiones',
+                    'reflections.header.title'.tr,
                     style: Get.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Análisis de tus comentarios y hábitos de escritura',
+                    'reflections.header.subtitle'.tr,
                     style: Get.textTheme.bodySmall?.copyWith(
                       color: Colors.grey[600],
                     ),
@@ -99,7 +101,7 @@ class ReflectionsView extends GetView<ReflectionsController> {
             IconButton(
               onPressed: controller.previousYear,
               icon: const Icon(Icons.chevron_left),
-              tooltip: 'Año anterior',
+              tooltip: 'reflections.year.tooltip.previous'.tr,
             ),
             Obx(() => Text(
               '${controller.selectedYear.value}',
@@ -112,7 +114,7 @@ class ReflectionsView extends GetView<ReflectionsController> {
                   ? controller.nextYear
                   : null,
               icon: const Icon(Icons.chevron_right),
-              tooltip: 'Año siguiente',
+              tooltip: 'reflections.year.tooltip.next'.tr,
             )),
           ],
         ),
@@ -150,7 +152,7 @@ class ReflectionsView extends GetView<ReflectionsController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Resumen',
+              'reflections.summary.title'.tr,
               style: Get.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -162,7 +164,7 @@ class ReflectionsView extends GetView<ReflectionsController> {
                   child: _buildStatBox(
                     icon: Icons.comment,
                     value: controller.totalDaysWithComments.value.toString(),
-                    label: 'Días con\ncomentarios',
+                    label: 'reflections.stat.days_with_comments'.tr,
                     color: AppColors.moodGood,
                   ),
                 ),
@@ -171,7 +173,7 @@ class ReflectionsView extends GetView<ReflectionsController> {
                   child: _buildStatBox(
                     icon: Icons.percent,
                     value: '${controller.commentPercentage.value.toStringAsFixed(1)}%',
-                    label: 'De días\nregistrados',
+                    label: 'reflections.stat.percentage'.tr,
                     color: AppColors.moodExcellent,
                   ),
                 ),
@@ -184,7 +186,7 @@ class ReflectionsView extends GetView<ReflectionsController> {
                   child: _buildStatBox(
                     icon: Icons.text_fields,
                     value: controller.averageCommentLength.value.toStringAsFixed(1),
-                    label: 'Palabras\npromedio',
+                    label: 'reflections.stat.avg_words'.tr,
                     color: AppColors.moodNeutral,
                   ),
                 ),
@@ -193,7 +195,7 @@ class ReflectionsView extends GetView<ReflectionsController> {
                   child: _buildStatBox(
                     icon: Icons.note_alt,
                     value: controller.totalRecords.value.toString(),
-                    label: 'Total días\nregistrados',
+                    label: 'reflections.stat.total_days'.tr,
                     color: AppColors.moodGood,
                   ),
                 ),
@@ -217,7 +219,7 @@ class ReflectionsView extends GetView<ReflectionsController> {
                 Icon(Icons.local_fire_department, color: AppColors.moodDifficult),
                 const SizedBox(width: 8),
                 Text(
-                  'Rachas de Escritura',
+                  'reflections.streak.title'.tr,
                   style: Get.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -229,7 +231,7 @@ class ReflectionsView extends GetView<ReflectionsController> {
               children: [
                 Expanded(
                   child: _buildStreakItem(
-                    title: 'Racha Actual',
+                    title: 'reflections.streak.current'.tr,
                     value: controller.currentStreak.value,
                     icon: Icons.trending_up,
                     color: AppColors.moodDifficult,
@@ -239,7 +241,7 @@ class ReflectionsView extends GetView<ReflectionsController> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: _buildStreakItem(
-                    title: 'Mejor Racha',
+                    title: 'reflections.streak.best'.tr,
                     value: controller.longestStreak.value,
                     icon: Icons.emoji_events,
                     color: AppColors.moodExcellent,
@@ -267,8 +269,12 @@ class ReflectionsView extends GetView<ReflectionsController> {
                     Expanded(
                       child: Text(
                         controller.currentStreak.value >= controller.longestStreak.value
-                            ? '¡Estás en tu mejor racha!'
-                            : '¡Sigue así! Te faltan ${controller.longestStreak.value - controller.currentStreak.value} días para tu récord.',
+                            ? 'reflections.streak.best_active'.tr
+                            : 'reflections.streak.go_for_record.one'.trPluralParams(
+                                'reflections.streak.go_for_record.other',
+                                controller.longestStreak.value - controller.currentStreak.value,
+                                {'count': '${controller.longestStreak.value - controller.currentStreak.value}'},
+                              ),
                         style: TextStyle(
                           color: AppColors.moodExcellent,
                           fontWeight: FontWeight.w500,
@@ -317,7 +323,9 @@ class ReflectionsView extends GetView<ReflectionsController> {
             ),
           ),
           Text(
-            value == 1 ? 'día' : 'días',
+            value == 1
+                ? 'reflections.streak.unit.one'.tr
+                : 'reflections.streak.unit.other'.tr,
             style: TextStyle(
               color: isActive ? color : Colors.grey[400],
               fontWeight: FontWeight.w500,
@@ -357,7 +365,7 @@ class ReflectionsView extends GetView<ReflectionsController> {
                 Icon(Icons.calendar_month, color: AppColors.moodGood),
                 const SizedBox(width: 8),
                 Text(
-                  'Mes Más Productivo',
+                  'reflections.top_month.title'.tr,
                   style: Get.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -395,7 +403,11 @@ class ReflectionsView extends GetView<ReflectionsController> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '$count ${count == 1 ? 'comentario' : 'comentarios'}',
+                    'reflections.top_month.comments.one'.trPluralParams(
+                      'reflections.top_month.comments.other',
+                      count,
+                      {'count': '$count'},
+                    ),
                     style: Get.textTheme.bodyLarge?.copyWith(
                       color: AppColors.moodExcellent,
                       fontWeight: FontWeight.w500,
@@ -463,14 +475,14 @@ class ReflectionsView extends GetView<ReflectionsController> {
             ),
             const SizedBox(height: 24),
             Text(
-              'Empieza a Reflexionar',
+              'reflections.empty.title'.tr,
               style: Get.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 12),
             Text(
-              'Agregar comentarios a tus registros te ayuda a reflexionar sobre tus emociones y descubrir patrones en tu bienestar.',
+              'reflections.empty.body'.tr,
               style: Get.textTheme.bodyMedium?.copyWith(
                 color: Colors.grey[600],
                 height: 1.5,
@@ -493,7 +505,7 @@ class ReflectionsView extends GetView<ReflectionsController> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Toca cualquier día en la cuadrícula para agregar un comentario sobre cómo te sentiste.',
+                    'reflections.empty.tip'.tr,
                     style: Get.textTheme.bodySmall?.copyWith(
                       color: AppColors.moodExcellent,
                       fontWeight: FontWeight.w500,
@@ -507,7 +519,7 @@ class ReflectionsView extends GetView<ReflectionsController> {
             ElevatedButton.icon(
               onPressed: () => Get.back(),
               icon: const Icon(Icons.grid_on),
-              label: const Text('Ir a la cuadrícula'),
+              label: Text('reflections.empty.button'.tr),
             ),
           ],
         ),

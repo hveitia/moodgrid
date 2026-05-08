@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
+import 'package:moodgrid/app/core/widgets/ad_banner.dart';
 import 'package:moodgrid/app/modules/home/controllers/home_controller.dart';
 
 class BackupView extends StatelessWidget {
@@ -12,8 +13,9 @@ class BackupView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Respaldo de Datos'),
+        title: Text('backup.title'.tr),
       ),
+      bottomNavigationBar: const AdBanner(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -27,7 +29,7 @@ class BackupView extends StatelessWidget {
             const SizedBox(height: 24),
 
             Text(
-              'Gestiona tus datos',
+              'backup.heading'.tr,
               style: Get.textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -36,7 +38,7 @@ class BackupView extends StatelessWidget {
             const SizedBox(height: 8),
 
             Text(
-              'Exporta o importa tus registros de estado de ánimo para mantener tus datos seguros',
+              'backup.subheading'.tr,
               style: Get.textTheme.bodyMedium?.copyWith(
                 color: AppColors.textSecondary,
               ),
@@ -58,7 +60,7 @@ class BackupView extends StatelessWidget {
                         ),
                         const SizedBox(width: 12),
                         Text(
-                          'Exportar Datos',
+                          'backup.export.title'.tr,
                           style: Get.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -67,7 +69,7 @@ class BackupView extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Crea una copia de seguridad de todos tus registros en formato JSON',
+                      'backup.export.subtitle'.tr,
                       style: Get.textTheme.bodySmall?.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -78,7 +80,7 @@ class BackupView extends StatelessWidget {
                       child: ElevatedButton.icon(
                         onPressed: homeController.exportData,
                         icon: const Icon(Icons.file_upload),
-                        label: const Text('Exportar'),
+                        label: Text('backup.export.button'.tr),
                       ),
                     ),
                   ],
@@ -101,7 +103,7 @@ class BackupView extends StatelessWidget {
                         ),
                         const SizedBox(width: 12),
                         Text(
-                          'Importar Datos',
+                          'backup.import.title'.tr,
                           style: Get.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -110,7 +112,7 @@ class BackupView extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Restaura tus registros desde un archivo de respaldo JSON',
+                      'backup.import.subtitle'.tr,
                       style: Get.textTheme.bodySmall?.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -121,7 +123,7 @@ class BackupView extends StatelessWidget {
                       child: OutlinedButton.icon(
                         onPressed: homeController.importData,
                         icon: const Icon(Icons.file_download),
-                        label: const Text('Importar'),
+                        label: Text('backup.import.button'.tr),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.moodGood,
                           side: BorderSide(color: AppColors.moodGood, width: 2),
@@ -155,7 +157,7 @@ class BackupView extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      'Los archivos de respaldo están en formato JSON y contienen todos tus registros de estado de ánimo',
+                      'backup.note'.tr,
                       style: Get.textTheme.bodySmall?.copyWith(
                         color: AppColors.textSecondary,
                       ),

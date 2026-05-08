@@ -43,7 +43,7 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Crear Cuenta'),
+        title: Text('register.title'.tr),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -67,16 +67,16 @@ class _RegisterViewState extends State<RegisterView> {
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: Icon(Icons.email),
+                  decoration: InputDecoration(
+                    labelText: 'login.field.email'.tr,
+                    prefixIcon: const Icon(Icons.email),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor ingresa tu email';
+                      return 'login.error.email_required'.tr;
                     }
                     if (!GetUtils.isEmail(value)) {
-                      return 'Por favor ingresa un email válido';
+                      return 'login.error.email_invalid'.tr;
                     }
                     return null;
                   },
@@ -86,16 +86,16 @@ class _RegisterViewState extends State<RegisterView> {
                 TextFormField(
                   controller: _passwordController,
                   obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Contraseña',
-                    prefixIcon: Icon(Icons.lock),
+                  decoration: InputDecoration(
+                    labelText: 'login.field.password'.tr,
+                    prefixIcon: const Icon(Icons.lock),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor ingresa tu contraseña';
+                      return 'login.error.password_required'.tr;
                     }
                     if (value.length < 6) {
-                      return 'La contraseña debe tener al menos 6 caracteres';
+                      return 'login.error.password_short'.tr;
                     }
                     return null;
                   },
@@ -105,16 +105,16 @@ class _RegisterViewState extends State<RegisterView> {
                 TextFormField(
                   controller: _confirmPasswordController,
                   obscureText: true,
-                  decoration: const InputDecoration(
-                    labelText: 'Confirmar Contraseña',
-                    prefixIcon: Icon(Icons.lock_outline),
+                  decoration: InputDecoration(
+                    labelText: 'register.field.confirm_password'.tr,
+                    prefixIcon: const Icon(Icons.lock_outline),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor confirma tu contraseña';
+                      return 'register.error.confirm_required'.tr;
                     }
                     if (value != _passwordController.text) {
-                      return 'Las contraseñas no coinciden';
+                      return 'register.error.passwords_mismatch'.tr;
                     }
                     return null;
                   },
@@ -132,13 +132,13 @@ class _RegisterViewState extends State<RegisterView> {
                                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                               ),
                             )
-                          : const Text('Crear Cuenta'),
+                          : Text('register.button.submit'.tr),
                     )),
                 const SizedBox(height: 16),
 
                 TextButton(
                   onPressed: () => Get.back(),
-                  child: const Text('¿Ya tienes cuenta? Inicia sesión'),
+                  child: Text('register.link.signin'.tr),
                 ),
               ],
             ),

@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+import 'package:moodgrid/app/core/utils/date_format_helper.dart';
+import 'package:moodgrid/app/core/utils/snackbar_helper.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
 import 'package:moodgrid/app/data/models/daily_record.dart';
 import 'package:moodgrid/app/data/providers/database_helper.dart';
@@ -40,12 +41,10 @@ class JournalController extends GetxController {
       journalEntries.value = entries;
       _applySearch();
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Error al cargar el diario: $e',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.shade400,
-        colorText: Colors.white,
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: 'journal.error.load'.trParams({'e': '$e'}),
+        kind: AppSnackKind.error,
       );
     } finally {
       isLoading.value = false;
@@ -133,13 +132,13 @@ class JournalController extends GetxController {
                             },
                             icon: const Icon(Icons.delete_outline),
                             color: Colors.red,
-                            tooltip: 'Eliminar registro',
+                            tooltip: 'home.record.tooltip.delete'.tr,
                           ),
                       ],
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      '¿Cómo te sentiste?',
+                      'home.record.title'.tr,
                       style: Get.textTheme.titleMedium,
                     ),
                     const SizedBox(height: 12),
@@ -147,7 +146,6 @@ class JournalController extends GetxController {
                       spacing: 12,
                       runSpacing: 12,
                       children: List.generate(5, (index) {
-                        final moods = ['Excelente', 'Bien', 'Neutral', 'Difícil', 'Mal'];
                         final emojis = ['😄', '🙂', '😐', '😕', '😢'];
                         final isSelected = selectedMoodIndex == index;
                         final moodColor = AppColors.getMoodColor(index);
@@ -156,7 +154,7 @@ class JournalController extends GetxController {
                           label: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(moods[index]),
+                              Text(AppColors.getMoodText(index)),
                               const SizedBox(width: 8),
                               Text(emojis[index]),
                             ],
@@ -178,15 +176,15 @@ class JournalController extends GetxController {
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'Comentario (opcional)',
+                      'home.record.comment.label'.tr,
                       style: Get.textTheme.titleMedium,
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: commentController,
                       maxLines: 3,
-                      decoration: const InputDecoration(
-                        hintText: 'Escribe un comentario...',
+                      decoration: InputDecoration(
+                        hintText: 'home.record.comment.hint'.tr,
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -195,7 +193,7 @@ class JournalController extends GetxController {
                       children: [
                         TextButton(
                           onPressed: () => Get.back(),
-                          child: const Text('Cancelar'),
+                          child: Text('common.cancel'.tr),
                         ),
                         const SizedBox(width: 8),
                         ElevatedButton(
@@ -212,7 +210,7 @@ class JournalController extends GetxController {
                                   );
                                   await loadJournalEntries();
                                 },
-                          child: const Text('Guardar'),
+                          child: Text('home.record.button.save'.tr),
                         ),
                       ],
                     ),
@@ -229,11 +227,11 @@ class JournalController extends GetxController {
   }
 
   String formatDate(DateTime date) {
-    return DateFormat('EEEE, d MMMM yyyy', 'es_ES').format(date);
+    return appDateFormat(date, 'EEEE, d MMMM yyyy');
   }
 
   String formatShortDate(DateTime date) {
-    return DateFormat('d MMM yyyy', 'es_ES').format(date);
+    return appDateFormat(date, 'd MMM yyyy');
   }
 
   Color getMoodColor(int colorIndex) {

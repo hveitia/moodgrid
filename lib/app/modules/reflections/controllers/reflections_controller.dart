@@ -4,6 +4,9 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:moodgrid/app/core/services/ads_service.dart';
+import 'package:moodgrid/app/core/utils/date_format_helper.dart';
+import 'package:moodgrid/app/core/utils/snackbar_helper.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
 import 'package:moodgrid/app/data/models/daily_record.dart';
 import 'package:moodgrid/app/data/providers/database_helper.dart';
@@ -47,10 +50,10 @@ class ReflectionsController extends GetxController {
       totalRecords.value = total;
       _calculateCommentStatistics(recordsWithComments, total);
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Error al cargar estadísticas',
-        snackPosition: SnackPosition.BOTTOM,
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: 'reflections.error.load_stats'.tr,
+        kind: AppSnackKind.error,
       );
     } finally {
       isLoading.value = false;
@@ -185,7 +188,7 @@ class ReflectionsController extends GetxController {
       final year = int.parse(parts[0]);
       final month = int.parse(parts[1]);
       final date = DateTime(year, month, 1);
-      topCommentMonth.value = DateFormat('MMMM yyyy', 'es_ES').format(date);
+      topCommentMonth.value = appDateFormat(date, 'MMMM yyyy');
       topCommentMonthCount.value = maxCount;
     }
   }
@@ -209,10 +212,10 @@ class ReflectionsController extends GetxController {
       }
       yearRecordsMap.assignAll(newMap);
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Error al cargar datos del año',
-        snackPosition: SnackPosition.BOTTOM,
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: 'reflections.error.load_year'.tr,
+        kind: AppSnackKind.error,
       );
     }
   }
@@ -274,7 +277,7 @@ class ReflectionsController extends GetxController {
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'Preparando exportación...',
+                      'home.exporting.title'.tr,
                       style: Get.textTheme.titleMedium?.copyWith(
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.w600,
@@ -283,7 +286,7 @@ class ReflectionsController extends GetxController {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Esto tomará un momento',
+                      'home.exporting.subtitle'.tr,
                       style: Get.textTheme.bodySmall?.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -312,7 +315,7 @@ class ReflectionsController extends GetxController {
       );
 
       final tempDir = await getTemporaryDirectory();
-      final fileName = 'moodgrid_año_${selectedYear.value}.png';
+      final fileName = 'emotionsmap_year_${selectedYear.value}.png';
       final file = File('${tempDir.path}/$fileName');
       await file.writeAsBytes(imageBytes);
 
@@ -321,22 +324,23 @@ class ReflectionsController extends GetxController {
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(file.path)],
-          subject: 'Feelmap - Mi Año en Píxeles ${selectedYear.value}',
-          text: 'Mi registro de estado de ánimo del año ${selectedYear.value}',
+          subject: 'reflections.share.subject'.trParams({'year': '${selectedYear.value}'}),
+          text: 'reflections.share.text'.trParams({'year': '${selectedYear.value}'}),
         ),
       );
+
+      // Interstitial post-export (respeta cap de frecuencia).
+      await AdsService.instance.showInterstitialIfAllowed();
     } catch (e) {
       try {
         Get.back();
       } catch (_) {}
 
       try {
-        Get.snackbar(
-          'Error',
-          'Error al exportar imagen: $e',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red.shade400,
-          colorText: Colors.white,
+        appSnackBar(
+          title: 'common.error'.tr,
+          message: 'reflections.error.export_image'.trParams({'e': '$e'}),
+          kind: AppSnackKind.error,
         );
       } catch (_) {}
     } finally {

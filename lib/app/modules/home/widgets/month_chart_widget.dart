@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:moodgrid/app/core/utils/date_format_helper.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
 import 'package:moodgrid/app/data/models/daily_record.dart';
 
@@ -34,14 +35,14 @@ class MonthChartWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'No hay datos para este mes',
+                  'home.chart.empty.title'.tr,
                   style: Get.textTheme.titleMedium?.copyWith(
                     color: Colors.grey[600],
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Registra tu estado de ánimo para ver el gráfico',
+                  'home.chart.empty.subtitle'.tr,
                   style: Get.textTheme.bodySmall?.copyWith(
                     color: Colors.grey[500],
                   ),
@@ -194,7 +195,7 @@ class MonthChartWidget extends StatelessWidget {
                           final invertedIndex = 4 - spot.y.toInt();
                           final moodText = AppColors.getMoodText(invertedIndex);
                           final date = DateTime(month.year, month.month, day);
-                          final dateText = DateFormat('d MMM', 'es_ES').format(date);
+                          final dateText = appDateFormat(date, 'd MMM');
 
                           return LineTooltipItem(
                             '$dateText\n$moodText',
@@ -216,7 +217,7 @@ class MonthChartWidget extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Días del mes',
+              'home.chart.axis_label'.tr,
               style: Get.textTheme.bodySmall?.copyWith(
                 color: Colors.grey[600],
               ),

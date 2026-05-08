@@ -1,7 +1,17 @@
-.screenshots {
-  background: var(--color-surface);
+.section {
   position: relative;
+  background: var(--color-background);
+  padding: var(--spacing-5xl) 0;
   overflow: hidden;
+}
+
+.bgTint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  filter: blur(60px);
+  transition: background 800ms var(--ease-out);
+  opacity: 0.7;
 }
 
 .carousel {
@@ -9,11 +19,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-xl);
+  min-height: 580px;
+  margin: var(--spacing-2xl) auto 0;
   opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s ease-out;
+  transform: translateY(20px);
+  transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out);
 }
 
 .carousel.visible {
@@ -21,95 +31,99 @@
   transform: translateY(0);
 }
 
-.screenshotsContainer {
+.stage {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 500px;
   width: 100%;
-  max-width: 800px;
-  perspective: 1000px;
+  height: 540px;
+  perspective: 1400px;
 }
 
-.screenshot {
+.slide {
   position: absolute;
+  top: 50%;
+  left: 50%;
+  background: none;
+  padding: 0;
   cursor: pointer;
+  transition:
+    transform 700ms var(--ease-out),
+    opacity 600ms var(--ease-out),
+    filter 600ms var(--ease-out);
+  --offset: 0;
+  --abs: 0;
   transform:
-    translateX(calc(var(--offset) * 180px))
-    scale(calc(1 - abs(var(--offset)) * 0.15))
-    rotateY(calc(var(--offset) * -5deg));
-  z-index: calc(10 - abs(var(--offset)));
-  opacity: calc(1 - abs(var(--offset)) * 0.3);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  filter: blur(calc(abs(var(--offset)) * 2px));
+    translate(-50%, -50%)
+    translateX(calc(var(--offset) * 200px))
+    translateZ(calc(var(--abs) * -160px))
+    rotateY(calc(var(--offset) * -14deg));
+  opacity: calc(1 - var(--abs) * 0.32);
 }
 
-.screenshot.active {
-  transform: translateX(0) scale(1) rotateY(0);
-  opacity: 1;
-  filter: blur(0);
-  z-index: 20;
+.slide:not(.slideActive) {
+  filter: blur(calc(var(--abs) * 1px));
+  will-change: transform, opacity, filter;
+}
+
+.slideActive {
+  z-index: 10;
+  filter: none;
+  transform: translate(-50%, -50%);
+  will-change: auto;
 }
 
 .phoneFrame {
-  width: 220px;
-  height: 460px;
-  background: var(--color-text-primary);
-  border-radius: 36px;
+  position: relative;
+  width: min(280px, 70vw);
+  aspect-ratio: 9 / 19.5;
+  background: linear-gradient(145deg, #232423, #0e0f0e);
+  border-radius: 40px;
   padding: 10px;
-  box-shadow: var(--shadow-xl);
-  transition: all var(--transition-base);
+  box-shadow: var(--shadow-mockup), inset 0 0 0 1.5px rgba(255, 255, 255, 0.08), inset 0 0 0 4px rgba(0, 0, 0, 0.5);
 }
 
-.screenshot.active .phoneFrame {
-  box-shadow: var(--shadow-xl), 0 0 40px color-mix(in srgb, var(--color) 40%, transparent);
+.phoneNotch {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 20px;
+  background: #0a0b0a;
+  border-radius: var(--radius-full);
+  z-index: 2;
 }
 
 .phoneScreen {
   width: 100%;
   height: 100%;
-  background: var(--color-background);
-  border-radius: 28px;
+  border-radius: 30px;
   overflow: hidden;
+  background: #FAF8F4;
+  transform: translateZ(0);
 }
 
-.screenshotImage {
+.image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.screenshotTitle {
   display: block;
-  text-align: center;
-  margin-top: var(--spacing-md);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
+  image-rendering: auto;
 }
 
-/* Navigation Buttons */
 .navButton {
-  display: flex;
+  position: relative;
+  z-index: 20;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-divider);
+  width: 52px;
+  height: 52px;
   border-radius: var(--radius-full);
-  cursor: pointer;
-  transition: all var(--transition-base);
-  z-index: 30;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  box-shadow: 0 8px 24px rgba(31, 45, 31, 0.10), 0 0 0 1px rgba(31, 45, 31, 0.06);
+  transition: transform var(--transition-press), box-shadow var(--transition-base), background-color var(--transition-base);
   flex-shrink: 0;
-}
-
-.navButton:hover {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: var(--color-surface);
-  transform: scale(1.1);
 }
 
 .navButton svg {
@@ -117,98 +131,136 @@
   height: 24px;
 }
 
-/* Indicators */
+.navButton:active {
+  transform: scale(0.94);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .navButton:hover {
+    background: var(--color-text-primary);
+    color: #FFFFFF;
+    box-shadow: 0 12px 32px rgba(31, 45, 31, 0.18);
+  }
+}
+
+.navPrev {
+  margin-right: -20px;
+}
+
+.navNext {
+  margin-left: -20px;
+}
+
+.captionRow {
+  margin-top: var(--spacing-lg);
+  text-align: center;
+  min-height: 56px;
+}
+
+.captionText {
+  animation: captionIn 480ms var(--ease-out);
+}
+
+@keyframes captionIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.captionTitle {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 2px;
+}
+
+.captionSubtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
 .indicators {
   display: flex;
   justify-content: center;
-  gap: var(--spacing-sm);
+  gap: 8px;
+  margin-top: var(--spacing-lg);
 }
 
 .indicator {
-  width: 12px;
-  height: 12px;
+  width: 24px;
+  height: 6px;
   border-radius: var(--radius-full);
-  background: var(--color-divider);
-  border: none;
-  cursor: pointer;
-  transition: all var(--transition-base);
+  background: rgba(31, 45, 31, 0.12);
+  transition: width var(--transition-base), background-color var(--transition-base);
 }
 
-.indicator:hover {
-  background: color-mix(in srgb, var(--color) 50%, transparent);
+.indicator:active {
+  transform: scale(0.9);
 }
 
 .indicatorActive {
-  background: var(--color);
-  width: 32px;
+  width: 40px;
+  background: var(--color, var(--color-primary));
 }
 
-/* Responsive */
 @media (max-width: 768px) {
-  .screenshotsContainer {
-    height: 400px;
+  .carousel {
+    min-height: 520px;
   }
 
-  .phoneFrame {
-    width: 180px;
-    height: 380px;
-    border-radius: 30px;
+  .stage {
+    height: 480px;
   }
 
-  .phoneScreen {
-    border-radius: 24px;
-  }
-
-  .screenshot {
+  .slide {
     transform:
-      translateX(calc(var(--offset) * 120px))
-      scale(calc(1 - abs(var(--offset)) * 0.2));
+      translate(-50%, -50%)
+      translateX(calc(var(--offset) * 130px))
+      translateZ(calc(var(--abs) * -120px))
+      rotateY(calc(var(--offset) * -10deg));
+  }
+
+  .slideActive {
+    transform: translate(-50%, -50%);
+  }
+
+  .navPrev {
+    margin-right: 0;
+  }
+
+  .navNext {
+    margin-left: 0;
   }
 
   .navButton {
-    width: 40px;
-    height: 40px;
-  }
-
-  .navButton svg {
-    width: 20px;
-    height: 20px;
+    width: 44px;
+    height: 44px;
   }
 }
 
 @media (max-width: 480px) {
-  .screenshotsContainer {
-    height: 350px;
+  .stage {
+    height: 440px;
   }
 
-  .phoneFrame {
-    width: 150px;
-    height: 320px;
-    border-radius: 26px;
-    padding: 8px;
-  }
-
-  .phoneScreen {
-    border-radius: 20px;
-  }
-
-  .screenshot {
+  .slide {
     transform:
-      translateX(calc(var(--offset) * 80px))
-      scale(calc(1 - abs(var(--offset)) * 0.25));
+      translate(-50%, -50%)
+      translateX(calc(var(--offset) * 90px))
+      translateZ(calc(var(--abs) * -100px))
+      rotateY(calc(var(--offset) * -8deg));
   }
 
-  .navButton {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .navPrev {
-    left: 0;
-  }
-
-  .navNext {
-    right: 0;
+  .slideActive {
+    transform: translate(-50%, -50%);
   }
 }

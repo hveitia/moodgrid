@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
+import 'package:moodgrid/app/core/widgets/ad_banner.dart';
 import 'package:moodgrid/app/data/models/word_cloud_item.dart';
 import 'package:moodgrid/app/modules/word_cloud/controllers/word_cloud_controller.dart';
 
@@ -13,15 +14,16 @@ class WordCloudView extends GetView<WordCloudController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nube de Palabras'),
+        title: Text('wordcloud.title'.tr),
         actions: [
           IconButton(
             icon: const Icon(Icons.info_outline),
             onPressed: _showInfoDialog,
-            tooltip: 'Información',
+            tooltip: 'wordcloud.tooltip.info'.tr,
           ),
         ],
       ),
+      bottomNavigationBar: const AdBanner(),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -62,17 +64,17 @@ class WordCloudView extends GetView<WordCloudController> {
             _buildStatItem(
               icon: Icons.comment,
               value: controller.totalComments.value.toString(),
-              label: 'Comentarios',
+              label: 'wordcloud.stat.comments'.tr,
             ),
             _buildStatItem(
               icon: Icons.text_fields,
               value: controller.totalWords.value.toString(),
-              label: 'Palabras',
+              label: 'wordcloud.stat.words'.tr,
             ),
             _buildStatItem(
               icon: Icons.cloud,
               value: controller.wordCloudItems.length.toString(),
-              label: 'Únicas',
+              label: 'wordcloud.stat.unique'.tr,
             ),
           ],
         ),
@@ -115,7 +117,7 @@ class WordCloudView extends GetView<WordCloudController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Leyenda de colores',
+                'wordcloud.legend.title'.tr,
                 style: Get.textTheme.titleSmall,
               ),
               const SizedBox(height: 8),
@@ -165,7 +167,7 @@ class WordCloudView extends GetView<WordCloudController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Palabras más frecuentes',
+              'wordcloud.most_frequent'.tr,
               style: Get.textTheme.titleSmall,
             ),
             const SizedBox(height: 12),
@@ -234,14 +236,14 @@ class WordCloudView extends GetView<WordCloudController> {
             ),
             const SizedBox(height: 24),
             Text(
-              'Sin suficientes datos',
+              'wordcloud.empty.title'.tr,
               style: Get.textTheme.headlineSmall?.copyWith(
                 color: Colors.grey[600],
               ),
             ),
             const SizedBox(height: 12),
             Text(
-              'Agrega comentarios a tus registros de ánimo para ver una nube de palabras con los temas más frecuentes.',
+              'wordcloud.empty.body'.tr,
               style: Get.textTheme.bodyMedium?.copyWith(
                 color: Colors.grey[600],
               ),
@@ -249,7 +251,7 @@ class WordCloudView extends GetView<WordCloudController> {
             ),
             const SizedBox(height: 8),
             Text(
-              'Las palabras deben aparecer al menos 2 veces para mostrarse.',
+              'wordcloud.empty.note'.tr,
               style: Get.textTheme.bodySmall?.copyWith(
                 color: Colors.grey[500],
                 fontStyle: FontStyle.italic,
@@ -260,7 +262,7 @@ class WordCloudView extends GetView<WordCloudController> {
             ElevatedButton.icon(
               onPressed: () => Get.back(),
               icon: const Icon(Icons.arrow_back),
-              label: const Text('Volver'),
+              label: Text('wordcloud.empty.button'.tr),
             ),
           ],
         ),
@@ -298,25 +300,29 @@ class WordCloudView extends GetView<WordCloudController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildDetailRow(
-              'Apariciones',
-              '${item.frequency} veces',
+              'wordcloud.detail.appearances'.tr,
+              'wordcloud.detail.appearances_value.one'.trPluralParams(
+                'wordcloud.detail.appearances_value.other',
+                item.frequency,
+                {'count': '${item.frequency}'},
+              ),
               Icons.repeat,
             ),
             const SizedBox(height: 12),
             _buildDetailRow(
-              'Ánimo promedio',
+              'wordcloud.detail.avg_mood'.tr,
               item.moodText,
               Icons.mood,
             ),
             const SizedBox(height: 12),
             _buildDetailRow(
-              'Valor promedio',
+              'wordcloud.detail.avg_value'.tr,
               item.averageMood.toStringAsFixed(2),
               Icons.analytics,
             ),
             const SizedBox(height: 16),
             Text(
-              'Distribución de ánimos',
+              'wordcloud.detail.distribution'.tr,
               style: Get.textTheme.titleSmall,
             ),
             const SizedBox(height: 8),
@@ -326,7 +332,7 @@ class WordCloudView extends GetView<WordCloudController> {
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Cerrar'),
+            child: Text('common.close'.tr),
           ),
         ],
       ),
@@ -409,33 +415,31 @@ class WordCloudView extends GetView<WordCloudController> {
           children: [
             Icon(Icons.cloud, color: AppColors.moodExcellent),
             const SizedBox(width: 12),
-            const Text('Nube de Palabras'),
+            Text('wordcloud.info.title'.tr),
           ],
         ),
-        content: const Column(
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'La nube de palabras muestra los términos más frecuentes en tus comentarios.',
-              style: TextStyle(height: 1.5),
+              'wordcloud.info.intro'.tr,
+              style: const TextStyle(height: 1.5),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Text(
-              'Interpretación:',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              'wordcloud.info.interpretation'.tr,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
-              '• Tamaño: indica la frecuencia de la palabra.\n'
-              '• Color: representa el ánimo promedio asociado.\n'
-              '• Toca una palabra para ver más detalles.',
-              style: TextStyle(height: 1.5),
+              'wordcloud.info.bullets'.tr,
+              style: const TextStyle(height: 1.5),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Text(
-              'Se filtran palabras comunes (artículos, preposiciones, etc.) para mostrar solo términos significativos.',
-              style: TextStyle(
+              'wordcloud.info.note'.tr,
+              style: const TextStyle(
                 height: 1.5,
                 fontStyle: FontStyle.italic,
                 fontSize: 13,
@@ -446,7 +450,7 @@ class WordCloudView extends GetView<WordCloudController> {
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Entendido'),
+            child: Text('wordcloud.info.button'.tr),
           ),
         ],
       ),

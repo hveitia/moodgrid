@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
 import 'package:moodgrid/app/data/models/daily_record.dart';
@@ -60,14 +61,14 @@ class YearInPixelsExportWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Feelmap',
+              'EmotionsMap',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-              'Mi Año en Píxeles $year',
+              'year_pixels.export.title'.trParams({'year': '$year'}),
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.grey[600],
@@ -81,8 +82,18 @@ class YearInPixelsExportWidget extends StatelessWidget {
 
   Widget _buildPixelGrid() {
     final monthNames = [
-      'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-      'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
+      'year_pixels.month.jan'.tr,
+      'year_pixels.month.feb'.tr,
+      'year_pixels.month.mar'.tr,
+      'year_pixels.month.apr'.tr,
+      'year_pixels.month.may'.tr,
+      'year_pixels.month.jun'.tr,
+      'year_pixels.month.jul'.tr,
+      'year_pixels.month.aug'.tr,
+      'year_pixels.month.sep'.tr,
+      'year_pixels.month.oct'.tr,
+      'year_pixels.month.nov'.tr,
+      'year_pixels.month.dec'.tr,
     ];
 
     return Column(
@@ -179,11 +190,11 @@ class YearInPixelsExportWidget extends StatelessWidget {
 
   Widget _buildLegend() {
     final legends = [
-      {'color': AppColors.moodExcellent, 'label': 'Excelente'},
-      {'color': AppColors.moodGood, 'label': 'Bien'},
-      {'color': AppColors.moodNeutral, 'label': 'Neutral'},
-      {'color': AppColors.moodDifficult, 'label': 'Difícil'},
-      {'color': AppColors.moodBad, 'label': 'Mal'},
+      {'color': AppColors.moodExcellent, 'label': AppColors.getMoodText(0)},
+      {'color': AppColors.moodGood, 'label': AppColors.getMoodText(1)},
+      {'color': AppColors.moodNeutral, 'label': AppColors.getMoodText(2)},
+      {'color': AppColors.moodDifficult, 'label': AppColors.getMoodText(3)},
+      {'color': AppColors.moodBad, 'label': AppColors.getMoodText(4)},
     ];
 
     return Row(
@@ -220,7 +231,7 @@ class YearInPixelsExportWidget extends StatelessWidget {
 
   Widget _buildFooter() {
     return Text(
-      'Mi registro de estado de ánimo',
+      'year_pixels.export.footer'.tr,
       style: TextStyle(
         fontSize: 14,
         color: Colors.grey[600],

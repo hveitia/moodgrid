@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AppColors {
   AppColors._();
@@ -29,21 +30,21 @@ class AppColors {
     }
   }
 
-  // Obtener texto del estado de ánimo
+  // Obtener texto del estado de ánimo (traducido según el locale activo)
   static String getMoodText(int index) {
     switch (index) {
       case 0:
-        return 'Excelente';
+        return 'mood.label.excellent'.tr;
       case 1:
-        return 'Bien';
+        return 'mood.label.good'.tr;
       case 2:
-        return 'Neutral';
+        return 'mood.label.neutral'.tr;
       case 3:
-        return 'Difícil';
+        return 'mood.label.difficult'.tr;
       case 4:
-        return 'Mal';
+        return 'mood.label.bad'.tr;
       default:
-        return 'Sin registro';
+        return 'mood.label.empty'.tr;
     }
   }
 

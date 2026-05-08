@@ -1,40 +1,69 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#88B486" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1F2D1F" media="(prefers-color-scheme: dark)" />
 
-    <!-- SEO Meta Tags -->
-    <title>Feelmap - Visualiza tus emociones, cuida tu bienestar</title>
-    <meta name="description" content="Registra tu estado de ánimo diario con una interfaz visual inspirada en GitHub. Descubre patrones emocionales, escribe en tu diario y cuida tu salud mental con Feelmap." />
-    <meta name="keywords" content="mood tracker, diario emocional, salud mental, bienestar, emociones, seguimiento de ánimo, mindfulness, autocuidado" />
-    <meta name="author" content="Feelmap" />
+    <title>EmotionsMap — Visualize your emotions, take care of your wellbeing</title>
+    <meta name="description" content="Log your daily mood with a visual grid inspired by GitHub. Discover emotional patterns, write in your journal, and take care of your mental health. 100% private and offline." />
+    <meta name="keywords" content="mood tracker, emotional journal, mental health, wellbeing, emotions, year in pixels, mindfulness, self-care, anxiety, depression" />
+    <meta name="author" content="EmotionsMap" />
     <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://emotionsmap.com/" />
 
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://feelmap.app/" />
-    <meta property="og:title" content="Feelmap - Visualiza tus emociones" />
-    <meta property="og:description" content="Registra tu estado de ánimo diario. Descubre patrones emocionales y cuida tu salud mental." />
-    <meta property="og:image" content="https://feelmap.app/og-image.png" />
-    <meta property="og:locale" content="es_ES" />
+    <meta property="og:url" content="https://emotionsmap.com/" />
+    <meta property="og:title" content="EmotionsMap — Visualize your emotions" />
+    <meta property="og:description" content="Log your daily mood. Discover emotional patterns and take care of your mental health. 100% private and offline." />
+    <meta property="og:image" content="https://emotionsmap.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="es_ES" />
+    <meta property="og:site_name" content="EmotionsMap" />
 
-    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://feelmap.app/" />
-    <meta name="twitter:title" content="Feelmap - Visualiza tus emociones" />
-    <meta name="twitter:description" content="Registra tu estado de ánimo diario con una interfaz visual." />
-    <meta name="twitter:image" content="https://feelmap.app/og-image.png" />
+    <meta name="twitter:url" content="https://emotionsmap.com/" />
+    <meta name="twitter:title" content="EmotionsMap — Visualize your emotions" />
+    <meta name="twitter:description" content="Log your daily mood. 100% private and offline." />
+    <meta name="twitter:image" content="https://emotionsmap.com/og-image.png" />
 
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#88B486" />
+    <meta name="apple-itunes-app" content="app-id=6756886570" />
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
+
+    <link rel="preload" as="image" href="/IMG_8421.PNG" fetchpriority="high" />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MobileApplication",
+      "name": "EmotionsMap",
+      "operatingSystem": "iOS, Android",
+      "applicationCategory": "HealthApplication",
+      "description": "Log your daily mood with a visual grid. Discover emotional patterns, write in your journal, and take care of your mental health.",
+      "url": "https://emotionsmap.com/",
+      "image": "https://emotionsmap.com/og-image.png",
+      "inLanguage": ["en", "es"],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "downloadUrl": "https://apps.apple.com/app/feelmap/id6756886570",
+      "installUrl": "https://play.google.com/store/apps/details?id=com.hveitia.moodgrid.moodgrid",
+      "author": {
+        "@type": "Organization",
+        "name": "EmotionsMap"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

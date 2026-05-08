@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:moodgrid/app/core/utils/snackbar_helper.dart';
 import 'package:moodgrid/app/modules/security/controllers/security_controller.dart';
 import 'package:moodgrid/app/modules/security/widgets/pin_input_widget.dart';
 import 'package:moodgrid/app/routes/app_routes.dart';
@@ -19,14 +20,14 @@ class SecuritySettingsView extends GetView<SecurityController> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Desactivar Seguridad',
+              'security.disable.dialog.title'.tr,
               style: Get.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Para desactivar la seguridad, ingresa tu PIN actual.',
+            Text(
+              'security.disable.dialog.message'.tr,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
@@ -39,10 +40,10 @@ class SecuritySettingsView extends GetView<SecurityController> {
                     Get.back();
                     await controller.disableSecurity();
                   } else {
-                    Get.snackbar(
-                      'Error',
-                      'PIN incorrecto',
-                      snackPosition: SnackPosition.BOTTOM,
+                    appSnackBar(
+                      title: 'common.error'.tr,
+                      message: 'security.error.wrong_pin'.tr,
+                      kind: AppSnackKind.error,
                     );
                   }
                 },
@@ -51,7 +52,7 @@ class SecuritySettingsView extends GetView<SecurityController> {
             const SizedBox(height: 24),
             TextButton(
               onPressed: () => Get.back(),
-              child: const Text('Cancelar'),
+              child: Text('common.cancel'.tr),
             ),
           ],
         ),
@@ -64,7 +65,7 @@ class SecuritySettingsView extends GetView<SecurityController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Seguridad'),
+        title: Text('security.title'.tr),
         leading: IconButton(onPressed: (){
           Get.offAllNamed(Routes.home);
         }, icon: const Icon(Icons.arrow_back_rounded)),
@@ -84,14 +85,14 @@ class SecuritySettingsView extends GetView<SecurityController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Protección con PIN',
+                      'security.protection.title'.tr,
                       style: Get.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Protege tu diario de emociones con un código PIN',
+                      'security.protection.subtitle'.tr,
                       style: Get.textTheme.bodyMedium?.copyWith(
                         color: Colors.grey[600],
                       ),
@@ -99,10 +100,10 @@ class SecuritySettingsView extends GetView<SecurityController> {
                     const SizedBox(height: 16),
                     const Divider(),
                     SwitchListTile(
-                      title: const Text('Activar Seguridad'),
+                      title: Text('security.toggle.title'.tr),
                       subtitle: controller.isSecurityEnabled.value
-                          ? const Text('Tu app está protegida con PIN')
-                          : const Text('Configura un PIN para proteger tu app'),
+                          ? Text('security.toggle.subtitle.on'.tr)
+                          : Text('security.toggle.subtitle.off'.tr),
                       value: controller.isSecurityEnabled.value,
                       onChanged: (value) {
                         if (value) {
@@ -119,9 +120,14 @@ class SecuritySettingsView extends GetView<SecurityController> {
                       const Divider(),
                       ListTile(
                         leading: const Icon(Icons.lock_outline),
-                        title: const Text('Cambiar PIN'),
+                        title: Text('security.change_pin.title'.tr),
                         subtitle: Text(
-                            'PIN de ${controller.pinLength.value} dígitos configurado'),
+                          'security.change_pin.subtitle.one'.trPluralParams(
+                            'security.change_pin.subtitle.other',
+                            controller.pinLength.value,
+                            {'count': '${controller.pinLength.value}'},
+                          ),
+                        ),
                         trailing: const Icon(Icons.chevron_right),
                         onTap: () {
                           Get.toNamed(
@@ -146,7 +152,7 @@ class SecuritySettingsView extends GetView<SecurityController> {
                     const SizedBox(width: 16),
                     Expanded(
                       child: Text(
-                        'La app se bloqueará automáticamente al minimizarla si la seguridad está activada.',
+                        'security.info_banner'.tr,
                         style: TextStyle(
                           color: Colors.blue[900],
                           fontSize: 13,

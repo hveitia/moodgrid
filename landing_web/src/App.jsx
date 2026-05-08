@@ -1,5 +1,14 @@
 import { Header, Footer } from './components/layout';
-import { Hero, Features, Screenshots, FAQ, CTA } from './components/sections';
+import {
+  Hero,
+  YearReveal,
+  HowItWorks,
+  Features,
+  Screenshots,
+  Privacy,
+  FAQ,
+  CTA,
+} from './components/sections';
 import './styles/globals.css';
 
 function App() {
@@ -8,8 +17,11 @@ function App() {
       <Header />
       <main>
         <Hero />
+        <YearReveal />
+        <HowItWorks />
         <Features />
         <Screenshots />
+        <Privacy />
         <FAQ />
         <CTA />
       </main>

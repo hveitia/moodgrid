@@ -46,28 +46,28 @@ class _PinSetupViewState extends State<PinSetupView> {
   String _getTitle() {
     switch (currentStep) {
       case PinSetupStep.selectLength:
-        return 'Configura tu PIN';
+        return 'pin_setup.title.create'.tr;
       case PinSetupStep.enterOld:
-        return 'Cambiar PIN';
+        return 'pin_setup.title.change'.tr;
       case PinSetupStep.enterNew:
         return mode == PinSetupMode.create
-            ? 'Crea tu PIN'
-            : 'Nuevo PIN';
+            ? 'pin_setup.title.new_create'.tr
+            : 'pin_setup.title.new_change'.tr;
       case PinSetupStep.confirmNew:
-        return 'Confirma tu PIN';
+        return 'pin_setup.title.confirm'.tr;
     }
   }
 
   String _getSubtitle() {
     switch (currentStep) {
       case PinSetupStep.selectLength:
-        return 'Selecciona la longitud de tu PIN';
+        return 'pin_setup.subtitle.length'.tr;
       case PinSetupStep.enterOld:
-        return 'Ingresa tu PIN actual';
+        return 'pin_setup.subtitle.old'.tr;
       case PinSetupStep.enterNew:
-        return 'Ingresa tu nuevo PIN';
+        return 'pin_setup.subtitle.new'.tr;
       case PinSetupStep.confirmNew:
-        return 'Vuelve a ingresar tu PIN';
+        return 'pin_setup.subtitle.confirm'.tr;
     }
   }
 
@@ -100,7 +100,7 @@ class _PinSetupViewState extends State<PinSetupView> {
       });
     } else {
       setState(() {
-        errorText = 'PIN incorrecto';
+        errorText = 'security.error.wrong_pin'.tr;
       });
     }
   }
@@ -133,7 +133,7 @@ class _PinSetupViewState extends State<PinSetupView> {
       }
     } else {
       setState(() {
-        errorText = 'Los PINs no coinciden';
+        errorText = 'security.error.pins_no_match'.tr;
         currentStep = PinSetupStep.enterNew;
         newPin = null;
       });
@@ -152,12 +152,17 @@ class _PinSetupViewState extends State<PinSetupView> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Longitud del PIN',
+          'pin_setup.length.heading'.tr,
           style: Get.textTheme.titleLarge,
         ),
         const SizedBox(height: 40),
         Obx(() {
           final length = controller.pinLength.value;
+          final lengthLabel = 'pin_setup.length.value.one'.trPluralParams(
+            'pin_setup.length.value.other',
+            length,
+            {'count': '$length'},
+          );
           return Column(
             children: [
               Slider(
@@ -165,14 +170,14 @@ class _PinSetupViewState extends State<PinSetupView> {
                 min: 4,
                 max: 6,
                 divisions: 2,
-                label: '$length dígitos',
+                label: lengthLabel,
                 onChanged: (value) {
                   controller.setPinLength(value.toInt());
                 },
               ),
               const SizedBox(height: 16),
               Text(
-                '$length dígitos',
+                lengthLabel,
                 style: Get.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -189,7 +194,7 @@ class _PinSetupViewState extends State<PinSetupView> {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          child: const Text('Continuar'),
+          child: Text('pin_setup.button.continue'.tr),
         ),
       ],
     );

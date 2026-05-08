@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:moodgrid/app/core/utils/snackbar_helper.dart';
 import 'package:moodgrid/app/data/providers/database_helper.dart';
 
 class ProfileController extends GetxController {
@@ -23,10 +24,10 @@ class ProfileController extends GetxController {
       moodStatistics.value = stats;
       totalRecords.value = total;
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Error al cargar estadísticas',
-        snackPosition: SnackPosition.BOTTOM,
+      appSnackBar(
+        title: 'common.error'.tr,
+        message: 'profile.stats.error_loading'.tr,
+        kind: AppSnackKind.error,
       );
     } finally {
       isLoading.value = false;

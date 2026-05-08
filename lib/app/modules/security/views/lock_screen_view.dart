@@ -32,7 +32,7 @@ class _LockScreenContentState extends State<_LockScreenContent> {
     } else {
       if (mounted) {
         setState(() {
-          errorText = 'PIN incorrecto. Intenta nuevamente.';
+          errorText = 'security.error.wrong_pin_retry'.tr;
         });
       }
     }
@@ -84,14 +84,14 @@ class _LockScreenContentState extends State<_LockScreenContent> {
                   children: [
                 const SizedBox(height: 12),
                 Text(
-                  'Feelmap',
+                  'EmotionsMap',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 18),
                 Text(
-                  'Ingresa tu PIN para desbloquear',
+                  'lock.subtitle'.tr,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     color: Colors.grey[600],
                   ),
@@ -128,17 +128,16 @@ class _LockScreenContentState extends State<_LockScreenContent> {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            '¿Cerrar Sesión?',
+                            'lock.forgot.confirm.title'.tr,
                             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           const SizedBox(height: 12),
-                          const Text(
-                            'Para recuperar el acceso, cerraremos tu sesión actual. '
-                                'Podrás iniciar sesión nuevamente y configurar un nuevo PIN.',
+                          Text(
+                            'lock.forgot.confirm.body'.tr,
                             textAlign: TextAlign.center,
-                            style: TextStyle(height: 1.5),
+                            style: const TextStyle(height: 1.5),
                           ),
                           const SizedBox(height: 24),
                           Row(
@@ -146,14 +145,14 @@ class _LockScreenContentState extends State<_LockScreenContent> {
                               Expanded(
                                 child: OutlinedButton(
                                   onPressed: _toggleForgotPinConfirmation,
-                                  child: const Text('Cancelar'),
+                                  child: Text('common.cancel'.tr),
                                 ),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: FilledButton(
                                   onPressed: _handleSignOut,
-                                  child: const Text('Cerrar Sesión'),
+                                  child: Text('lock.forgot.confirm.signout'.tr),
                                 ),
                               ),
                             ],
@@ -168,7 +167,7 @@ class _LockScreenContentState extends State<_LockScreenContent> {
                   TextButton(
                     onPressed: _toggleForgotPinConfirmation,
                     child: Text(
-                      '¿Olvidaste tu PIN?',
+                      'lock.forgot.button'.tr,
                       style: TextStyle(
                         color: Colors.grey[600],
                       ),

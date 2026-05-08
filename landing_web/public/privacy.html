@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy — EmotionsMap</title>
+    <meta name="description" content="EmotionsMap Privacy Policy. How we handle your data, our advertising practices, and your rights." />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="theme-color" content="#88B486" />
+    <link rel="canonical" href="https://emotionsmap.com/privacy" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #FAF8F4;
+        --surface: #FFFFFF;
+        --primary: #88B486;
+        --primary-dark: #5E8A5C;
+        --text: #1F2D1F;
+        --muted: #5A6760;
+        --divider: rgba(31, 45, 31, 0.10);
+      }
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html { scroll-behavior: smooth; }
+      body {
+        font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+      .topbar {
+        position: sticky; top: 0; z-index: 10;
+        background: rgba(250, 248, 244, 0.92);
+        backdrop-filter: saturate(180%) blur(12px);
+        -webkit-backdrop-filter: saturate(180%) blur(12px);
+        border-bottom: 1px solid var(--divider);
+      }
+      .topbar-inner {
+        max-width: 760px; margin: 0 auto;
+        padding: 14px 20px;
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 16px;
+      }
+      .brand {
+        display: inline-flex; align-items: center; gap: 10px;
+        color: var(--text); text-decoration: none;
+        font-family: 'Fraunces', Georgia, serif;
+        font-weight: 600; font-size: 1.15rem; letter-spacing: -0.02em;
+      }
+      .brand img { width: 28px; height: 28px; border-radius: 6px; }
+      .lang-switch {
+        display: inline-flex;
+        background: rgba(31, 45, 31, 0.05);
+        padding: 3px;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+      .lang-switch button {
+        border: none; background: transparent;
+        padding: 6px 14px; border-radius: 999px;
+        font-family: inherit; font-weight: 600; font-size: 0.78rem;
+        color: var(--muted); cursor: pointer;
+        transition: color 200ms, background 200ms;
+      }
+      .lang-switch button.active {
+        background: var(--surface);
+        color: var(--text);
+        box-shadow: 0 1px 4px rgba(31, 45, 31, 0.10);
+      }
+      main {
+        max-width: 760px; margin: 0 auto;
+        padding: 48px 20px 80px;
+      }
+      h1 {
+        font-family: 'Fraunces', Georgia, serif;
+        font-size: clamp(2rem, 5vw, 2.75rem);
+        font-weight: 600;
+        letter-spacing: -0.025em;
+        line-height: 1.1;
+        margin-bottom: 12px;
+      }
+      .meta {
+        color: var(--muted); font-size: 0.9rem; margin-bottom: 40px;
+      }
+      h2 {
+        font-family: 'Fraunces', Georgia, serif;
+        font-size: 1.5rem; font-weight: 600;
+        letter-spacing: -0.015em;
+        margin-top: 36px; margin-bottom: 12px;
+      }
+      h3 {
+        font-size: 1.05rem; font-weight: 600;
+        margin-top: 20px; margin-bottom: 8px;
+      }
+      p { margin-bottom: 14px; color: var(--text); }
+      ul, ol { padding-left: 24px; margin-bottom: 14px; }
+      li { margin-bottom: 6px; color: var(--text); }
+      a { color: var(--primary-dark); }
+      a:hover { text-decoration: underline; }
+      .lang-section { display: none; }
+      .lang-section.active { display: block; }
+      .footer-link {
+        margin-top: 60px; padding-top: 24px;
+        border-top: 1px solid var(--divider);
+        text-align: center; font-size: 0.85rem; color: var(--muted);
+      }
+      .footer-link a { color: var(--primary-dark); font-weight: 500; text-decoration: none; }
+      .footer-link a:hover { text-decoration: underline; }
+      .callout {
+        background: rgba(136, 180, 134, 0.08);
+        border-left: 3px solid var(--primary);
+        padding: 14px 18px;
+        border-radius: 8px;
+        margin: 16px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="/">
+          <img src="/favicon.png" alt="" />
+          <span>EmotionsMap</span>
+        </a>
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button data-lang="en" class="active" aria-pressed="true">EN</button>
+          <button data-lang="es" aria-pressed="false">ES</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- ─────────────────── ENGLISH ─────────────────── -->
+      <section class="lang-section active" data-lang="en">
+        <h1>Privacy Policy</h1>
+        <p class="meta">Last updated: May 7, 2026</p>
+
+        <h2>1. Introduction</h2>
+        <p>Your privacy is fundamental to us. This Privacy Policy explains what information we collect, how we use it, and your rights over your personal data when you use EmotionsMap.</p>
+
+        <h2>2. Information We Collect</h2>
+        <h3>Information you provide</h3>
+        <ul>
+          <li><strong>Account:</strong> Email address and password, securely stored via Firebase Authentication.</li>
+        </ul>
+        <h3>Information stored locally on your device</h3>
+        <ul>
+          <li>Mood entries, dates, comments and journal text — all kept in a local SQLite database on your phone.</li>
+          <li>App settings (language, security PIN hash, etc.) stored via SharedPreferences and Flutter Secure Storage.</li>
+        </ul>
+
+        <h2>3. Data Storage</h2>
+        <h3>Local storage</h3>
+        <ul>
+          <li>Your mood records, journal entries and statistics are stored exclusively on your device.</li>
+          <li>Local data is protected by your operating system's security features.</li>
+          <li>You may lock the app with a PIN for additional protection.</li>
+        </ul>
+        <h3>Cloud storage</h3>
+        <ul>
+          <li>Authentication credentials (email + password hash) are stored in Firebase Authentication (Google Cloud).</li>
+          <li><strong>We do not store your mood entries, journal text, or any emotional data in the cloud.</strong></li>
+        </ul>
+
+        <h2>4. Advertising</h2>
+        <p>EmotionsMap is free and supported by advertising. To show ads, we use Google AdMob.</p>
+        <div class="callout">
+          <strong>Our advertising principles:</strong>
+          <ul style="margin-top: 8px; margin-bottom: 0;">
+            <li>Ads are <strong>non-personalized by default</strong>. We configure AdMob to serve contextual ads only.</li>
+            <li>Your <strong>journal entries and mood data are never shared</strong> with the ads network.</li>
+            <li>To deliver ads, AdMob may collect anonymous device identifiers (such as the Advertising ID / IDFA).</li>
+            <li>We never use your in-app behavior to target ads.</li>
+            <li>You can reset your Advertising ID at any time from your device settings.</li>
+          </ul>
+        </div>
+        <p>For details on AdMob's data handling practices, see <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google's advertising policy</a>.</p>
+
+        <h2>5. App Tracking Transparency (iOS)</h2>
+        <p>On iOS, we ask for your permission to track via the system's App Tracking Transparency prompt. <strong>Regardless of your choice, ads remain non-personalized in this version.</strong> The prompt exists to allow optional personalized ads in a future version, only with your explicit consent.</p>
+
+        <h2>6. Sharing Information with Third Parties</h2>
+        <p>We do <strong>not</strong> sell, rent, or share your personal information with third parties for commercial purposes. The only third-party services that process data are:</p>
+        <ul>
+          <li><strong>Firebase</strong> (Google) — for authentication and push notifications. <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">Firebase Privacy Policy</a>.</li>
+          <li><strong>Google AdMob</strong> — for showing non-personalized ads. <a href="https://support.google.com/admob/answer/6128543" target="_blank" rel="noopener">AdMob privacy info</a>.</li>
+        </ul>
+
+        <h2>7. Data Export and Import</h2>
+        <ul>
+          <li>You can export your full mood history as a JSON file at any time.</li>
+          <li>You can import data from a previously exported backup.</li>
+          <li>Files are shared via your device's native sharing — we do not have access to them.</li>
+        </ul>
+
+        <h2>8. Data Retention</h2>
+        <ul>
+          <li><strong>Local data:</strong> retained on your device until you delete it manually or uninstall the app.</li>
+          <li><strong>Account data:</strong> retained while your account is active. You can delete your account at any time from Profile → Danger zone → Delete account.</li>
+        </ul>
+
+        <h2>9. Data Deletion</h2>
+        <p>You have the right to delete your data at any time:</p>
+        <ul>
+          <li>Delete individual records from the app interface.</li>
+          <li>Delete your account from Profile settings — this removes your email, credentials, and any data associated with your account in the cloud.</li>
+          <li>Local data must be deleted from within the app or by uninstalling. After uninstalling, your phone removes the local database.</li>
+        </ul>
+
+        <h2>10. Data Security</h2>
+        <ul>
+          <li>HTTPS/TLS encryption in transit.</li>
+          <li>Firebase encryption at rest.</li>
+          <li>Local secure storage via Flutter Secure Storage for sensitive data (PIN hash).</li>
+          <li>Optional PIN lock for the app.</li>
+        </ul>
+        <p><em>No system is 100% secure. While we apply best practices, we cannot guarantee absolute security.</em></p>
+
+        <h2>11. Children's Privacy</h2>
+        <p>EmotionsMap is not directed at children under 13. We do not knowingly collect personal information from anyone under 13. If we discover such data, we will delete it immediately.</p>
+
+        <h2>12. Your Rights</h2>
+        <p>Under applicable laws (GDPR, CCPA, etc.), you have the right to:</p>
+        <ul>
+          <li>Request access to your data.</li>
+          <li>Rectify inaccurate data.</li>
+          <li>Delete your data.</li>
+          <li>Export your data in JSON format.</li>
+          <li>Object to or limit certain processing.</li>
+        </ul>
+        <p>To exercise these rights, contact us at <a href="mailto:hveitia86@gmail.com">hveitia86@gmail.com</a>.</p>
+
+        <h2>13. International Data Transfers</h2>
+        <p>Data processed by Firebase and AdMob may be transferred and stored on servers located outside your country, including the United States. Google complies with applicable privacy frameworks for international data transfers.</p>
+
+        <h2>14. Cookies and Tracking Technologies</h2>
+        <p>EmotionsMap does not use web cookies. The mobile app may use anonymous device identifiers via Firebase Analytics (if enabled) and Google AdMob for the purposes described above.</p>
+
+        <h2>15. Changes to This Privacy Policy</h2>
+        <p>We may update this Privacy Policy occasionally. We will notify you of significant changes via:</p>
+        <ul>
+          <li>An in-app notification.</li>
+          <li>Email (if you provided one).</li>
+          <li>Updating the "Last updated" date at the top of this document.</li>
+        </ul>
+        <p>Continued use after changes constitutes acceptance of the new policy.</p>
+
+        <h2>16. Contact</h2>
+        <p>If you have any questions about this Privacy Policy, please contact us at <a href="mailto:hveitia86@gmail.com">hveitia86@gmail.com</a>.</p>
+
+        <div class="footer-link">
+          <a href="/">← emotionsmap.com</a> · <a href="/terms">Terms &amp; Conditions</a> · <a href="/support">Support</a>
+        </div>
+      </section>
+
+      <!-- ─────────────────── ESPAÑOL ─────────────────── -->
+      <section class="lang-section" data-lang="es">
+        <h1>Política de Privacidad</h1>
+        <p class="meta">Última actualización: 7 de mayo de 2026</p>
+
+        <h2>1. Introducción</h2>
+        <p>Tu privacidad es fundamental para nosotros. Esta Política de Privacidad explica qué información recopilamos, cómo la usamos y qué derechos tienes sobre tus datos personales cuando usas EmotionsMap.</p>
+
+        <h2>2. Información que Recopilamos</h2>
+        <h3>Información que tú proporcionas</h3>
+        <ul>
+          <li><strong>Cuenta:</strong> dirección de correo electrónico y contraseña, almacenadas de forma segura mediante Firebase Authentication.</li>
+        </ul>
+        <h3>Información almacenada localmente en tu dispositivo</h3>
+        <ul>
+          <li>Registros de ánimo, fechas, comentarios y texto del diario — todo guardado en una base de datos SQLite local en tu teléfono.</li>
+          <li>Configuración de la app (idioma, hash del PIN, etc.) guardada mediante SharedPreferences y Flutter Secure Storage.</li>
+        </ul>
+
+        <h2>3. Almacenamiento de Datos</h2>
+        <h3>Almacenamiento local</h3>
+        <ul>
+          <li>Tus registros de ánimo, entradas de diario y estadísticas se almacenan exclusivamente en tu dispositivo.</li>
+          <li>Los datos locales están protegidos por las medidas de seguridad de tu sistema operativo.</li>
+          <li>Puedes proteger la app con un PIN para una capa adicional de seguridad.</li>
+        </ul>
+        <h3>Almacenamiento en la nube</h3>
+        <ul>
+          <li>Las credenciales de autenticación (email + hash de contraseña) se almacenan en Firebase Authentication (Google Cloud).</li>
+          <li><strong>No almacenamos tus registros de ánimo, texto del diario, ni ningún dato emocional en la nube.</strong></li>
+        </ul>
+
+        <h2>4. Publicidad</h2>
+        <p>EmotionsMap es gratuita y se sostiene con publicidad. Para mostrar anuncios usamos Google AdMob.</p>
+        <div class="callout">
+          <strong>Nuestros principios publicitarios:</strong>
+          <ul style="margin-top: 8px; margin-bottom: 0;">
+            <li>Los anuncios son <strong>no personalizados por defecto</strong>. Configuramos AdMob para mostrar solo anuncios contextuales.</li>
+            <li><strong>Tus entradas de diario y datos de ánimo nunca se comparten</strong> con la red de anuncios.</li>
+            <li>Para mostrar anuncios, AdMob puede recopilar identificadores anónimos del dispositivo (como el ID de publicidad / IDFA).</li>
+            <li>Nunca usamos tu comportamiento dentro de la app para segmentar anuncios.</li>
+            <li>Puedes reiniciar tu ID de publicidad cuando quieras desde la configuración de tu dispositivo.</li>
+          </ul>
+        </div>
+        <p>Para detalles sobre el manejo de datos por parte de AdMob, consulta la <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">política publicitaria de Google</a>.</p>
+
+        <h2>5. App Tracking Transparency (iOS)</h2>
+        <p>En iOS, te pedimos permiso a través del prompt nativo de App Tracking Transparency. <strong>Independientemente de tu elección, los anuncios siguen siendo no personalizados en esta versión.</strong> El prompt existe para permitir, en una versión futura, anuncios personalizados opcionales solo con tu consentimiento explícito.</p>
+
+        <h2>6. Compartir Información con Terceros</h2>
+        <p><strong>No</strong> vendemos, alquilamos ni compartimos tu información personal con terceros con fines comerciales. Los únicos servicios de terceros que procesan datos son:</p>
+        <ul>
+          <li><strong>Firebase</strong> (Google) — para autenticación y notificaciones push. <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">Política de Privacidad de Firebase</a>.</li>
+          <li><strong>Google AdMob</strong> — para mostrar anuncios no personalizados. <a href="https://support.google.com/admob/answer/6128543" target="_blank" rel="noopener">Información de privacidad de AdMob</a>.</li>
+        </ul>
+
+        <h2>7. Exportación e Importación de Datos</h2>
+        <ul>
+          <li>Puedes exportar todo tu historial de ánimo como archivo JSON cuando quieras.</li>
+          <li>Puedes importar datos desde un respaldo exportado previamente.</li>
+          <li>Los archivos se comparten a través del compartir nativo de tu dispositivo — nosotros no tenemos acceso.</li>
+        </ul>
+
+        <h2>8. Retención de Datos</h2>
+        <ul>
+          <li><strong>Datos locales:</strong> se conservan en tu dispositivo hasta que los elimines manualmente o desinstales la app.</li>
+          <li><strong>Datos de cuenta:</strong> se conservan mientras tu cuenta esté activa. Puedes eliminar tu cuenta cuando quieras desde Perfil → Zona de peligro → Eliminar cuenta.</li>
+        </ul>
+
+        <h2>9. Eliminación de Datos</h2>
+        <p>Tienes derecho a eliminar tus datos en cualquier momento:</p>
+        <ul>
+          <li>Elimina registros individuales desde la interfaz de la app.</li>
+          <li>Elimina tu cuenta desde Perfil — esto borra tu email, credenciales y cualquier dato asociado a tu cuenta en la nube.</li>
+          <li>Los datos locales deben eliminarse desde la app o desinstalándola. Al desinstalar, tu teléfono elimina la base de datos local.</li>
+        </ul>
+
+        <h2>10. Seguridad de los Datos</h2>
+        <ul>
+          <li>Cifrado HTTPS/TLS en tránsito.</li>
+          <li>Cifrado en reposo en Firebase.</li>
+          <li>Almacenamiento seguro local mediante Flutter Secure Storage para datos sensibles (hash del PIN).</li>
+          <li>Bloqueo opcional con PIN.</li>
+        </ul>
+        <p><em>Ningún sistema es 100% seguro. Aunque aplicamos buenas prácticas, no podemos garantizar seguridad absoluta.</em></p>
+
+        <h2>11. Privacidad de Menores</h2>
+        <p>EmotionsMap no está dirigida a menores de 13 años. No recopilamos intencionalmente información personal de menores de 13. Si descubrimos tales datos, los eliminaremos de inmediato.</p>
+
+        <h2>12. Tus Derechos</h2>
+        <p>Según las leyes aplicables (GDPR, CCPA, etc.), tienes derecho a:</p>
+        <ul>
+          <li>Solicitar acceso a tus datos.</li>
+          <li>Rectificar datos inexactos.</li>
+          <li>Eliminar tus datos.</li>
+          <li>Exportar tus datos en formato JSON.</li>
+          <li>Oponerte o limitar ciertos procesamientos.</li>
+        </ul>
+        <p>Para ejercer estos derechos, contáctanos en <a href="mailto:hveitia86@gmail.com">hveitia86@gmail.com</a>.</p>
+
+        <h2>13. Transferencias Internacionales de Datos</h2>
+        <p>Los datos procesados por Firebase y AdMob pueden transferirse y almacenarse en servidores ubicados fuera de tu país, incluyendo Estados Unidos. Google cumple con los marcos de privacidad aplicables para transferencias internacionales.</p>
+
+        <h2>14. Cookies y Tecnologías de Seguimiento</h2>
+        <p>EmotionsMap no utiliza cookies web. La app móvil puede usar identificadores anónimos del dispositivo a través de Firebase Analytics (si está activado) y Google AdMob para los fines descritos arriba.</p>
+
+        <h2>15. Cambios a esta Política de Privacidad</h2>
+        <p>Podemos actualizar esta Política de Privacidad ocasionalmente. Te notificaremos los cambios significativos mediante:</p>
+        <ul>
+          <li>Una notificación dentro de la app.</li>
+          <li>Correo electrónico (si proporcionaste uno).</li>
+          <li>Actualizando la fecha de "Última actualización" arriba.</li>
+        </ul>
+        <p>El uso continuado después de los cambios implica la aceptación de la nueva política.</p>
+
+        <h2>16. Contacto</h2>
+        <p>Si tienes preguntas sobre esta Política de Privacidad, contáctanos en <a href="mailto:hveitia86@gmail.com">hveitia86@gmail.com</a>.</p>
+
+        <div class="footer-link">
+          <a href="/">← emotionsmap.com</a> · <a href="/terms">Términos y Condiciones</a> · <a href="/support">Soporte</a>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        var btns = document.querySelectorAll('.lang-switch button');
+        var sections = document.querySelectorAll('.lang-section');
+        var saved = (function () {
+          try { return localStorage.getItem('emotionsmap.docs.lang'); } catch (_) { return null; }
+        })();
+        var browserLang = (navigator.language || 'en').toLowerCase().startsWith('es') ? 'es' : 'en';
+        var initial = saved || browserLang;
+        setLang(initial);
+
+        btns.forEach(function (b) {
+          b.addEventListener('click', function () { setLang(b.dataset.lang); });
+        });
+
+        function setLang(lang) {
+          document.documentElement.lang = lang;
+          btns.forEach(function (b) {
+            var active = b.dataset.lang === lang;
+            b.classList.toggle('active', active);
+            b.setAttribute('aria-pressed', active);
+          });
+          sections.forEach(function (s) {
+            s.classList.toggle('active', s.dataset.lang === lang);
+          });
+          try { localStorage.setItem('emotionsmap.docs.lang', lang); } catch (_) {}
+        }
+      })();
+    </script>
+  </body>
+</html>

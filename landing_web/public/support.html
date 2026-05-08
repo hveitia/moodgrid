@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Support — EmotionsMap</title>
+    <meta name="description" content="EmotionsMap support. Contact us, FAQs, and how to get help." />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="theme-color" content="#88B486" />
+    <link rel="canonical" href="https://emotionsmap.com/support" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #FAF8F4;
+        --surface: #FFFFFF;
+        --primary: #88B486;
+        --primary-dark: #5E8A5C;
+        --text: #1F2D1F;
+        --muted: #5A6760;
+        --divider: rgba(31, 45, 31, 0.10);
+      }
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: var(--bg); color: var(--text); line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+      .topbar {
+        position: sticky; top: 0; z-index: 10;
+        background: rgba(250, 248, 244, 0.92);
+        backdrop-filter: saturate(180%) blur(12px);
+        -webkit-backdrop-filter: saturate(180%) blur(12px);
+        border-bottom: 1px solid var(--divider);
+      }
+      .topbar-inner {
+        max-width: 760px; margin: 0 auto;
+        padding: 14px 20px;
+        display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      }
+      .brand {
+        display: inline-flex; align-items: center; gap: 10px;
+        color: var(--text); text-decoration: none;
+        font-family: 'Fraunces', Georgia, serif;
+        font-weight: 600; font-size: 1.15rem; letter-spacing: -0.02em;
+      }
+      .brand img { width: 28px; height: 28px; border-radius: 6px; }
+      .lang-switch {
+        display: inline-flex;
+        background: rgba(31, 45, 31, 0.05);
+        padding: 3px; border-radius: 999px;
+        font-size: 0.78rem; font-weight: 600;
+      }
+      .lang-switch button {
+        border: none; background: transparent;
+        padding: 6px 14px; border-radius: 999px;
+        font-family: inherit; font-weight: 600; font-size: 0.78rem;
+        color: var(--muted); cursor: pointer;
+        transition: color 200ms, background 200ms;
+      }
+      .lang-switch button.active {
+        background: var(--surface); color: var(--text);
+        box-shadow: 0 1px 4px rgba(31, 45, 31, 0.10);
+      }
+      main { max-width: 760px; margin: 0 auto; padding: 48px 20px 80px; }
+      h1 {
+        font-family: 'Fraunces', Georgia, serif;
+        font-size: clamp(2rem, 5vw, 2.75rem);
+        font-weight: 600; letter-spacing: -0.025em;
+        line-height: 1.1; margin-bottom: 12px;
+      }
+      .lead { color: var(--muted); font-size: 1.05rem; margin-bottom: 32px; }
+      h2 {
+        font-family: 'Fraunces', Georgia, serif;
+        font-size: 1.5rem; font-weight: 600; letter-spacing: -0.015em;
+        margin-top: 36px; margin-bottom: 12px;
+      }
+      h3 { font-size: 1.05rem; font-weight: 600; margin-top: 20px; margin-bottom: 6px; }
+      p { margin-bottom: 14px; }
+      ul { padding-left: 24px; margin-bottom: 14px; }
+      li { margin-bottom: 6px; }
+      a { color: var(--primary-dark); }
+      a:hover { text-decoration: underline; }
+      .lang-section { display: none; }
+      .lang-section.active { display: block; }
+      .contact-card {
+        background: var(--surface);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 16px rgba(31, 45, 31, 0.05), 0 0 0 1px var(--divider);
+        margin: 16px 0 32px;
+      }
+      .contact-card .email {
+        display: inline-flex; align-items: center; gap: 10px;
+        background: var(--primary);
+        color: #fff;
+        padding: 12px 22px;
+        border-radius: 999px;
+        font-weight: 600;
+        text-decoration: none;
+        margin-top: 12px;
+        transition: transform 120ms;
+      }
+      .contact-card .email:hover {
+        text-decoration: none;
+        transform: translateY(-1px);
+      }
+      .contact-card .email:active { transform: scale(0.97); }
+      details {
+        background: var(--surface);
+        border-radius: 12px;
+        padding: 0;
+        margin-bottom: 10px;
+        box-shadow: 0 0 0 1px var(--divider);
+        overflow: hidden;
+      }
+      details[open] { box-shadow: 0 4px 16px rgba(31, 45, 31, 0.06), 0 0 0 1px var(--divider); }
+      summary {
+        padding: 16px 20px;
+        cursor: pointer;
+        font-weight: 600;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      summary::-webkit-details-marker { display: none; }
+      summary::after {
+        content: '+';
+        font-size: 1.4rem;
+        color: var(--muted);
+        font-weight: 300;
+        transition: transform 200ms;
+      }
+      details[open] summary::after { transform: rotate(45deg); }
+      details > p, details > ul {
+        padding: 0 20px 16px;
+        color: var(--muted);
+      }
+      .footer-link {
+        margin-top: 60px; padding-top: 24px;
+        border-top: 1px solid var(--divider);
+        text-align: center; font-size: 0.85rem; color: var(--muted);
+      }
+      .footer-link a { color: var(--primary-dark); font-weight: 500; text-decoration: none; }
+      .footer-link a:hover { text-decoration: underline; }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="/">
+          <img src="/favicon.png" alt="" />
+          <span>EmotionsMap</span>
+        </a>
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button data-lang="en" class="active" aria-pressed="true">EN</button>
+          <button data-lang="es" aria-pressed="false">ES</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- ─────────────────── ENGLISH ─────────────────── -->
+      <section class="lang-section active" data-lang="en">
+        <h1>Support</h1>
+        <p class="lead">We're a small team. Reach out anytime — we read every message.</p>
+
+        <div class="contact-card">
+          <h3 style="margin-top:0">Contact us</h3>
+          <p>The fastest way to get help is by email. We typically respond within 24–48 hours.</p>
+          <a class="email" href="mailto:hveitia86@gmail.com?subject=EmotionsMap%20Support">
+            hveitia86@gmail.com
+          </a>
+        </div>
+
+        <h2>Frequently Asked Questions</h2>
+
+        <details>
+          <summary>How do I back up my data?</summary>
+          <p>Open the app, go to <strong>Menu → Data Backup → Export</strong>. You'll get a JSON file with your full mood history. Save it somewhere safe (cloud drive, email to yourself, etc.).</p>
+        </details>
+
+        <details>
+          <summary>How do I restore from a backup?</summary>
+          <p>Go to <strong>Menu → Data Backup → Import</strong> and pick the JSON file you exported previously.</p>
+        </details>
+
+        <details>
+          <summary>I forgot my password</summary>
+          <p>On the Sign-in screen, tap <em>"Forgot your password?"</em> and enter your email. We'll send you a reset link via Firebase.</p>
+        </details>
+
+        <details>
+          <summary>I forgot my PIN</summary>
+          <p>The PIN is local to your device — we cannot reset it. On the lock screen, tap <em>"Forgot your PIN?"</em> to sign out. After signing in again you can configure a new PIN. Your local data remains on the device.</p>
+        </details>
+
+        <details>
+          <summary>How do I change the language?</summary>
+          <p>Open <strong>Profile → Language</strong> and pick English or Spanish. The change is instant — no restart needed.</p>
+        </details>
+
+        <details>
+          <summary>Why am I seeing ads?</summary>
+          <p>EmotionsMap is free to use thanks to advertising. Ads are non-personalized by default and we never share your journal entries with the ads network. See <a href="/privacy">Privacy Policy §4</a>.</p>
+        </details>
+
+        <details>
+          <summary>How do I delete my account and all my data?</summary>
+          <p>Go to <strong>Profile → Danger zone → Delete account</strong>. This permanently removes your authentication credentials and any cloud-stored data. Local data on your device is removed when you uninstall the app.</p>
+        </details>
+
+        <details>
+          <summary>Is my data really private?</summary>
+          <p>Yes. Mood entries, journal text and statistics are stored only on your device (local SQLite). They never leave your phone — not to our servers, not to the ads network, not to anyone. See <a href="/privacy">Privacy Policy</a>.</p>
+        </details>
+
+        <details>
+          <summary>I have a feature request</summary>
+          <p>Awesome — please email us at <a href="mailto:hveitia86@gmail.com?subject=EmotionsMap%20Feature%20Request">hveitia86@gmail.com</a>. We read everything and pick the most-requested ideas for upcoming releases.</p>
+        </details>
+
+        <h2>Reporting a problem</h2>
+        <p>If you found a bug or something is broken, please include in your email:</p>
+        <ul>
+          <li>Your device model and OS version (e.g., iPhone 15 Pro, iOS 18.2).</li>
+          <li>App version (Profile → bottom of the menu).</li>
+          <li>What you were trying to do and what happened.</li>
+          <li>A screenshot if possible.</li>
+        </ul>
+
+        <h2>Mental health resources</h2>
+        <p>EmotionsMap is a self-tracking tool, not a medical device or substitute for professional care. If you are in crisis, please reach out to the appropriate hotline in your country:</p>
+        <ul>
+          <li><strong>USA:</strong> Call or text <a href="tel:988">988</a> (Suicide &amp; Crisis Lifeline).</li>
+          <li><strong>Mexico:</strong> SAPTEL <a href="tel:5552598121">55 5259 8121</a>.</li>
+          <li><strong>International:</strong> <a href="https://findahelpline.com/" target="_blank" rel="noopener">findahelpline.com</a>.</li>
+        </ul>
+
+        <div class="footer-link">
+          <a href="/">← emotionsmap.com</a> · <a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms &amp; Conditions</a>
+        </div>
+      </section>
+
+      <!-- ─────────────────── ESPAÑOL ─────────────────── -->
+      <section class="lang-section" data-lang="es">
+        <h1>Soporte</h1>
+        <p class="lead">Somos un equipo pequeño. Escríbenos cuando quieras — leemos cada mensaje.</p>
+
+        <div class="contact-card">
+          <h3 style="margin-top:0">Contáctanos</h3>
+          <p>La forma más rápida de obtener ayuda es por correo. Solemos responder en 24–48 horas.</p>
+          <a class="email" href="mailto:hveitia86@gmail.com?subject=EmotionsMap%20Soporte">
+            hveitia86@gmail.com
+          </a>
+        </div>
+
+        <h2>Preguntas Frecuentes</h2>
+
+        <details>
+          <summary>¿Cómo respaldo mis datos?</summary>
+          <p>Abre la app, ve a <strong>Menú → Respaldo de Datos → Exportar</strong>. Obtendrás un archivo JSON con todo tu historial. Guárdalo en un lugar seguro (drive, email a ti mismo, etc.).</p>
+        </details>
+
+        <details>
+          <summary>¿Cómo restauro un respaldo?</summary>
+          <p>Ve a <strong>Menú → Respaldo de Datos → Importar</strong> y selecciona el archivo JSON que exportaste antes.</p>
+        </details>
+
+        <details>
+          <summary>Olvidé mi contraseña</summary>
+          <p>En la pantalla de inicio de sesión, toca <em>"¿Olvidaste tu contraseña?"</em> e ingresa tu email. Te enviaremos un enlace para restablecerla mediante Firebase.</p>
+        </details>
+
+        <details>
+          <summary>Olvidé mi PIN</summary>
+          <p>El PIN es local a tu dispositivo — no podemos restablecerlo. En la pantalla de bloqueo, toca <em>"¿Olvidaste tu PIN?"</em> para cerrar sesión. Tras iniciar sesión nuevamente podrás configurar un nuevo PIN. Tus datos locales se conservan en el dispositivo.</p>
+        </details>
+
+        <details>
+          <summary>¿Cómo cambio el idioma?</summary>
+          <p>Abre <strong>Perfil → Idioma</strong> y elige Inglés o Español. El cambio es instantáneo — no requiere reinicio.</p>
+        </details>
+
+        <details>
+          <summary>¿Por qué veo anuncios?</summary>
+          <p>EmotionsMap es gratuita gracias a la publicidad. Los anuncios son no personalizados por defecto y nunca compartimos tus entradas de diario con la red de anuncios. Consulta <a href="/privacy">Política de Privacidad §4</a>.</p>
+        </details>
+
+        <details>
+          <summary>¿Cómo elimino mi cuenta y todos mis datos?</summary>
+          <p>Ve a <strong>Perfil → Zona de peligro → Eliminar cuenta</strong>. Esto borra permanentemente tus credenciales de autenticación y cualquier dato en la nube. Los datos locales en tu dispositivo se eliminan al desinstalar la app.</p>
+        </details>
+
+        <details>
+          <summary>¿Mis datos son realmente privados?</summary>
+          <p>Sí. Los registros de ánimo, texto del diario y estadísticas se almacenan solo en tu dispositivo (SQLite local). Nunca salen de tu teléfono — ni a nuestros servidores, ni a la red de anuncios, a nadie. Ver <a href="/privacy">Política de Privacidad</a>.</p>
+        </details>
+
+        <details>
+          <summary>Tengo una sugerencia</summary>
+          <p>¡Genial! Escríbenos a <a href="mailto:hveitia86@gmail.com?subject=EmotionsMap%20Sugerencia">hveitia86@gmail.com</a>. Leemos todo y seleccionamos las ideas más pedidas para próximas versiones.</p>
+        </details>
+
+        <h2>Reportar un problema</h2>
+        <p>Si encontraste un error o algo no funciona, incluye en tu correo:</p>
+        <ul>
+          <li>Modelo de tu dispositivo y versión del SO (ej. iPhone 15 Pro, iOS 18.2).</li>
+          <li>Versión de la app (Perfil → al final del menú).</li>
+          <li>Qué intentabas hacer y qué pasó.</li>
+          <li>Una captura si es posible.</li>
+        </ul>
+
+        <h2>Recursos de salud mental</h2>
+        <p>EmotionsMap es una herramienta de auto-seguimiento, no un dispositivo médico ni un sustituto de atención profesional. Si estás en crisis, contacta la línea apropiada en tu país:</p>
+        <ul>
+          <li><strong>México:</strong> SAPTEL <a href="tel:5552598121">55 5259 8121</a>.</li>
+          <li><strong>Argentina:</strong> Centro de Asistencia al Suicida <a href="tel:135">135</a> (línea gratuita).</li>
+          <li><strong>España:</strong> Teléfono de la Esperanza <a href="tel:717003717">717 003 717</a>.</li>
+          <li><strong>USA (en español):</strong> 988 (Línea de prevención del suicidio).</li>
+          <li><strong>Internacional:</strong> <a href="https://findahelpline.com/" target="_blank" rel="noopener">findahelpline.com</a>.</li>
+        </ul>
+
+        <div class="footer-link">
+          <a href="/">← emotionsmap.com</a> · <a href="/privacy">Política de Privacidad</a> · <a href="/terms">Términos y Condiciones</a>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        var btns = document.querySelectorAll('.lang-switch button');
+        var sections = document.querySelectorAll('.lang-section');
+        var saved = (function () {
+          try { return localStorage.getItem('emotionsmap.docs.lang'); } catch (_) { return null; }
+        })();
+        var browserLang = (navigator.language || 'en').toLowerCase().startsWith('es') ? 'es' : 'en';
+        setLang(saved || browserLang);
+
+        btns.forEach(function (b) {
+          b.addEventListener('click', function () { setLang(b.dataset.lang); });
+        });
+
+        function setLang(lang) {
+          document.documentElement.lang = lang;
+          btns.forEach(function (b) {
+            var active = b.dataset.lang === lang;
+            b.classList.toggle('active', active);
+            b.setAttribute('aria-pressed', active);
+          });
+          sections.forEach(function (s) {
+            s.classList.toggle('active', s.dataset.lang === lang);
+          });
+          try { localStorage.setItem('emotionsmap.docs.lang', lang); } catch (_) {}
+        }
+      })();
+    </script>
+  </body>
+</html>

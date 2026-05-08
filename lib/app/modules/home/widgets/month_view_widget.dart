@@ -23,19 +23,23 @@ class MonthViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 295,
-      child: isChartView
-          ? MonthChartWidget(
-              month: month,
-              recordsMap: recordsMap,
-            )
-          : Column(
-              children: weeks.map((week) => Padding(
+    if (isChartView) {
+      return SizedBox(
+        height: 295,
+        child: MonthChartWidget(
+          month: month,
+          recordsMap: recordsMap,
+        ),
+      );
+    }
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: weeks
+          .map((week) => Padding(
                 padding: const EdgeInsets.only(bottom: 4),
                 child: buildWeekRow(week, rangeStartDate, month),
-              )).toList(),
-            ),
+              ))
+          .toList(),
     );
   }
 }

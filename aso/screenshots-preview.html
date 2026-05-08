@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EmotionsMap — ASO Screenshots Preview</title>
+<style>
+  :root {
+    --brand-primary: #88B486;
+    --brand-primary-dark: #5E8A5C;
+    --brand-secondary: #90AFCF;
+    --brand-secondary-dark: #6F8FB0;
+    --brand-sand: #EED694;
+    --brand-terracotta: #E3A676;
+    --brand-coral: #D68078;
+    --brand-dark: #1F2D1F;
+    --cream: #FAF8F4;
+    --text: #2C2C2C;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: #1a1a1a;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+  }
+  .header {
+    text-align: center;
+    padding: 48px 24px 24px;
+    border-bottom: 1px solid #333;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .header p {
+    margin-top: 8px;
+    color: #999;
+    font-size: 14px;
+  }
+  .header .meta {
+    margin-top: 16px;
+    font-size: 12px;
+    color: #666;
+  }
+
+  .order-strip {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .order-strip .pill {
+    background: #2a2a2a;
+    color: #ccc;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+  }
+  .order-strip .pill strong { color: #fff; margin-right: 4px; }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 28px;
+    padding: 48px 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* Screenshot card — ratio 1242 × 2688 (iPhone 6.5") */
+  .screenshot {
+    aspect-ratio: 1242 / 2688;
+    border-radius: 32px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .screenshot.bg-primary    { background: linear-gradient(160deg, #88B486 0%, #5E8A5C 100%); }
+  .screenshot.bg-secondary  { background: linear-gradient(160deg, #90AFCF 0%, #6F8FB0 100%); }
+  .screenshot.bg-dark       { background: linear-gradient(160deg, #1F2D1F 0%, #0e1810 100%); }
+  .screenshot.bg-placeholder { background: linear-gradient(160deg, #1F2D1F 0%, #0e1810 100%); }
+
+  .screenshot .title-block {
+    padding: 56px 36px 20px;
+    text-align: center;
+    color: #fff;
+  }
+
+  .screenshot .title-block h2 {
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  .screenshot .title-block .subtitle {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+  .screenshot .title-block .lang-es {
+    margin-top: 14px;
+    font-size: 14px;
+    font-weight: 400;
+    opacity: 0.65;
+    font-style: italic;
+  }
+
+  /* Phone frame holding the real screenshot */
+  .phone {
+    width: 78%;
+    margin: 18px auto 56px;
+    background: #000;
+    border-radius: 36px;
+    padding: 6px;
+    flex: 1;
+    display: flex;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    overflow: hidden;
+  }
+  .phone-screen {
+    background: #fff;
+    border-radius: 30px;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  .phone-screen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+
+  /* Placeholder (for missing screenshots) */
+  .phone-screen.placeholder {
+    background: #2a2a2a;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .phone-screen.placeholder .ph-icon { font-size: 48px; opacity: 0.4; margin-bottom: 12px; }
+
+  /* Caption under each screenshot */
+  .caption {
+    text-align: center;
+    margin-top: 16px;
+    color: #999;
+    font-size: 12px;
+  }
+  .caption strong { color: #fff; }
+  .caption .file { color: #666; font-family: ui-monospace, "SF Mono", monospace; font-size: 11px; }
+
+  .footer {
+    text-align: center;
+    padding: 32px 24px 48px;
+    color: #666;
+    font-size: 12px;
+    border-top: 1px solid #333;
+    margin-top: 24px;
+  }
+  .footer code {
+    background: #2a2a2a;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #ccc;
+  }
+  .footer .reco {
+    margin-top: 16px;
+    color: #999;
+  }
+  .footer .reco strong { color: #fff; }
+
+  /* Download buttons */
+  .dl-btn {
+    display: inline-block;
+    margin-top: 12px;
+    background: #2a2a2a;
+    color: #fff;
+    border: 1px solid #444;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+  }
+  .dl-btn:hover {
+    background: var(--brand-primary);
+    border-color: var(--brand-primary);
+  }
+  .dl-btn:disabled {
+    opacity: 0.5;
+    cursor: wait;
+  }
+  .dl-all {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--brand-primary);
+    color: #fff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 8px 24px rgba(136,180,134,0.5);
+    z-index: 100;
+    transition: all 0.15s ease;
+  }
+  .dl-all:hover { background: var(--brand-primary-dark); transform: translateY(-2px); }
+  .dl-all:disabled { opacity: 0.7; cursor: wait; transform: none; }
+  .dl-status {
+    position: fixed;
+    bottom: 88px;
+    right: 24px;
+    background: #000;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .dl-status.show { opacity: 1; }
+  .file-notice {
+    background: #3a2a00;
+    color: #ffd57a;
+    padding: 16px 24px;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.5;
+    border-bottom: 1px solid #5a4500;
+  }
+  .file-notice code {
+    background: rgba(0,0,0,0.4);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: ui-monospace, "SF Mono", monospace;
+    color: #fff;
+  }
+
+  /* ── Asset section (icon + feature graphic) ── */
+  .section-divider {
+    text-align: center;
+    padding: 32px 24px 0;
+    color: #fff;
+    border-top: 1px solid #333;
+    margin-top: 16px;
+  }
+  .section-divider h2 {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .section-divider p {
+    margin-top: 6px;
+    color: #999;
+    font-size: 13px;
+  }
+
+  .assets {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding: 32px 24px 16px;
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: center;
+  }
+  .assets > div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .asset-frame {
+    background: #0d0d0d;
+    border-radius: 20px;
+    padding: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #2a2a2a;
+  }
+
+  /* App Icon — real size 1024×1024, preview at 256×256 with iOS-style rounded corners */
+  .icon-preview {
+    width: 256px;
+    height: 256px;
+    overflow: hidden;
+    border-radius: 56px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+  }
+  .app-icon-real {
+    width: 1024px;
+    height: 1024px;
+    transform: scale(0.25);
+    transform-origin: top left;
+  }
+  .app-icon-real svg {
+    display: block;
+    width: 1024px;
+    height: 1024px;
+  }
+
+  /* Feature Graphic — real size 1024×500, preview at 716.8×350 (scale 0.7) */
+  .fg-preview {
+    width: 716.8px;
+    height: 350px;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+  }
+  .fg-real {
+    width: 1024px;
+    height: 500px;
+    transform: scale(0.7);
+    transform-origin: top left;
+  }
+  .fg-real svg {
+    display: block;
+    width: 1024px;
+    height: 500px;
+  }
+
+  @media (max-width: 800px) {
+    .fg-preview {
+      width: calc(100vw - 80px);
+      height: calc((100vw - 80px) * 500 / 1024);
+    }
+    .fg-real {
+      transform: scale(calc((100vw - 80px) / 1024));
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>EmotionsMap — ASO Screenshots Preview</h1>
+  <p>Los 6 screenshots ordenados para máxima conversión en App Store y Google Play.</p>
+  <p class="meta">Ratio 1242 × 2688 px (iPhone 6.5") · Capturas reales desde <code style="background:#2a2a2a;padding:2px 6px;border-radius:4px;color:#ccc;">aso/source/</code> · 2026-05-07</p>
+
+  <div class="order-strip">
+    <div class="pill"><strong>1</strong>Wow visual</div>
+    <div class="pill"><strong>2</strong>Diferenciador</div>
+    <div class="pill"><strong>3</strong>Diario personal</div>
+    <div class="pill"><strong>4</strong>Profundidad</div>
+    <div class="pill"><strong>5</strong>Retención</div>
+    <div class="pill"><strong>6</strong>Privacidad</div>
+  </div>
+</div>
+
+<div class="gallery">
+
+  <!-- ─────────── SCREENSHOT 1: MOSAICO MENSUAL (Wow visual) ─────────── -->
+  <div>
+    <div class="screenshot bg-primary">
+      <div class="title-block">
+        <h2>Your year,<br>in a single image.</h2>
+        <div class="subtitle">One tap a day. 365 colors.</div>
+        <div class="lang-es">Tu año, en una sola imagen. · Un toque al día. 365 colores.</div>
+      </div>
+      <div class="phone">
+        <div class="phone-screen">
+          <img src="../aso/source/03-monthly-grid.png" alt="Mosaico mensual de Feelmap">
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>#1</strong> · Wow visual <span class="file">03-monthly-grid.png</span></div>
+  </div>
+
+  <!-- ─────────── SCREENSHOT 2: AÑO EN PÍXELES (Diferenciador) ─────────── -->
+  <div>
+    <div class="screenshot bg-secondary">
+      <div class="title-block">
+        <h2>365 days.<br>One screen.</h2>
+        <div class="subtitle">See patterns no one else can.</div>
+        <div class="lang-es">365 días. Una pantalla. · Descubre patrones que solo tú ves.</div>
+      </div>
+      <div class="phone">
+        <div class="phone-screen">
+          <img src="../aso/source/02-year-pixels.png" alt="Año en píxeles con estadísticas">
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>#2</strong> · Diferenciador <span class="file">02-year-pixels.png</span></div>
+  </div>
+
+  <!-- ─────────── SCREENSHOT 3: DIARIO (Personal) ─────────── -->
+  <div>
+    <div class="screenshot bg-dark">
+      <div class="title-block">
+        <h2>Your private<br>journal.</h2>
+        <div class="subtitle">Day by day, only yours.</div>
+        <div class="lang-es">Tu diario, solo tuyo. · Día tras día, sin nube.</div>
+      </div>
+      <div class="phone">
+        <div class="phone-screen">
+          <img src="../aso/source/01-journal.png" alt="Diario con búsqueda">
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>#3</strong> · Diario personal <span class="file">01-journal.png</span></div>
+  </div>
+
+  <!-- ─────────── SCREENSHOT 4: NUBE DE PALABRAS (Profundidad) ─────────── -->
+  <div>
+    <div class="screenshot bg-primary">
+      <div class="title-block">
+        <h2>The words that<br>lived in you.</h2>
+        <div class="subtitle">A cloud of your year.</div>
+        <div class="lang-es">Las palabras de tu año. · Una nube emocional.</div>
+      </div>
+      <div class="phone">
+        <div class="phone-screen">
+          <img src="../aso/source/04-word-cloud.png" alt="Nube de palabras">
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>#4</strong> · Profundidad <span class="file">04-word-cloud.png</span></div>
+  </div>
+
+  <!-- ─────────── SCREENSHOT 5: PERFIL / STATS (Retención) ─────────── -->
+  <div>
+    <div class="screenshot bg-secondary">
+      <div class="title-block">
+        <h2>Track your<br>emotional balance.</h2>
+        <div class="subtitle">Streaks, stats, no judgment.</div>
+        <div class="lang-es">Tu equilibrio emocional. · Rachas, stats, sin juicios.</div>
+      </div>
+      <div class="phone">
+        <div class="phone-screen">
+          <img src="../aso/source/05-profile-stats.png" alt="Estadísticas y perfil">
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>#5</strong> · Retención <span class="file">05-profile-stats.png</span></div>
+  </div>
+
+  <!-- ─────────── SCREENSHOT 6: PRIVACIDAD (PIN lock) ─────────── -->
+  <div>
+    <div class="screenshot bg-dark">
+      <div class="title-block">
+        <h2>100% local.<br>PIN-locked.</h2>
+        <div class="subtitle">Your feelings never leave your phone.</div>
+        <div class="lang-es">100% local. Con PIN. · Tus emociones nunca salen de tu teléfono.</div>
+      </div>
+      <div class="phone">
+        <div class="phone-screen">
+          <img src="../aso/source/06-pin-lock.png" alt="Pantalla de seguridad con PIN">
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>#6</strong> · Privacidad <span class="file">06-pin-lock.png</span></div>
+  </div>
+
+</div>
+
+<div class="section-divider">
+  <h2>Recursos adicionales</h2>
+  <p>Ícono de la app y Feature Graphic — generados según ASO.md §3.4 y §5.1</p>
+</div>
+
+<div class="assets">
+
+  <!-- ─────────── APP ICON: MOSAICO 6×6 ─────────── -->
+  <div>
+    <div class="asset-frame">
+      <div class="icon-preview">
+        <div class="app-icon-real" data-export="1" data-width="1024" data-height="1024" data-mode="fixed">
+          <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="iconBg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#FAF8F4"/>
+                <stop offset="100%" stop-color="#F0EBE0"/>
+              </linearGradient>
+              <filter id="cellShadow" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.10"/>
+              </filter>
+            </defs>
+
+            <!-- Fondo cream -->
+            <rect width="1024" height="1024" fill="url(#iconBg)"/>
+
+            <!-- Mosaico 6×6 — paleta mood (pseudoaleatoria pero balanceada) -->
+            <!-- Cada cuadrado: 132×132 px con 16px gap. Margen externo: 88px -->
+            <!-- Posiciones: x = 88 + col*148, y = 88 + row*148 -->
+            <g filter="url(#cellShadow)">
+              <!-- Fila 1 -->
+              <rect x="88"  y="88"  width="132" height="132" rx="22" fill="#88B486"/>
+              <rect x="236" y="88"  width="132" height="132" rx="22" fill="#90AFCF"/>
+              <rect x="384" y="88"  width="132" height="132" rx="22" fill="#88B486"/>
+              <rect x="532" y="88"  width="132" height="132" rx="22" fill="#EED694"/>
+              <rect x="680" y="88"  width="132" height="132" rx="22" fill="#D68078"/>
+              <rect x="828" y="88"  width="132" height="132" rx="22" fill="#88B486"/>
+              <!-- Fila 2 -->
+              <rect x="88"  y="236" width="132" height="132" rx="22" fill="#E3A676"/>
+              <rect x="236" y="236" width="132" height="132" rx="22" fill="#88B486"/>
+              <rect x="384" y="236" width="132" height="132" rx="22" fill="#90AFCF"/>
+              <rect x="532" y="236" width="132" height="132" rx="22" fill="#88B486"/>
+              <rect x="680" y="236" width="132" height="132" rx="22" fill="#EED694"/>
+              <rect x="828" y="236" width="132" height="132" rx="22" fill="#90AFCF"/>
+              <!-- Fila 3 -->
+              <rect x="88"  y="384" width="132" height="132" rx="22" fill="#88B486"/>
+              <rect x="236" y="384" width="132" height="132" rx="22" fill="#E3A676"/>
+              <rect x="384" y="384" width="132" height="132" rx="22" fill="#88B486"/>
+              <rect x="532" y="384" width="132" height="132" rx="22" fill="#90AFCF"/>
+              <rect x="680" y="384" width="132" height="132" rx="22" fill="#88B486"/>
+              <rect x="828" y="384" width="132" height="132" rx="22" fill="#EED694"/>
+              <!-- Fila 4 -->
+              <rect x="88"  y="532" width="132" height="132" rx="22" fill="#90AFCF"/>
+              <rect x="236" y="532" width="132" height="132" rx="22" fill="#88B486"/>
+              <rect x="384" y="532" width="132" height="132" rx="22" fill="#D68078"/>
+              <rect x="532" y="532" width="132" height="132" rx="22" fill="#88B486"/>
+              <rect x="680" y="532" width="132" height="132" rx="22" fill="#90AFCF"/>
+              <rect x="828" y="532" width="132" height="132" rx="22" fill="#88B486"/>
+              <!-- Fila 5 -->
+              <rect x="88"  y="680" width="132" height="132" rx="22" fill="#EED694"/>
+              <rect x="236" y="680" width="132" height="132" rx="22" fill="#90AFCF"/>
+              <rect x="384" y="680" width="132" height="132" rx="22" fill="#88B486"/>
+              <rect x="532" y="680" width="132" height="132" rx="22" fill="#E3A676"/>
+              <rect x="680" y="680" width="132" height="132" rx="22" fill="#88B486"/>
+              <rect x="828" y="680" width="132" height="132" rx="22" fill="#90AFCF"/>
+              <!-- Fila 6 -->
+              <rect x="88"  y="828" width="132" height="132" rx="22" fill="#88B486"/>
+              <rect x="236" y="828" width="132" height="132" rx="22" fill="#90AFCF"/>
+              <rect x="384" y="828" width="132" height="132" rx="22" fill="#EED694"/>
+              <rect x="532" y="828" width="132" height="132" rx="22" fill="#88B486"/>
+              <rect x="680" y="828" width="132" height="132" rx="22" fill="#D68078"/>
+              <rect x="828" y="828" width="132" height="132" rx="22" fill="#88B486"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Ícono de la app</strong> · 1024×1024 px · Mosaico 6×6 con paleta mood
+      <span class="file" style="display:none">app-icon.png</span>
+    </div>
+  </div>
+
+  <!-- ─────────── FEATURE GRAPHIC ─────────── -->
+  <div>
+    <div class="asset-frame">
+      <div class="fg-preview">
+        <div class="fg-real" data-export="1" data-width="1024" data-height="500" data-mode="fixed">
+          <svg viewBox="0 0 1024 500" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="fgBg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#88B486"/>
+                <stop offset="50%" stop-color="#7AA378"/>
+                <stop offset="100%" stop-color="#5E8A5C"/>
+              </linearGradient>
+              <radialGradient id="fgGlow" cx="80%" cy="50%" r="70%">
+                <stop offset="0%" stop-color="#fff" stop-opacity="0.18"/>
+                <stop offset="70%" stop-color="#fff" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="fgCellShadow" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000" flood-opacity="0.30"/>
+              </filter>
+            </defs>
+
+            <rect width="1024" height="500" fill="url(#fgBg)"/>
+            <rect width="1024" height="500" fill="url(#fgGlow)"/>
+
+            <!-- Texto izquierdo (60%) -->
+            <g font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" fill="#fff">
+              <text x="60" y="115" font-size="20" font-weight="700" letter-spacing="5" opacity="0.85">EMOTIONS · FEELINGS · YOU</text>
+              <text x="56" y="255" font-size="106" font-weight="900" letter-spacing="-3">EmotionsMap</text>
+              <text x="60" y="320" font-size="32" font-weight="600" opacity="0.95">Feel. Track. See.</text>
+              <text x="60" y="395" font-size="20" font-weight="500" opacity="0.78">Your year, in a single image. 100% private.</text>
+            </g>
+
+            <!-- Mini-mosaico flotante derecho (40%) -->
+            <!-- Mosaico A: 5×5 grande, rotado -8°, frente -->
+            <g transform="translate(800 250) rotate(-8) translate(-130 -130)" filter="url(#fgCellShadow)">
+              <!-- Fila 1 -->
+              <rect x="0"   y="0"   width="44" height="44" rx="8" fill="#FAF8F4"/>
+              <rect x="52"  y="0"   width="44" height="44" rx="8" fill="#88B486"/>
+              <rect x="104" y="0"   width="44" height="44" rx="8" fill="#90AFCF"/>
+              <rect x="156" y="0"   width="44" height="44" rx="8" fill="#88B486"/>
+              <rect x="208" y="0"   width="44" height="44" rx="8" fill="#EED694"/>
+              <!-- Fila 2 -->
+              <rect x="0"   y="52"  width="44" height="44" rx="8" fill="#90AFCF"/>
+              <rect x="52"  y="52"  width="44" height="44" rx="8" fill="#88B486"/>
+              <rect x="104" y="52"  width="44" height="44" rx="8" fill="#E3A676"/>
+              <rect x="156" y="52"  width="44" height="44" rx="8" fill="#88B486"/>
+              <rect x="208" y="52"  width="44" height="44" rx="8" fill="#88B486"/>
+              <!-- Fila 3 -->
+              <rect x="0"   y="104" width="44" height="44" rx="8" fill="#88B486"/>
+              <rect x="52"  y="104" width="44" height="44" rx="8" fill="#D68078"/>
+              <rect x="104" y="104" width="44" height="44" rx="8" fill="#88B486"/>
+              <rect x="156" y="104" width="44" height="44" rx="8" fill="#90AFCF"/>
+              <rect x="208" y="104" width="44" height="44" rx="8" fill="#88B486"/>
+              <!-- Fila 4 -->
+              <rect x="0"   y="156" width="44" height="44" rx="8" fill="#EED694"/>
+              <rect x="52"  y="156" width="44" height="44" rx="8" fill="#88B486"/>
+              <rect x="104" y="156" width="44" height="44" rx="8" fill="#90AFCF"/>
+              <rect x="156" y="156" width="44" height="44" rx="8" fill="#88B486"/>
+              <rect x="208" y="156" width="44" height="44" rx="8" fill="#E3A676"/>
+              <!-- Fila 5 -->
+              <rect x="0"   y="208" width="44" height="44" rx="8" fill="#88B486"/>
+              <rect x="52"  y="208" width="44" height="44" rx="8" fill="#90AFCF"/>
+              <rect x="104" y="208" width="44" height="44" rx="8" fill="#88B486"/>
+              <rect x="156" y="208" width="44" height="44" rx="8" fill="#EED694"/>
+              <rect x="208" y="208" width="44" height="44" rx="8" fill="#88B486"/>
+            </g>
+
+            <!-- Mosaico B: 3×3 chico, rotado 18°, atrás superior -->
+            <g transform="translate(660 130) rotate(18) translate(-58 -58)" opacity="0.7" filter="url(#fgCellShadow)">
+              <rect x="0"  y="0"  width="34" height="34" rx="6" fill="#90AFCF"/>
+              <rect x="42" y="0"  width="34" height="34" rx="6" fill="#88B486"/>
+              <rect x="84" y="0"  width="34" height="34" rx="6" fill="#EED694"/>
+              <rect x="0"  y="42" width="34" height="34" rx="6" fill="#88B486"/>
+              <rect x="42" y="42" width="34" height="34" rx="6" fill="#D68078"/>
+              <rect x="84" y="42" width="34" height="34" rx="6" fill="#88B486"/>
+              <rect x="0"  y="84" width="34" height="34" rx="6" fill="#E3A676"/>
+              <rect x="42" y="84" width="34" height="34" rx="6" fill="#90AFCF"/>
+              <rect x="84" y="84" width="34" height="34" rx="6" fill="#88B486"/>
+            </g>
+
+            <!-- Mosaico C: 3×3 chico, rotado -22°, atrás inferior -->
+            <g transform="translate(950 410) rotate(-22) translate(-58 -58)" opacity="0.55" filter="url(#fgCellShadow)">
+              <rect x="0"  y="0"  width="34" height="34" rx="6" fill="#88B486"/>
+              <rect x="42" y="0"  width="34" height="34" rx="6" fill="#EED694"/>
+              <rect x="84" y="0"  width="34" height="34" rx="6" fill="#90AFCF"/>
+              <rect x="0"  y="42" width="34" height="34" rx="6" fill="#E3A676"/>
+              <rect x="42" y="42" width="34" height="34" rx="6" fill="#88B486"/>
+              <rect x="84" y="42" width="34" height="34" rx="6" fill="#88B486"/>
+              <rect x="0"  y="84" width="34" height="34" rx="6" fill="#90AFCF"/>
+              <rect x="42" y="84" width="34" height="34" rx="6" fill="#D68078"/>
+              <rect x="84" y="84" width="34" height="34" rx="6" fill="#88B486"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="caption">
+      <strong>Feature Graphic</strong> · 1024×500 px · Solo Google Play
+      <span class="file" style="display:none">feature-graphic.png</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Edita títulos, subtítulos y colores en <code>aso/screenshots-preview.html</code>.
+  <div class="reco">
+    <strong>Recomendación:</strong> usa el botón <strong>"⬇ Descargar todas"</strong> para obtener los 8 PNGs (6 screenshots + ícono + feature graphic) listos para subir.<br>
+    Necesitás un servidor local: <code>python3 -m http.server 8000</code> en la raíz del proyecto.
+  </div>
+</div>
+
+<button class="dl-all" id="dlAll">⬇ Descargar todas</button>
+<div class="dl-status" id="dlStatus"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/dist/html-to-image.min.js"></script>
+<script>
+(function() {
+  const isLocalFile = location.protocol === 'file:';
+  const status = document.getElementById('dlStatus');
+
+  function showStatus(msg, persist) {
+    status.textContent = msg;
+    status.classList.add('show');
+    clearTimeout(status._timer);
+    if (!persist) {
+      status._timer = setTimeout(() => status.classList.remove('show'), 2200);
+    }
+  }
+
+  if (isLocalFile) {
+    const notice = document.createElement('div');
+    notice.className = 'file-notice';
+    notice.innerHTML = `
+      <strong>⚠ Descarga deshabilitada en modo archivo local</strong><br>
+      Los navegadores bloquean leer imágenes con <code>file://</code>. Para descargar, levanta un servidor local:<br>
+      <code>cd ${location.pathname.split('/aso/')[0]} && python3 -m http.server 8000</code><br>
+      luego abre <code>http://localhost:8000/aso/screenshots-preview.html</code>
+    `;
+    document.body.prepend(notice);
+  }
+
+  // Backfill data-export attrs on existing .screenshot elements
+  document.querySelectorAll('.gallery .screenshot').forEach(el => {
+    el.dataset.export = '1';
+    el.dataset.width = '1242';
+    el.dataset.height = '2688';
+    el.dataset.mode = 'scale';
+  });
+
+  async function captureElement(el) {
+    const w = parseInt(el.dataset.width, 10);
+    const h = parseInt(el.dataset.height, 10);
+    const mode = el.dataset.mode || 'scale';
+
+    if (mode === 'fixed') {
+      return await htmlToImage.toPng(el, {
+        width: w,
+        height: h,
+        pixelRatio: 1,
+        cacheBust: true,
+        backgroundColor: null,
+        style: {
+          transform: 'none',
+          transformOrigin: 'top left',
+          width: w + 'px',
+          height: h + 'px',
+        },
+      });
+    } else {
+      const rect = el.getBoundingClientRect();
+      const pixelRatio = w / rect.width;
+      return await htmlToImage.toPng(el, {
+        pixelRatio,
+        cacheBust: true,
+        backgroundColor: null,
+      });
+    }
+  }
+
+  function downloadDataUrl(dataUrl, filename) {
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = dataUrl;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function getFilename(wrap, idx) {
+    const fileSpan = wrap.querySelector('.caption .file');
+    const base = fileSpan ? fileSpan.textContent.trim().replace(/\.png$/i, '') : `image-${idx}`;
+    if (wrap.parentElement.classList.contains('gallery')) {
+      return `${String(idx + 1).padStart(2, '0')}-${base}.png`;
+    }
+    return `${base}.png`;
+  }
+
+  async function downloadOne(target, filename, btn) {
+    const orig = btn ? btn.textContent : null;
+    if (btn) { btn.disabled = true; btn.textContent = 'Generando…'; }
+    showStatus(`Generando ${filename}…`, true);
+    try {
+      const dataUrl = await captureElement(target);
+      downloadDataUrl(dataUrl, filename);
+      showStatus(`✓ ${filename} descargado`);
+    } catch (err) {
+      console.error(err);
+      showStatus(`✗ Error: ${err.message}`);
+      alert('Error al generar la imagen:\n' + err.message + (isLocalFile ? '\n\nDebes abrir el HTML desde un servidor local (ver aviso arriba).' : ''));
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = orig; }
+    }
+  }
+
+  function setupWrap(wrap, idx) {
+    const target = wrap.querySelector('[data-export]');
+    const caption = wrap.querySelector('.caption');
+    if (!target || !caption) return;
+
+    const filename = getFilename(wrap, idx);
+    const w = target.dataset.width;
+    const h = target.dataset.height;
+
+    const br = document.createElement('br');
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = `⬇ Descargar PNG (${w}×${h})`;
+    btn.addEventListener('click', () => downloadOne(target, filename, btn));
+    caption.appendChild(br);
+    caption.appendChild(btn);
+  }
+
+  document.querySelectorAll('.gallery > div').forEach(setupWrap);
+  document.querySelectorAll('.assets > div').forEach(setupWrap);
+
+  // Update "download all" button label with actual count
+  const allWraps = [
+    ...document.querySelectorAll('.gallery > div'),
+    ...document.querySelectorAll('.assets > div'),
+  ].filter(w => w.querySelector('[data-export]'));
+  const dlAllBtn = document.getElementById('dlAll');
+  dlAllBtn.textContent = `⬇ Descargar todas (${allWraps.length})`;
+
+  dlAllBtn.addEventListener('click', async function() {
+    const btn = this;
+    btn.disabled = true;
+    const original = btn.textContent;
+    try {
+      for (let i = 0; i < allWraps.length; i++) {
+        const wrap = allWraps[i];
+        const target = wrap.querySelector('[data-export]');
+        const localIdx = Array.from(wrap.parentElement.children).indexOf(wrap);
+        const filename = getFilename(wrap, localIdx);
+        btn.textContent = `Generando ${i + 1}/${allWraps.length}…`;
+        showStatus(`Generando ${filename} (${i + 1}/${allWraps.length})`, true);
+        const dataUrl = await captureElement(target);
+        downloadDataUrl(dataUrl, filename);
+        await new Promise(r => setTimeout(r, 400));
+      }
+      showStatus(`✓ ${allWraps.length} imágenes descargadas`);
+    } catch (err) {
+      console.error(err);
+      showStatus(`✗ Error: ${err.message}`);
+      alert('Error al generar las imágenes:\n' + err.message + (isLocalFile ? '\n\nDebes abrir el HTML desde un servidor local (ver aviso arriba).' : ''));
+    } finally {
+      btn.disabled = false;
+      btn.textContent = original;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

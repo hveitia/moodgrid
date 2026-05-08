@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:moodgrid/app/core/utils/date_format_helper.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
+import 'package:moodgrid/app/core/widgets/ad_banner.dart';
 import 'package:moodgrid/app/modules/auth/controllers/auth_controller.dart';
 import 'package:moodgrid/app/modules/profile/controllers/profile_controller.dart';
+import 'package:moodgrid/app/modules/profile/widgets/language_selector_tile.dart';
 import 'package:moodgrid/app/routes/app_routes.dart';
 
 class ProfileView extends GetView<ProfileController> {
@@ -17,11 +20,12 @@ class ProfileView extends GetView<ProfileController> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text('Mi Perfil'),
+        title: Text('profile.title'.tr),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
+      bottomNavigationBar: const AdBanner(),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -111,7 +115,7 @@ class ProfileView extends GetView<ProfileController> {
           ),
           const SizedBox(height: 16),
           Text(
-            user?.email ?? 'Usuario',
+            user?.email ?? 'profile.user_default'.tr,
             style: Get.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
               fontSize: 20,
@@ -120,7 +124,9 @@ class ProfileView extends GetView<ProfileController> {
           ),
           const SizedBox(height: 4),
           Text(
-            'Miembro desde ${_formatDate(user?.metadata.creationTime)}',
+            'profile.member_since'.trParams({
+              'date': _formatDate(user?.metadata.creationTime),
+            }),
             style: Get.textTheme.bodyMedium?.copyWith(
               color: Colors.grey[600],
             ),
@@ -153,7 +159,7 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                   const SizedBox(width: 12),
                   Text(
-                    'Estadísticas',
+                    'profile.stats.title'.tr,
                     style: Get.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -162,7 +168,7 @@ class ProfileView extends GetView<ProfileController> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Análisis de tus estados de ánimo',
+                'profile.stats.subtitle'.tr,
                 style: Get.textTheme.bodySmall?.copyWith(
                   color: Colors.grey[600],
                 ),
@@ -252,7 +258,7 @@ class ProfileView extends GetView<ProfileController> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'Configuración',
+            'profile.settings.title'.tr,
             style: Get.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
               color: Colors.grey[700],
@@ -266,6 +272,8 @@ class ProfileView extends GetView<ProfileController> {
             ),
             child: Column(
               children: [
+                const LanguageSelectorTile(),
+                const Divider(height: 1),
                 ListTile(
                   leading: Container(
                     padding: const EdgeInsets.all(8),
@@ -278,11 +286,11 @@ class ProfileView extends GetView<ProfileController> {
                       color: AppColors.moodExcellent,
                     ),
                   ),
-                  title: const Text(
-                    'Seguridad',
-                    style: TextStyle(fontWeight: FontWeight.w500),
+                  title: Text(
+                    'profile.settings.security.title'.tr,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
-                  subtitle: const Text('Configura tu PIN de seguridad'),
+                  subtitle: Text('profile.settings.security.subtitle'.tr),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Get.toNamed(Routes.securitySettings),
                 ),
@@ -299,11 +307,11 @@ class ProfileView extends GetView<ProfileController> {
                       color: Colors.orange,
                     ),
                   ),
-                  title: const Text(
-                    'Cerrar Sesión',
-                    style: TextStyle(fontWeight: FontWeight.w500),
+                  title: Text(
+                    'profile.settings.signout.title'.tr,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
-                  subtitle: const Text('Salir de tu cuenta'),
+                  subtitle: Text('profile.settings.signout.subtitle'.tr),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: _showLogoutDialog,
                 ),
@@ -312,7 +320,7 @@ class ProfileView extends GetView<ProfileController> {
           ),
           const SizedBox(height: 24),
           Text(
-            'Zona de peligro',
+            'profile.danger.title'.tr,
             style: Get.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
               color: Colors.red[700],
@@ -337,16 +345,16 @@ class ProfileView extends GetView<ProfileController> {
                   color: Colors.red,
                 ),
               ),
-              title: const Text(
-                'Eliminar Cuenta',
-                style: TextStyle(
+              title: Text(
+                'profile.danger.delete.title'.tr,
+                style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   color: Colors.red,
                 ),
               ),
-              subtitle: const Text(
-                'Esta acción es permanente e irreversible',
-                style: TextStyle(fontSize: 12),
+              subtitle: Text(
+                'profile.danger.delete.subtitle'.tr,
+                style: const TextStyle(fontSize: 12),
               ),
               trailing: const Icon(Icons.chevron_right, color: Colors.red),
               onTap: _showDeleteAccountDialog,
@@ -367,22 +375,8 @@ class ProfileView extends GetView<ProfileController> {
   }
 
   String _formatDate(DateTime? date) {
-    if (date == null) return 'Fecha desconocida';
-    final months = [
-      'Enero',
-      'Febrero',
-      'Marzo',
-      'Abril',
-      'Mayo',
-      'Junio',
-      'Julio',
-      'Agosto',
-      'Septiembre',
-      'Octubre',
-      'Noviembre',
-      'Diciembre'
-    ];
-    return '${months[date.month - 1]} ${date.year}';
+    if (date == null) return 'profile.unknown_date'.tr;
+    return appDateFormat(date, 'MMMM yyyy');
   }
 
   void _showLogoutDialog() {
@@ -395,17 +389,17 @@ class ProfileView extends GetView<ProfileController> {
           children: [
             Icon(Icons.logout, color: Colors.orange),
             const SizedBox(width: 12),
-            const Text('Cerrar Sesión'),
+            Text('profile.signout.dialog.title'.tr),
           ],
         ),
-        content: const Text(
-          '¿Estás seguro de que deseas cerrar sesión?',
-          style: TextStyle(height: 1.5),
+        content: Text(
+          'profile.signout.dialog.message'.tr,
+          style: const TextStyle(height: 1.5),
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Cancelar'),
+            child: Text('common.cancel'.tr),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -421,7 +415,7 @@ class ProfileView extends GetView<ProfileController> {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text('Cerrar Sesión'),
+            child: Text('profile.signout.dialog.confirm'.tr),
           ),
         ],
       ),
@@ -438,10 +432,10 @@ class ProfileView extends GetView<ProfileController> {
           children: [
             Icon(Icons.warning_amber_rounded, color: Colors.red[700], size: 28),
             const SizedBox(width: 12),
-            const Expanded(
+            Expanded(
               child: Text(
-                'Eliminar Cuenta',
-                style: TextStyle(color: Colors.red),
+                'profile.delete.dialog.title'.tr,
+                style: const TextStyle(color: Colors.red),
               ),
             ),
           ],
@@ -450,9 +444,9 @@ class ProfileView extends GetView<ProfileController> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              '¿Estás seguro de que deseas eliminar tu cuenta?',
-              style: TextStyle(
+            Text(
+              'profile.delete.dialog.question'.tr,
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 height: 1.5,
               ),
@@ -471,10 +465,10 @@ class ProfileView extends GetView<ProfileController> {
                     children: [
                       Icon(Icons.info_outline, size: 16, color: Colors.red[700]),
                       const SizedBox(width: 8),
-                      const Expanded(
+                      Expanded(
                         child: Text(
-                          'Esta acción es PERMANENTE',
-                          style: TextStyle(
+                          'profile.delete.dialog.warning'.tr,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
                           ),
@@ -483,11 +477,9 @@ class ProfileView extends GetView<ProfileController> {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    '• Se eliminarán todos tus datos\n'
-                    '• Se perderán tus registros de ánimo\n'
-                    '• No podrás recuperar tu cuenta',
-                    style: TextStyle(fontSize: 12, height: 1.5),
+                  Text(
+                    'profile.delete.dialog.bullets'.tr,
+                    style: const TextStyle(fontSize: 12, height: 1.5),
                   ),
                 ],
               ),
@@ -497,7 +489,7 @@ class ProfileView extends GetView<ProfileController> {
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: const Text('Cancelar'),
+            child: Text('common.cancel'.tr),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -517,7 +509,7 @@ class ProfileView extends GetView<ProfileController> {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: const Text('Eliminar Permanentemente'),
+            child: Text('profile.delete.dialog.confirm'.tr),
           ),
         ],
       ),

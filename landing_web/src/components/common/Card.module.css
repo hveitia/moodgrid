@@ -1,11 +1,13 @@
 .card {
   background: var(--color-surface);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-card);
-  transition: all var(--transition-base);
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base);
+  position: relative;
 }
 
-/* Variants */
 .default {
   background: var(--color-surface);
 }
@@ -17,8 +19,7 @@
 
 .outlined {
   background: var(--color-surface);
-  border: 1px solid var(--color-divider);
-  box-shadow: none;
+  box-shadow: 0 0 0 1px var(--color-border-soft);
 }
 
 .transparent {
@@ -26,7 +27,6 @@
   box-shadow: none;
 }
 
-/* Padding */
 .padding-none {
   padding: 0;
 }
@@ -43,23 +43,15 @@
   padding: var(--spacing-xl);
 }
 
-/* Hover Effect */
-.hoverable:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-card-hover);
+@media (hover: hover) and (pointer: fine) {
+  .hoverable:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+  }
 }
 
-.gradient.hoverable:hover {
-  box-shadow: var(--shadow-lg), 0 0 30px rgba(136, 180, 134, 0.3);
-}
-
-/* Responsive */
 @media (max-width: 768px) {
   .padding-large {
     padding: var(--spacing-lg);
-  }
-
-  .padding-medium {
-    padding: var(--spacing-md);
   }
 }

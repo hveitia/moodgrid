@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+import 'package:moodgrid/app/core/utils/date_format_helper.dart';
 import 'package:moodgrid/app/data/models/daily_record.dart';
 import 'package:moodgrid/app/modules/home/widgets/month_chart_widget.dart';
 
@@ -16,7 +16,7 @@ class MonthChartExportWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final monthName = DateFormat('MMMM', 'es_ES').format(month);
+    final monthName = appDateFormat(month, 'MMMM');
     final capitalizedMonth = monthName[0].toUpperCase() + monthName.substring(1);
 
     return MediaQuery(
@@ -47,7 +47,7 @@ class MonthChartExportWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Feelmap',
+                    'EmotionsMap',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -79,7 +79,7 @@ class MonthChartExportWidget extends StatelessWidget {
 
           // Footer
           Text(
-            'Mi evolución emocional',
+            'home.export.chart.footer'.tr,
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey[600],
