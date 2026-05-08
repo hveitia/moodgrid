@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EmotionsMap — Imágenes promocionales para redes sociales</title>
+<style>
+  :root {
+    --brand-red: #88B486;
+    --brand-red-dark: #5E8A5C;
+    --brand-red-deep: #1F2D1F;
+    --cream: #FAF8F4;
+    --cream-dark: #F0EBE0;
+    --gold: #90AFCF;
+    --gold-dark: #6F8FB0;
+    --ink: #1F2D1F;
+
+    --mood-excellent: #88B486;
+    --mood-good: #90AFCF;
+    --mood-neutral: #EED694;
+    --mood-difficult: #E3A676;
+    --mood-bad: #D68078;
+    --mood-empty: rgba(31, 45, 31, 0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: #1a1a1a;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+  }
+
+  .header {
+    text-align: center;
+    padding: 48px 24px 24px;
+    border-bottom: 1px solid #333;
+  }
+  .header h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
+  .header p { margin-top: 8px; color: #999; font-size: 14px; }
+  .header .meta { margin-top: 16px; font-size: 12px; color: #666; }
+
+  .section-divider {
+    text-align: center;
+    padding: 48px 24px 0;
+    color: #fff;
+    border-top: 1px solid #333;
+    margin-top: 16px;
+  }
+  .section-divider:first-of-type { border-top: none; }
+  .section-divider h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+  .section-divider p { margin-top: 6px; color: #999; font-size: 13px; }
+  .section-divider .badge {
+    display: inline-block;
+    margin-top: 12px;
+    background: #2a2a2a;
+    color: #ccc;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-family: ui-monospace, "SF Mono", monospace;
+  }
+
+  .gallery {
+    display: grid;
+    gap: 32px;
+    padding: 32px 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .gallery.square    { grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); }
+  .gallery.story     { grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
+  .gallery.landscape { grid-template-columns: repeat(auto-fit, minmax(580px, 1fr)); }
+
+  /* ════════════════════════════════════════════════════════════════
+     PROMO CARD
+     ════════════════════════════════════════════════════════════════ */
+  .promo {
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    display: flex;
+    container-type: inline-size;
+  }
+  .promo.square    { aspect-ratio: 1 / 1;       border-radius: 1.7cqw; flex-direction: column; }
+  .promo.story     { aspect-ratio: 9 / 16;      border-radius: 1.7cqw; flex-direction: column; }
+  .promo.landscape { aspect-ratio: 1200 / 630;  border-radius: 1.2cqw; flex-direction: row; }
+
+  /* ── Variant backgrounds ─────────────────────────────────────────── */
+  .v1 { background: radial-gradient(ellipse at top right, #9CC09A 0%, var(--brand-red) 50%, var(--brand-red-dark) 100%); }
+  .v2 { background: linear-gradient(155deg, var(--cream) 0%, var(--cream-dark) 100%); color: var(--ink); }
+  .v3 { background: linear-gradient(135deg, var(--brand-red-deep) 0%, var(--brand-red-dark) 100%); }
+  .v4 { background: var(--brand-red); }
+  .v5 { background: linear-gradient(160deg, var(--cream) 0%, #EFE4D0 100%); color: var(--ink); }
+
+  .v4::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(250,248,244,0.10) 0%, transparent 14%),
+      radial-gradient(circle at 70% 80%, rgba(250,248,244,0.08) 0%, transparent 16%),
+      radial-gradient(circle at 90% 20%, rgba(144,175,207,0.12) 0%, transparent 18%);
+    z-index: 0;
+  }
+
+  /* ── URL footer ──────────────────────────────────────────────────── */
+  .promo::after {
+    content: "emotionsmap.com/get";
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: rgba(250, 248, 244, 0.7);
+    z-index: 3;
+    pointer-events: none;
+  }
+  .v2.promo::after, .v5.promo::after { color: rgba(31, 45, 31, 0.55); }
+  .promo.square::after    { font-size: 1.5cqw; bottom: 2cqw; }
+  .promo.story::after     { font-size: 1.7cqw; bottom: 4cqw; }
+  .promo.landscape::after { font-size: 1.2cqw; bottom: 1.5cqw; }
+
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(8cqw);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .text-zone, .visual-zone {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ── SQUARE 1080×1080 ────────────────────────────────────────────── */
+  .promo.square .text-zone {
+    padding: 6cqw 6cqw 2cqw;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4cqw;
+    flex: 0 0 auto;
+  }
+  .promo.square .visual-zone {
+    padding: 0 6cqw 6cqw;
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  /* ── STORY 1080×1920 ─────────────────────────────────────────────── */
+  .promo.story .text-zone {
+    padding: 14cqw 8cqw 3cqw;
+    display: flex;
+    flex-direction: column;
+    gap: 2cqw;
+    flex: 0 0 auto;
+  }
+  .promo.story .visual-zone {
+    padding: 2cqw 8cqw 12cqw;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3cqw;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  /* ── LANDSCAPE 1200×630 ──────────────────────────────────────────── */
+  .promo.landscape .text-zone {
+    padding: 5cqw 2cqw 5cqw 5cqw;
+    flex: 1.4 1 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1cqw;
+    min-width: 0;
+  }
+  .promo.landscape .visual-zone {
+    padding: 5cqw 5cqw 5cqw 0;
+    flex: 1 1 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-width: 0;
+  }
+
+  /* ── Brand mark ──────────────────────────────────────────────────── */
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.95cqw;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .brand-icon {
+    border-radius: 22%;
+    box-shadow: 0 0.4cqw 1.2cqw rgba(0,0,0,0.18);
+    display: block;
+  }
+  .promo.square .brand    { font-size: 2.5cqw; gap: 1.2cqw; }
+  .promo.square .brand-icon { width: 4.5cqw; height: 4.5cqw; }
+  .promo.story .brand     { font-size: 2.8cqw; gap: 1.3cqw; }
+  .promo.story .brand-icon { width: 5.5cqw; height: 5.5cqw; }
+  .promo.landscape .brand { font-size: 2cqw; }
+  .promo.landscape .brand-icon { width: 3.5cqw; height: 3.5cqw; }
+
+  /* Eyebrow pill */
+  .eyebrow {
+    display: inline-block;
+    padding: 0.65cqw 1.5cqw;
+    border-radius: 999px;
+    font-size: 1.5cqw;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.25);
+    align-self: flex-start;
+  }
+  .v2 .eyebrow, .v5 .eyebrow {
+    background: rgba(31,45,31,0.08);
+    color: var(--brand-red-dark);
+    border-color: rgba(31,45,31,0.18);
+  }
+  .promo.story .eyebrow { font-size: 1.8cqw; padding: 0.8cqw 2cqw; }
+  .promo.landscape .eyebrow { font-size: 1.3cqw; padding: 0.55cqw 1.4cqw; }
+
+  /* Headline */
+  .headline {
+    font-weight: 900;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+  .promo.square .headline    { font-size: 7cqw; }
+  .promo.story .headline     { font-size: 8.5cqw; }
+  .promo.landscape .headline { font-size: 5cqw; }
+  .headline .accent { color: #EED694; }
+  .v2 .headline .accent, .v5 .headline .accent { color: var(--brand-red-dark); }
+
+  .sub {
+    font-weight: 500;
+    line-height: 1.3;
+    opacity: 0.92;
+  }
+  .promo.square .sub    { font-size: 2.5cqw; }
+  .promo.story .sub     { font-size: 3cqw; }
+  .promo.landscape .sub { font-size: 2cqw; }
+
+  /* CTA */
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8cqw;
+    padding: 1.4cqw 2.4cqw;
+    border-radius: 999px;
+    background: var(--cream);
+    color: var(--brand-red-dark);
+    font-weight: 800;
+    font-size: 2cqw;
+    align-self: flex-start;
+  }
+  .v2 .cta, .v5 .cta { background: var(--brand-red-dark); color: var(--cream); }
+  .promo.story .cta { font-size: 2.4cqw; padding: 1.8cqw 3cqw; }
+  .promo.landscape .cta { font-size: 1.7cqw; padding: 1.1cqw 2.2cqw; }
+  .promo.story .visual-zone .cta { align-self: center; }
+
+  /* Store badges */
+  .badges {
+    display: flex;
+    gap: 0.9cqw;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .badge-pill {
+    background: var(--ink);
+    color: #fff;
+    padding: 1cqw 1.7cqw 1cqw 1.4cqw;
+    border-radius: 0.9cqw;
+    line-height: 1.1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9cqw;
+  }
+  .v2 .badge-pill, .v5 .badge-pill { background: var(--brand-red-dark); }
+  .badge-pill svg { width: 1.9cqw; height: auto; flex-shrink: 0; }
+  .badge-pill .label { font-size: 1cqw; opacity: 0.7; display: block; text-transform: uppercase; letter-spacing: 0.08em; }
+  .badge-pill .name  { font-weight: 700; font-size: 1.6cqw; }
+  .promo.story .badge-pill { padding: 1.4cqw 2.2cqw 1.4cqw 1.9cqw; border-radius: 1.1cqw; gap: 1.1cqw; }
+  .promo.story .badge-pill svg { width: 2.4cqw; }
+  .promo.story .badge-pill .label { font-size: 1.2cqw; }
+  .promo.story .badge-pill .name  { font-size: 1.9cqw; }
+  .promo.landscape .badge-pill { padding: 0.8cqw 1.5cqw 0.8cqw 1.3cqw; border-radius: 0.7cqw; gap: 0.8cqw; }
+  .promo.landscape .badge-pill svg { width: 1.5cqw; }
+  .promo.landscape .badge-pill .label { font-size: 0.85cqw; }
+  .promo.landscape .badge-pill .name  { font-size: 1.3cqw; }
+
+  /* ════════════════════════════════════════════════════════════════
+     VISUAL: Monthly grid (V1) — mosaico mensual estilo GitHub
+     ════════════════════════════════════════════════════════════════ */
+  .visual-grid {
+    background: var(--cream);
+    border-radius: 1.6cqw;
+    padding: 2.4cqw;
+    box-shadow: 0 1.5cqw 3.5cqw rgba(0,0,0,0.25);
+    width: 100%;
+    max-width: 52cqw;
+    display: flex;
+    flex-direction: column;
+    gap: 1cqw;
+  }
+  .visual-grid .grid-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--brand-red-dark);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .visual-grid .grid-month { font-size: 2cqw; }
+  .visual-grid .grid-share {
+    width: 2.6cqw; height: 2.6cqw;
+    border-radius: 50%;
+    background: rgba(94,138,92,0.12);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--brand-red-dark);
+    font-size: 1.4cqw;
+  }
+  .visual-grid .grid-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.6cqw;
+    font-size: 1cqw;
+    font-weight: 700;
+    color: rgba(31,45,31,0.45);
+    text-align: center;
+    letter-spacing: 0.04em;
+    padding: 0 0.2cqw;
+  }
+  .visual-grid .grid-cells {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.7cqw;
+  }
+  .visual-grid .cell {
+    aspect-ratio: 1;
+    border-radius: 0.6cqw;
+    box-shadow: inset 0 -0.15cqw 0 rgba(0,0,0,0.05);
+  }
+  .visual-grid .cell.empty { background: var(--mood-empty); }
+  .visual-grid .cell.excellent { background: var(--mood-excellent); }
+  .visual-grid .cell.good { background: var(--mood-good); }
+  .visual-grid .cell.neutral { background: var(--mood-neutral); }
+  .visual-grid .cell.difficult { background: var(--mood-difficult); }
+  .visual-grid .cell.bad { background: var(--mood-bad); }
+  .visual-grid .cell.today { box-shadow: 0 0 0 0.3cqw var(--brand-red-deep), inset 0 -0.15cqw 0 rgba(0,0,0,0.05); }
+
+  .promo.story .visual-grid {
+    max-width: 80cqw;
+    padding: 3.2cqw;
+    border-radius: 2.2cqw;
+    transform: rotate(-2deg);
+    gap: 1.6cqw;
+  }
+  .promo.story .visual-grid .grid-month { font-size: 2.6cqw; }
+  .promo.story .visual-grid .grid-weekdays { font-size: 1.4cqw; gap: 0.9cqw; }
+  .promo.story .visual-grid .grid-cells { gap: 1cqw; }
+  .promo.story .visual-grid .cell { border-radius: 0.9cqw; }
+
+  .promo.landscape .visual-grid {
+    max-width: 38cqw;
+    padding: 1.7cqw;
+    border-radius: 1.3cqw;
+    gap: 0.7cqw;
+  }
+  .promo.landscape .visual-grid .grid-month { font-size: 1.4cqw; }
+  .promo.landscape .visual-grid .grid-share { width: 1.9cqw; height: 1.9cqw; font-size: 1cqw; }
+  .promo.landscape .visual-grid .grid-weekdays { font-size: 0.7cqw; gap: 0.4cqw; }
+  .promo.landscape .visual-grid .grid-cells { gap: 0.5cqw; }
+  .promo.landscape .visual-grid .cell { border-radius: 0.4cqw; }
+
+  /* ════════════════════════════════════════════════════════════════
+     VISUAL: Year in pixels (V2) — 12 meses × 31 días
+     ════════════════════════════════════════════════════════════════ */
+  .visual-year {
+    background: #fff;
+    border: 0.25cqw solid rgba(31,45,31,0.08);
+    border-radius: 1.6cqw;
+    padding: 2cqw 2.4cqw;
+    color: var(--ink);
+    box-shadow: 0 1.5cqw 3.5cqw rgba(31,45,31,0.12);
+    width: 100%;
+    max-width: 54cqw;
+  }
+  .visual-year .year-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.4cqw;
+    color: var(--brand-red-dark);
+  }
+  .visual-year .year-title { font-size: 1.7cqw; font-weight: 800; letter-spacing: -0.01em; }
+  .visual-year .year-num { font-size: 1.2cqw; font-weight: 600; opacity: 0.55; }
+  .visual-year .year-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.32cqw;
+  }
+  .visual-year .month-row {
+    display: flex;
+    align-items: center;
+    gap: 0.7cqw;
+  }
+  .visual-year .month-lbl {
+    width: 3cqw;
+    font-size: 0.85cqw;
+    font-weight: 700;
+    color: rgba(31,45,31,0.55);
+    text-align: right;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+  }
+  .visual-year .month-cells {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(31, 1fr);
+    gap: 0.18cqw;
+  }
+  .visual-year .pixel {
+    aspect-ratio: 1;
+    border-radius: 0.18cqw;
+  }
+  .visual-year .pixel.empty { background: rgba(31,45,31,0.06); }
+  .visual-year .pixel.excellent { background: var(--mood-excellent); }
+  .visual-year .pixel.good { background: var(--mood-good); }
+  .visual-year .pixel.neutral { background: var(--mood-neutral); }
+  .visual-year .pixel.difficult { background: var(--mood-difficult); }
+  .visual-year .pixel.bad { background: var(--mood-bad); }
+
+  .promo.story .visual-year {
+    max-width: 84cqw;
+    padding: 2.8cqw 3.2cqw;
+    border-radius: 2cqw;
+    transform: rotate(-2deg);
+  }
+  .promo.story .visual-year .year-title { font-size: 2.4cqw; }
+  .promo.story .visual-year .year-num { font-size: 1.7cqw; }
+  .promo.story .visual-year .month-lbl { width: 4.4cqw; font-size: 1.2cqw; }
+  .promo.story .visual-year .month-cells { gap: 0.26cqw; }
+  .promo.story .visual-year .pixel { border-radius: 0.26cqw; }
+
+  .promo.landscape .visual-year {
+    max-width: 40cqw;
+    padding: 1.4cqw 1.7cqw;
+    border-radius: 1.1cqw;
+  }
+  .promo.landscape .visual-year .year-title { font-size: 1.2cqw; }
+  .promo.landscape .visual-year .year-num { font-size: 0.85cqw; }
+  .promo.landscape .visual-year .month-lbl { width: 2cqw; font-size: 0.6cqw; }
+  .promo.landscape .visual-year .month-cells { gap: 0.12cqw; }
+  .promo.landscape .visual-year .pixel { border-radius: 0.12cqw; }
+  .promo.landscape .visual-year .year-grid { gap: 0.22cqw; }
+
+  /* ════════════════════════════════════════════════════════════════
+     VISUAL: Privacy icons (V3) — lock + cloud-off + shield
+     ════════════════════════════════════════════════════════════════ */
+  .visual-privacy {
+    display: flex;
+    gap: 2cqw;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  .visual-privacy .pic {
+    background: rgba(250,248,244,0.10);
+    border: 0.25cqw solid rgba(250,248,244,0.18);
+    backdrop-filter: blur(12px);
+    border-radius: 24%;
+    width: 18cqw;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cream);
+    box-shadow: 0 1.4cqw 2.8cqw rgba(0,0,0,0.35);
+  }
+  .visual-privacy .pic.center {
+    width: 22cqw;
+    background: var(--cream);
+    color: var(--brand-red-dark);
+    border-color: rgba(31,45,31,0.08);
+  }
+  .visual-privacy .pic svg {
+    width: 50%;
+    height: auto;
+    stroke-width: 2.3;
+  }
+  .visual-privacy .pic:nth-child(1) { transform: rotate(-10deg) translateY(0.6cqw); }
+  .visual-privacy .pic:nth-child(2) { transform: rotate(-2deg) translateY(-0.4cqw); }
+  .visual-privacy .pic:nth-child(3) { transform: rotate(8deg) translateY(0.5cqw); }
+
+  .promo.story .visual-privacy { gap: 2.6cqw; }
+  .promo.story .visual-privacy .pic { width: 22cqw; }
+  .promo.story .visual-privacy .pic.center { width: 27cqw; }
+
+  .promo.landscape .visual-privacy { gap: 1.4cqw; }
+  .promo.landscape .visual-privacy .pic { width: 11cqw; }
+  .promo.landscape .visual-privacy .pic.center { width: 13cqw; }
+
+  /* ════════════════════════════════════════════════════════════════
+     VISUAL: Journal entries (V4) — card con 3 entradas mock
+     ════════════════════════════════════════════════════════════════ */
+  .visual-journal {
+    background: var(--cream);
+    border-radius: 1.6cqw;
+    padding: 2.2cqw 2.5cqw;
+    color: var(--ink);
+    box-shadow: 0 1.5cqw 3.5cqw rgba(0,0,0,0.30);
+    width: 100%;
+    max-width: 52cqw;
+  }
+  .visual-journal .entry {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.3cqw;
+    padding: 1.1cqw 0;
+    border-bottom: 1px dashed rgba(31,45,31,0.12);
+  }
+  .visual-journal .entry:last-child { border-bottom: none; }
+  .visual-journal .dot {
+    width: 1.6cqw;
+    height: 1.6cqw;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 0.4cqw;
+    box-shadow: inset 0 -0.15cqw 0 rgba(0,0,0,0.08);
+  }
+  .visual-journal .dot.excellent { background: var(--mood-excellent); }
+  .visual-journal .dot.good { background: var(--mood-good); }
+  .visual-journal .dot.neutral { background: var(--mood-neutral); }
+  .visual-journal .body { flex: 1; min-width: 0; }
+  .visual-journal .date {
+    font-size: 1.4cqw;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .visual-journal .text {
+    font-size: 1.25cqw;
+    color: rgba(31,45,31,0.72);
+    margin-top: 0.4cqw;
+    font-style: italic;
+    line-height: 1.35;
+  }
+  .visual-journal .pill {
+    align-self: flex-start;
+    background: rgba(94,138,92,0.14);
+    color: var(--brand-red-dark);
+    font-size: 1cqw;
+    font-weight: 700;
+    padding: 0.4cqw 1cqw;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+
+  .promo.story .visual-journal {
+    max-width: 82cqw;
+    padding: 3cqw 3.4cqw;
+    border-radius: 2.2cqw;
+    transform: rotate(-2deg);
+  }
+  .promo.story .visual-journal .entry { gap: 1.8cqw; padding: 1.5cqw 0; }
+  .promo.story .visual-journal .dot { width: 2.2cqw; height: 2.2cqw; margin-top: 0.6cqw; }
+  .promo.story .visual-journal .date { font-size: 1.95cqw; }
+  .promo.story .visual-journal .text { font-size: 1.7cqw; margin-top: 0.55cqw; }
+  .promo.story .visual-journal .pill { font-size: 1.4cqw; padding: 0.55cqw 1.4cqw; }
+
+  .promo.landscape .visual-journal {
+    max-width: 38cqw;
+    padding: 1.5cqw 1.8cqw;
+    border-radius: 1.2cqw;
+  }
+  .promo.landscape .visual-journal .entry { gap: 1cqw; padding: 0.8cqw 0; }
+  .promo.landscape .visual-journal .dot { width: 1.1cqw; height: 1.1cqw; margin-top: 0.3cqw; }
+  .promo.landscape .visual-journal .date { font-size: 1cqw; }
+  .promo.landscape .visual-journal .text { font-size: 0.9cqw; }
+  .promo.landscape .visual-journal .pill { font-size: 0.75cqw; padding: 0.3cqw 0.8cqw; }
+
+  /* ════════════════════════════════════════════════════════════════
+     VISUAL: App icon + badges (V5)
+     ════════════════════════════════════════════════════════════════ */
+  .visual-app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.8cqw;
+    width: 100%;
+  }
+  .visual-app .big-icon {
+    width: 26cqw;
+    aspect-ratio: 1;
+    border-radius: 22%;
+    box-shadow: 0 1.8cqw 3.5cqw rgba(31,45,31,0.22);
+    display: block;
+  }
+  .promo.story .visual-app { gap: 3.5cqw; }
+  .promo.story .visual-app .big-icon { width: 40cqw; }
+  .promo.landscape .visual-app .big-icon { width: 22cqw; }
+  .promo.landscape .visual-app { gap: 1.5cqw; }
+
+  /* ── Caption / download UI ───────────────────────────────────────── */
+  .caption {
+    text-align: center;
+    margin-top: 14px;
+    color: #999;
+    font-size: 12px;
+  }
+  .caption strong { color: #fff; }
+  .caption .file { color: #666; font-family: ui-monospace, "SF Mono", monospace; font-size: 11px; }
+
+  .dl-btn {
+    display: inline-block;
+    margin-top: 10px;
+    background: #2a2a2a;
+    color: #fff;
+    border: 1px solid #444;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+  }
+  .dl-btn:hover { background: var(--brand-red-dark); border-color: var(--brand-red-dark); }
+  .dl-btn:disabled { opacity: 0.5; cursor: wait; }
+
+  .dl-all {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--brand-red-dark);
+    color: #fff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 8px 24px rgba(94,138,92,0.5);
+    z-index: 100;
+    transition: all 0.15s ease;
+  }
+  .dl-all:hover { background: var(--brand-red-deep); transform: translateY(-2px); }
+  .dl-all:disabled { opacity: 0.7; cursor: wait; transform: none; }
+
+  .dl-status {
+    position: fixed;
+    bottom: 88px;
+    right: 24px;
+    background: #000;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .dl-status.show { opacity: 1; }
+
+  .file-notice {
+    background: #3a2a00;
+    color: #ffd57a;
+    padding: 16px 24px;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.5;
+    border-bottom: 1px solid #5a4500;
+  }
+  .file-notice code {
+    background: rgba(0,0,0,0.4);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: ui-monospace, "SF Mono", monospace;
+    color: #fff;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 32px 24px 96px;
+    color: #666;
+    font-size: 12px;
+    border-top: 1px solid #333;
+    margin-top: 24px;
+  }
+  .footer code {
+    background: #2a2a2a;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #ccc;
+  }
+
+  .lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 1000;
+    background: rgba(20, 20, 20, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid #333;
+    border-radius: 999px;
+    padding: 4px;
+    display: flex;
+    gap: 2px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+  }
+  .lang-toggle button {
+    border: 0;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: transparent;
+    color: #999;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    font-family: inherit;
+    transition: background 150ms ease, color 150ms ease;
+  }
+  .lang-toggle button:hover { color: #fff; }
+  .lang-toggle button.active {
+    background: #fff;
+    color: #000;
+  }
+</style>
+</head>
+<body>
+
+<div class="lang-toggle" role="tablist" aria-label="Idioma / Language">
+  <button type="button" data-lang="es" class="active" role="tab" aria-selected="true">ES</button>
+  <button type="button" data-lang="en" role="tab" aria-selected="false">EN</button>
+</div>
+
+<div class="header">
+  <h1>EmotionsMap — Imágenes promocionales para redes</h1>
+  <p>5 mensajes × 3 formatos · listas para Instagram y Facebook (post, story, link share)</p>
+  <div class="meta">15 imágenes · paleta sage #88B486 / cream #FAF8F4 / acento #90AFCF</div>
+</div>
+
+<!-- ============================================================
+     SECTION 1 · INSTAGRAM POST CUADRADO 1080×1080
+     ============================================================ -->
+<div class="section-divider">
+  <h2>Instagram · Post cuadrado</h2>
+  <p>También válido para post de Facebook</p>
+  <div class="badge">1080 × 1080 px</div>
+</div>
+
+<div class="gallery square">
+
+  <!-- V1 SQUARE — Mosaico mensual -->
+  <div>
+    <div class="promo square v1" data-export="1" data-width="1080" data-height="1080">
+      <div class="blob" style="background: rgba(144,175,207,0.22); width: 60%; height: 60%; top: -15%; right: -15%;"></div>
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Mosaico mensual</span>
+        <h2 class="headline">Tu mes,<br>en <span class="accent">colores</span>.</h2>
+        <p class="sub">Un toque al día. Tu año emocional cobra forma frente a tus ojos.</p>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-grid">
+          <div class="grid-header">
+            <span class="grid-month">Mayo · 2026</span>
+            <span class="grid-share">↗</span>
+          </div>
+          <div class="grid-weekdays">
+            <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+          </div>
+          <div class="grid-cells">
+            <span class="cell empty"></span><span class="cell empty"></span><span class="cell empty"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell excellent"></span><span class="cell good"></span>
+            <span class="cell neutral"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell excellent"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell excellent"></span>
+            <span class="cell good"></span><span class="cell neutral"></span><span class="cell difficult"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell good"></span><span class="cell excellent"></span>
+            <span class="cell excellent"></span><span class="cell excellent"></span><span class="cell good"></span><span class="cell neutral"></span><span class="cell good"></span><span class="cell excellent today"></span><span class="cell empty"></span>
+            <span class="cell empty"></span><span class="cell empty"></span><span class="cell empty"></span><span class="cell empty"></span><span class="cell empty"></span><span class="cell empty"></span><span class="cell empty"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V1 · Mosaico mensual</strong><br><span class="file">ig-post-01-mosaico.png</span></div>
+  </div>
+
+  <!-- V2 SQUARE — Year in Pixels -->
+  <div>
+    <div class="promo square v2" data-export="1" data-width="1080" data-height="1080">
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Year in pixels</span>
+        <h2 class="headline">365 días.<br>Una <span class="accent">pantalla</span>.</h2>
+        <p class="sub">Mira tu año entero como un mosaico. Detecta patrones que solo tú ves.</p>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-year">
+          <div class="year-header">
+            <span class="year-title">Mi Año en Píxeles</span>
+            <span class="year-num">2026</span>
+          </div>
+          <div class="year-grid">
+            <div class="month-row"><span class="month-lbl">Ene</span><div class="month-cells">
+              <span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Feb</span><div class="month-cells">
+              <span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Mar</span><div class="month-cells">
+              <span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel bad"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Abr</span><div class="month-cells">
+              <span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">May</span><div class="month-cells">
+              <span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel bad"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Jun</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Jul</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Ago</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Sep</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Oct</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Nov</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Dic</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V2 · Year in Pixels</strong><br><span class="file">ig-post-02-year-pixels.png</span></div>
+  </div>
+
+  <!-- V3 SQUARE — Privacidad -->
+  <div>
+    <div class="promo square v3" data-export="1" data-width="1080" data-height="1080">
+      <div class="blob" style="background: rgba(144,175,207,0.18); width: 55%; height: 55%; bottom: -18%; left: -18%;"></div>
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Privacidad por diseño</span>
+        <h2 class="headline">Tu diario,<br><span class="accent">solo tuyo</span>.</h2>
+        <p class="sub">Sin nube. Sin cuenta. Tus emociones se quedan en tu teléfono.</p>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-privacy">
+          <div class="pic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div class="pic center">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="2" y1="2" x2="22" y2="22"/>
+              <path d="M5.78 5.78A4 4 0 0 0 9 13h9.26"/>
+              <path d="M21 13a4 4 0 0 0-3-3.87"/>
+              <path d="M11 4a4 4 0 0 1 5 3"/>
+            </svg>
+          </div>
+          <div class="pic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V3 · Privacidad</strong><br><span class="file">ig-post-03-privacidad.png</span></div>
+  </div>
+
+  <!-- V4 SQUARE — Diario con búsqueda -->
+  <div>
+    <div class="promo square v4" data-export="1" data-width="1080" data-height="1080">
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Mi diario</span>
+        <h2 class="headline">Lo que viviste,<br><span class="accent">a un toque</span>.</h2>
+        <p class="sub">Diario integrado con búsqueda. Anota momentos y vuelve a ellos cuando quieras.</p>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-journal">
+          <div class="entry">
+            <span class="dot excellent"></span>
+            <div class="body">
+              <div class="date">vie · 8 mayo 2026</div>
+              <div class="text">"arizona, viaje, panas"</div>
+            </div>
+            <span class="pill">Excelente</span>
+          </div>
+          <div class="entry">
+            <span class="dot excellent"></span>
+            <div class="body">
+              <div class="date">jue · 7 mayo 2026</div>
+              <div class="text">"lodestar, gorilla, bbq en casa"</div>
+            </div>
+            <span class="pill">Excelente</span>
+          </div>
+          <div class="entry">
+            <span class="dot good"></span>
+            <div class="body">
+              <div class="date">mié · 6 mayo 2026</div>
+              <div class="text">"trabajo remoto, tarde productiva"</div>
+            </div>
+            <span class="pill">Bien</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V4 · Diario</strong><br><span class="file">ig-post-04-diario.png</span></div>
+  </div>
+
+  <!-- V5 SQUARE — Descarga -->
+  <div>
+    <div class="promo square v5" data-export="1" data-width="1080" data-height="1080">
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Disponible ya</span>
+        <h2 class="headline">Descarga<br><span class="accent">gratis</span>.</h2>
+        <p class="sub">Empieza a mapear tu año emocional hoy. Disponible en español e inglés.</p>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-app">
+          <img class="big-icon" src="../assets/moodgrid.png" alt="">
+          <div class="badges">
+            <span class="badge-pill">
+              <svg viewBox="0 0 384 512" fill="#fff"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zM277 117.3c20.7-24.7 18.7-47.7 18.5-55.7-.2 0-.7 0-3.7-1.3-7.5 4.3-32.2 16.6-46.7 39.5-15.4 24.8-15.6 50.7-15.6 51.3 1.7.3 3.4.6 5 .8 13.7-1.4 28.5-9.4 42.5-34.6z"/></svg>
+              <span><span class="label">Descarga en</span><span class="name">App Store</span></span>
+            </span>
+            <span class="badge-pill">
+              <svg viewBox="0 0 512 512"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z" fill="#fff"/></svg>
+              <span><span class="label">Disponible en</span><span class="name">Google Play</span></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V5 · Descarga</strong><br><span class="file">ig-post-05-descarga.png</span></div>
+  </div>
+
+</div>
+
+<!-- ============================================================
+     SECTION 2 · STORY VERTICAL 1080×1920
+     ============================================================ -->
+<div class="section-divider">
+  <h2>Stories · Instagram &amp; Facebook</h2>
+  <p>Mismo formato sirve para IG Stories, IG Reels cover y FB Stories</p>
+  <div class="badge">1080 × 1920 px</div>
+</div>
+
+<div class="gallery story">
+
+  <!-- V1 STORY — Mosaico mensual -->
+  <div>
+    <div class="promo story v1" data-export="1" data-width="1080" data-height="1920">
+      <div class="blob" style="background: rgba(144,175,207,0.22); width: 60%; height: 40%; top: -10%; right: -20%;"></div>
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Mosaico mensual</span>
+        <h2 class="headline">Tu mes,<br>en <span class="accent">colores</span>.</h2>
+        <p class="sub">Un toque al día. Tu año emocional cobra forma frente a tus ojos.</p>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-grid">
+          <div class="grid-header">
+            <span class="grid-month">Mayo · 2026</span>
+            <span class="grid-share">↗</span>
+          </div>
+          <div class="grid-weekdays">
+            <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+          </div>
+          <div class="grid-cells">
+            <span class="cell empty"></span><span class="cell empty"></span><span class="cell empty"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell excellent"></span><span class="cell good"></span>
+            <span class="cell neutral"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell excellent"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell excellent"></span>
+            <span class="cell good"></span><span class="cell neutral"></span><span class="cell difficult"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell good"></span><span class="cell excellent"></span>
+            <span class="cell excellent"></span><span class="cell excellent"></span><span class="cell good"></span><span class="cell neutral"></span><span class="cell good"></span><span class="cell excellent today"></span><span class="cell empty"></span>
+            <span class="cell empty"></span><span class="cell empty"></span><span class="cell empty"></span><span class="cell empty"></span><span class="cell empty"></span><span class="cell empty"></span><span class="cell empty"></span>
+          </div>
+        </div>
+        <span class="cta">Descúbrelo →</span>
+      </div>
+    </div>
+    <div class="caption"><strong>V1 · Mosaico mensual</strong><br><span class="file">story-01-mosaico.png</span></div>
+  </div>
+
+  <!-- V2 STORY — Year in Pixels -->
+  <div>
+    <div class="promo story v2" data-export="1" data-width="1080" data-height="1920">
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Year in pixels</span>
+        <h2 class="headline">365 días.<br>Una <span class="accent">pantalla</span>.</h2>
+        <p class="sub">Mira tu año entero como un mosaico. Detecta patrones que solo tú ves.</p>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-year">
+          <div class="year-header">
+            <span class="year-title">Mi Año en Píxeles</span>
+            <span class="year-num">2026</span>
+          </div>
+          <div class="year-grid">
+            <div class="month-row"><span class="month-lbl">Ene</span><div class="month-cells">
+              <span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Feb</span><div class="month-cells">
+              <span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Mar</span><div class="month-cells">
+              <span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel bad"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Abr</span><div class="month-cells">
+              <span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">May</span><div class="month-cells">
+              <span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel bad"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Jun</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Jul</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Ago</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Sep</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Oct</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Nov</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Dic</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+          </div>
+        </div>
+        <span class="cta">Ver mi año →</span>
+      </div>
+    </div>
+    <div class="caption"><strong>V2 · Year in Pixels</strong><br><span class="file">story-02-year-pixels.png</span></div>
+  </div>
+
+  <!-- V3 STORY — Privacidad -->
+  <div>
+    <div class="promo story v3" data-export="1" data-width="1080" data-height="1920">
+      <div class="blob" style="background: rgba(144,175,207,0.18); width: 70%; height: 40%; bottom: -15%; left: -25%;"></div>
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Privacidad por diseño</span>
+        <h2 class="headline">Tu diario,<br><span class="accent">solo tuyo</span>.</h2>
+        <p class="sub">Sin nube. Sin cuenta. Tus emociones se quedan en tu teléfono.</p>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-privacy">
+          <div class="pic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div class="pic center">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="2" y1="2" x2="22" y2="22"/>
+              <path d="M5.78 5.78A4 4 0 0 0 9 13h9.26"/>
+              <path d="M21 13a4 4 0 0 0-3-3.87"/>
+              <path d="M11 4a4 4 0 0 1 5 3"/>
+            </svg>
+          </div>
+          <div class="pic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+        </div>
+        <span class="cta">Empieza →</span>
+      </div>
+    </div>
+    <div class="caption"><strong>V3 · Privacidad</strong><br><span class="file">story-03-privacidad.png</span></div>
+  </div>
+
+  <!-- V4 STORY — Diario -->
+  <div>
+    <div class="promo story v4" data-export="1" data-width="1080" data-height="1920">
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Mi diario</span>
+        <h2 class="headline">Lo que viviste,<br><span class="accent">a un toque</span>.</h2>
+        <p class="sub">Diario integrado con búsqueda. Anota momentos y vuelve a ellos cuando quieras.</p>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-journal">
+          <div class="entry">
+            <span class="dot excellent"></span>
+            <div class="body">
+              <div class="date">vie · 8 mayo 2026</div>
+              <div class="text">"arizona, viaje, panas"</div>
+            </div>
+            <span class="pill">Excelente</span>
+          </div>
+          <div class="entry">
+            <span class="dot excellent"></span>
+            <div class="body">
+              <div class="date">jue · 7 mayo 2026</div>
+              <div class="text">"lodestar, gorilla, bbq en casa"</div>
+            </div>
+            <span class="pill">Excelente</span>
+          </div>
+          <div class="entry">
+            <span class="dot good"></span>
+            <div class="body">
+              <div class="date">mié · 6 mayo 2026</div>
+              <div class="text">"trabajo remoto, tarde productiva"</div>
+            </div>
+            <span class="pill">Bien</span>
+          </div>
+        </div>
+        <span class="cta">Probar gratis →</span>
+      </div>
+    </div>
+    <div class="caption"><strong>V4 · Diario</strong><br><span class="file">story-04-diario.png</span></div>
+  </div>
+
+  <!-- V5 STORY — Descarga -->
+  <div>
+    <div class="promo story v5" data-export="1" data-width="1080" data-height="1920">
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Disponible ya</span>
+        <h2 class="headline">Descarga<br><span class="accent">gratis</span>.</h2>
+        <p class="sub">Empieza a mapear tu año emocional hoy. EN + ES.</p>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-app">
+          <img class="big-icon" src="../assets/moodgrid.png" alt="">
+          <div class="badges">
+            <span class="badge-pill">
+              <svg viewBox="0 0 384 512" fill="#fff"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zM277 117.3c20.7-24.7 18.7-47.7 18.5-55.7-.2 0-.7 0-3.7-1.3-7.5 4.3-32.2 16.6-46.7 39.5-15.4 24.8-15.6 50.7-15.6 51.3 1.7.3 3.4.6 5 .8 13.7-1.4 28.5-9.4 42.5-34.6z"/></svg>
+              <span><span class="label">Descarga en</span><span class="name">App Store</span></span>
+            </span>
+            <span class="badge-pill">
+              <svg viewBox="0 0 512 512"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z" fill="#fff"/></svg>
+              <span><span class="label">Disponible en</span><span class="name">Google Play</span></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V5 · Descarga</strong><br><span class="file">story-05-descarga.png</span></div>
+  </div>
+
+</div>
+
+<!-- ============================================================
+     SECTION 3 · POST HORIZONTAL 1200×630
+     ============================================================ -->
+<div class="section-divider">
+  <h2>Facebook · Post / Link share</h2>
+  <p>Formato horizontal para grupos de Facebook y Open Graph</p>
+  <div class="badge">1200 × 630 px</div>
+</div>
+
+<div class="gallery landscape">
+
+  <!-- V1 LANDSCAPE — Mosaico -->
+  <div>
+    <div class="promo landscape v1" data-export="1" data-width="1200" data-height="630">
+      <div class="blob" style="background: rgba(144,175,207,0.22); width: 35%; height: 70%; top: -15%; right: -8%;"></div>
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Mosaico mensual</span>
+        <h2 class="headline">Tu mes,<br>en <span class="accent">colores</span>.</h2>
+        <p class="sub">Un toque al día. Tu año emocional cobra forma.</p>
+        <div><span class="cta">Descúbrelo →</span></div>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-grid">
+          <div class="grid-header">
+            <span class="grid-month">Mayo · 2026</span>
+            <span class="grid-share">↗</span>
+          </div>
+          <div class="grid-weekdays">
+            <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+          </div>
+          <div class="grid-cells">
+            <span class="cell empty"></span><span class="cell empty"></span><span class="cell empty"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell excellent"></span><span class="cell good"></span>
+            <span class="cell neutral"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell excellent"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell excellent"></span>
+            <span class="cell good"></span><span class="cell neutral"></span><span class="cell difficult"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell good"></span><span class="cell excellent"></span>
+            <span class="cell excellent"></span><span class="cell excellent"></span><span class="cell good"></span><span class="cell neutral"></span><span class="cell good"></span><span class="cell excellent today"></span><span class="cell empty"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V1 · Mosaico mensual</strong><br><span class="file">fb-post-01-mosaico.png</span></div>
+  </div>
+
+  <!-- V2 LANDSCAPE — Year in Pixels -->
+  <div>
+    <div class="promo landscape v2" data-export="1" data-width="1200" data-height="630">
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Year in pixels</span>
+        <h2 class="headline">365 días.<br>Una <span class="accent">pantalla</span>.</h2>
+        <p class="sub">Mira tu año entero. Detecta patrones que solo tú ves.</p>
+        <div><span class="cta">Ver mi año →</span></div>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-year">
+          <div class="year-header">
+            <span class="year-title">Mi Año en Píxeles</span>
+            <span class="year-num">2026</span>
+          </div>
+          <div class="year-grid">
+            <div class="month-row"><span class="month-lbl">Ene</span><div class="month-cells">
+              <span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Feb</span><div class="month-cells">
+              <span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Mar</span><div class="month-cells">
+              <span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel bad"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Abr</span><div class="month-cells">
+              <span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">May</span><div class="month-cells">
+              <span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel bad"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Jun</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Jul</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Ago</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Sep</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Oct</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Nov</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Dic</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V2 · Year in Pixels</strong><br><span class="file">fb-post-02-year-pixels.png</span></div>
+  </div>
+
+  <!-- V3 LANDSCAPE — Privacidad -->
+  <div>
+    <div class="promo landscape v3" data-export="1" data-width="1200" data-height="630">
+      <div class="blob" style="background: rgba(144,175,207,0.18); width: 35%; height: 70%; bottom: -15%; left: -10%;"></div>
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Privacidad por diseño</span>
+        <h2 class="headline">Tu diario,<br><span class="accent">solo tuyo</span>.</h2>
+        <p class="sub">Sin nube. Sin cuenta. Tus emociones se quedan en tu teléfono.</p>
+        <div><span class="cta">Empieza →</span></div>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-privacy">
+          <div class="pic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div class="pic center">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="2" y1="2" x2="22" y2="22"/>
+              <path d="M5.78 5.78A4 4 0 0 0 9 13h9.26"/>
+              <path d="M21 13a4 4 0 0 0-3-3.87"/>
+              <path d="M11 4a4 4 0 0 1 5 3"/>
+            </svg>
+          </div>
+          <div class="pic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V3 · Privacidad</strong><br><span class="file">fb-post-03-privacidad.png</span></div>
+  </div>
+
+  <!-- V4 LANDSCAPE — Diario -->
+  <div>
+    <div class="promo landscape v4" data-export="1" data-width="1200" data-height="630">
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Mi diario</span>
+        <h2 class="headline">Lo que viviste,<br><span class="accent">a un toque</span>.</h2>
+        <p class="sub">Diario integrado. Busca momentos en tus reflexiones.</p>
+        <div><span class="cta">Probar gratis →</span></div>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-journal">
+          <div class="entry">
+            <span class="dot excellent"></span>
+            <div class="body">
+              <div class="date">vie · 8 mayo</div>
+              <div class="text">"arizona, viaje, panas"</div>
+            </div>
+            <span class="pill">Excelente</span>
+          </div>
+          <div class="entry">
+            <span class="dot excellent"></span>
+            <div class="body">
+              <div class="date">jue · 7 mayo</div>
+              <div class="text">"lodestar, gorilla, bbq"</div>
+            </div>
+            <span class="pill">Excelente</span>
+          </div>
+          <div class="entry">
+            <span class="dot good"></span>
+            <div class="body">
+              <div class="date">mié · 6 mayo</div>
+              <div class="text">"trabajo remoto"</div>
+            </div>
+            <span class="pill">Bien</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V4 · Diario</strong><br><span class="file">fb-post-04-diario.png</span></div>
+  </div>
+
+  <!-- V5 LANDSCAPE — Descarga -->
+  <div>
+    <div class="promo landscape v5" data-export="1" data-width="1200" data-height="630">
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Disponible ya</span>
+        <h2 class="headline">Descarga<br><span class="accent">gratis</span>.</h2>
+        <p class="sub">Empieza a mapear tu año emocional hoy.</p>
+        <div class="badges" style="justify-content: flex-start;">
+          <span class="badge-pill">
+            <svg viewBox="0 0 384 512" fill="#fff"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zM277 117.3c20.7-24.7 18.7-47.7 18.5-55.7-.2 0-.7 0-3.7-1.3-7.5 4.3-32.2 16.6-46.7 39.5-15.4 24.8-15.6 50.7-15.6 51.3 1.7.3 3.4.6 5 .8 13.7-1.4 28.5-9.4 42.5-34.6z"/></svg>
+            <span><span class="label">Descarga en</span><span class="name">App Store</span></span>
+          </span>
+          <span class="badge-pill">
+            <svg viewBox="0 0 512 512"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z" fill="#fff"/></svg>
+            <span><span class="label">Disponible en</span><span class="name">Google Play</span></span>
+          </span>
+        </div>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-app">
+          <img class="big-icon" src="../assets/moodgrid.png" alt="">
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V5 · Descarga</strong><br><span class="file">fb-post-05-descarga.png</span></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Edita textos y colores en <code>aso/promo-social.html</code>.<br><br>
+  <strong>Cómo usar:</strong> abre el HTML desde un servidor local
+  (<code>cd /Users/hector/Documents/Work/moodgrid &amp;&amp; python3 -m http.server 8000</code>),
+  visita <code>http://localhost:8000/aso/promo-social.html</code>
+  y descarga PNGs individuales o todas a la vez.
+</div>
+
+<button class="dl-all" id="dlAll">⬇ Descargar todas</button>
+<div class="dl-status" id="dlStatus"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.13/dist/html-to-image.min.js"></script>
+<script>
+(function() {
+  const isLocalFile = location.protocol === 'file:';
+  const status = document.getElementById('dlStatus');
+
+  function showStatus(msg, persist) {
+    status.textContent = msg;
+    status.classList.add('show');
+    clearTimeout(status._timer);
+    if (!persist) {
+      status._timer = setTimeout(() => status.classList.remove('show'), 2200);
+    }
+  }
+
+  if (isLocalFile) {
+    const notice = document.createElement('div');
+    notice.className = 'file-notice';
+    notice.innerHTML = `
+      <strong>⚠ Descarga deshabilitada en modo archivo local</strong><br>
+      Los navegadores bloquean leer imágenes con <code>file://</code>. Para descargar, levanta un servidor local:<br>
+      <code>cd ${location.pathname.split('/aso/')[0]} && python3 -m http.server 8000</code><br>
+      luego abre <code>http://localhost:8000/aso/promo-social.html</code>
+    `;
+    document.body.prepend(notice);
+  }
+
+  async function captureElement(el) {
+    const w = parseInt(el.dataset.width, 10);
+    const rect = el.getBoundingClientRect();
+    const pixelRatio = w / rect.width;
+    return await htmlToImage.toPng(el, {
+      pixelRatio,
+      cacheBust: true,
+      backgroundColor: null,
+    });
+  }
+
+  function downloadDataUrl(dataUrl, filename) {
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = dataUrl;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function getFilename(wrap) {
+    const fileSpan = wrap.querySelector('.caption .file');
+    return fileSpan ? fileSpan.textContent.trim() : `image.png`;
+  }
+
+  async function downloadOne(target, filename, btn) {
+    const orig = btn ? btn.textContent : null;
+    if (btn) { btn.disabled = true; btn.textContent = 'Generando…'; }
+    showStatus(`Generando ${filename}…`, true);
+    try {
+      const dataUrl = await captureElement(target);
+      downloadDataUrl(dataUrl, filename);
+      showStatus(`✓ ${filename} descargado`);
+    } catch (err) {
+      console.error(err);
+      showStatus(`✗ Error: ${err.message}`);
+      alert('Error al generar la imagen:\n' + err.message + (isLocalFile ? '\n\nDebes abrir el HTML desde un servidor local (ver aviso arriba).' : ''));
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = orig; }
+    }
+  }
+
+  function setupWrap(wrap) {
+    const target = wrap.querySelector('[data-export]');
+    const caption = wrap.querySelector('.caption');
+    if (!target || !caption) return;
+
+    const filename = getFilename(wrap);
+    const w = target.dataset.width;
+    const h = target.dataset.height;
+
+    const br = document.createElement('br');
+    const btn = document.createElement('button');
+    btn.className = 'dl-btn';
+    btn.textContent = `⬇ Descargar PNG (${w}×${h})`;
+    btn.addEventListener('click', () => downloadOne(target, filename, btn));
+    caption.appendChild(br);
+    caption.appendChild(btn);
+  }
+
+  const allWraps = Array.from(document.querySelectorAll('.gallery > div'))
+    .filter(w => w.querySelector('[data-export]'));
+  allWraps.forEach(setupWrap);
+
+  const dlAllBtn = document.getElementById('dlAll');
+  dlAllBtn.textContent = `⬇ Descargar todas (${allWraps.length})`;
+
+  dlAllBtn.addEventListener('click', async function() {
+    const btn = this;
+    btn.disabled = true;
+    const original = btn.textContent;
+    try {
+      for (let i = 0; i < allWraps.length; i++) {
+        const wrap = allWraps[i];
+        const target = wrap.querySelector('[data-export]');
+        const filename = getFilename(wrap);
+        btn.textContent = `Generando ${i + 1}/${allWraps.length}…`;
+        showStatus(`Generando ${filename} (${i + 1}/${allWraps.length})`, true);
+        const dataUrl = await captureElement(target);
+        downloadDataUrl(dataUrl, filename);
+        await new Promise(r => setTimeout(r, 400));
+      }
+      showStatus(`✓ ${allWraps.length} imágenes descargadas`);
+    } catch (err) {
+      console.error(err);
+      showStatus(`✗ Error: ${err.message}`);
+      alert('Error al generar las imágenes:\n' + err.message + (isLocalFile ? '\n\nDebes abrir el HTML desde un servidor local (ver aviso arriba).' : ''));
+    } finally {
+      btn.disabled = false;
+      btn.textContent = original;
+    }
+  });
+})();
+</script>
+
+<script>
+(function() {
+  // Diccionario ES → EN (textContent)
+  const T = {
+    // Página
+    'EmotionsMap — Imágenes promocionales para redes': 'EmotionsMap — Promotional images for social media',
+    '5 mensajes × 3 formatos · listas para Instagram y Facebook (post, story, link share)': '5 messages × 3 formats · ready for Instagram and Facebook (post, story, link share)',
+    '15 imágenes · paleta sage #88B486 / cream #FAF8F4 / acento #90AFCF': '15 images · sage #88B486 / cream #FAF8F4 / accent #90AFCF palette',
+    'Instagram · Post cuadrado': 'Instagram · Square post',
+    'También válido para post de Facebook': 'Also works as a Facebook post',
+    'Stories · Instagram & Facebook': 'Stories · Instagram & Facebook',
+    'Mismo formato sirve para IG Stories, IG Reels cover y FB Stories': 'Same format works for IG Stories, IG Reels covers and FB Stories',
+    'Facebook · Post / Link share': 'Facebook · Post / Link share',
+    'Formato horizontal para grupos de Facebook y Open Graph': 'Landscape format for Facebook groups and Open Graph',
+    // Eyebrows
+    'Mosaico mensual': 'Monthly mosaic',
+    'Year in pixels': 'Year in pixels',
+    'Privacidad por diseño': 'Private by design',
+    'Mi diario': 'My journal',
+    'Disponible ya': 'Available now',
+    // Subs
+    'Un toque al día. Tu año emocional cobra forma frente a tus ojos.': 'One tap a day. Your emotional year takes shape before your eyes.',
+    'Un toque al día. Tu año emocional cobra forma.': 'One tap a day. Your emotional year takes shape.',
+    'Mira tu año entero como un mosaico. Detecta patrones que solo tú ves.': 'See your whole year as a mosaic. Spot patterns only you can see.',
+    'Mira tu año entero. Detecta patrones que solo tú ves.': 'See your whole year. Spot patterns only you can see.',
+    'Sin nube. Sin cuenta. Tus emociones se quedan en tu teléfono.': 'No cloud. No account. Your feelings stay on your phone.',
+    'Diario integrado con búsqueda. Anota momentos y vuelve a ellos cuando quieras.': 'Built-in journal with search. Capture moments and revisit them anytime.',
+    'Diario integrado. Busca momentos en tus reflexiones.': 'Built-in journal. Search through your reflections.',
+    'Empieza a mapear tu año emocional hoy. Disponible en español e inglés.': 'Start mapping your emotional year today. Available in English and Spanish.',
+    'Empieza a mapear tu año emocional hoy.': 'Start mapping your emotional year today.',
+    'Empieza a mapear tu año emocional hoy. EN + ES.': 'Start mapping your emotional year today. EN + ES.',
+    // CTAs
+    'Descúbrelo →': 'Discover it →',
+    'Ver mi año →': 'See my year →',
+    'Empieza →': 'Get started →',
+    'Probar gratis →': 'Try it free →',
+    // Visuals
+    'Mayo · 2026': 'May · 2026',
+    'Mi Año en Píxeles': 'My Year in Pixels',
+    // Month labels
+    'Ene': 'Jan', 'Abr': 'Apr', 'Ago': 'Aug', 'Dic': 'Dec',
+    // Journal dates
+    'vie · 8 mayo 2026': 'Fri · May 8, 2026',
+    'jue · 7 mayo 2026': 'Thu · May 7, 2026',
+    'mié · 6 mayo 2026': 'Wed · May 6, 2026',
+    'vie · 8 mayo': 'Fri · May 8',
+    'jue · 7 mayo': 'Thu · May 7',
+    'mié · 6 mayo': 'Wed · May 6',
+    // Journal text
+    '"arizona, viaje, panas"': '"arizona, road trip, friends"',
+    '"lodestar, gorilla, bbq en casa"': '"lodestar, gorilla, bbq at home"',
+    '"lodestar, gorilla, bbq"': '"lodestar, gorilla, bbq"',
+    '"trabajo remoto, tarde productiva"': '"remote work, productive afternoon"',
+    '"trabajo remoto"': '"remote work"',
+    'Excelente': 'Excellent',
+    'Bien': 'Good',
+    // Badges
+    'Descarga en': 'Download on',
+    'Disponible en': 'Get it on',
+    // Captions
+    'V1 · Mosaico mensual': 'V1 · Monthly mosaic',
+    'V3 · Privacidad': 'V3 · Privacy',
+    'V4 · Diario': 'V4 · Journal',
+    'V5 · Descarga': 'V5 · Download',
+    // Filenames
+    'ig-post-01-mosaico.png': 'ig-post-01-mosaic-en.png',
+    'ig-post-02-year-pixels.png': 'ig-post-02-year-pixels-en.png',
+    'ig-post-03-privacidad.png': 'ig-post-03-privacy-en.png',
+    'ig-post-04-diario.png': 'ig-post-04-journal-en.png',
+    'ig-post-05-descarga.png': 'ig-post-05-download-en.png',
+    'story-01-mosaico.png': 'story-01-mosaic-en.png',
+    'story-02-year-pixels.png': 'story-02-year-pixels-en.png',
+    'story-03-privacidad.png': 'story-03-privacy-en.png',
+    'story-04-diario.png': 'story-04-journal-en.png',
+    'story-05-descarga.png': 'story-05-download-en.png',
+    'fb-post-01-mosaico.png': 'fb-post-01-mosaic-en.png',
+    'fb-post-02-year-pixels.png': 'fb-post-02-year-pixels-en.png',
+    'fb-post-03-privacidad.png': 'fb-post-03-privacy-en.png',
+    'fb-post-04-diario.png': 'fb-post-04-journal-en.png',
+    'fb-post-05-descarga.png': 'fb-post-05-download-en.png',
+  };
+
+  // Headlines (innerHTML)
+  const H = {
+    'Tu mes,<br>en <span class="accent">colores</span>.': 'Your month,<br>in <span class="accent">color</span>.',
+    '365 días.<br>Una <span class="accent">pantalla</span>.': '365 days.<br>One <span class="accent">screen</span>.',
+    'Tu diario,<br><span class="accent">solo tuyo</span>.': 'Your journal,<br><span class="accent">yours alone</span>.',
+    'Lo que viviste,<br><span class="accent">a un toque</span>.': 'What you lived,<br><span class="accent">one tap away</span>.',
+    'Descarga<br><span class="accent">gratis</span>.': 'Download<br>for <span class="accent">free</span>.',
+  };
+
+  // Construir mapas reversos
+  const T_REV = Object.fromEntries(Object.entries(T).map(([k, v]) => [v, k]));
+  const H_REV = Object.fromEntries(Object.entries(H).map(([k, v]) => [v, k]));
+
+  const TEXT_SELECTORS = [
+    '.header h1',
+    '.header > p',
+    '.header .meta',
+    '.section-divider h2',
+    '.section-divider > p',
+    '.eyebrow',
+    '.sub',
+    '.cta',
+    '.grid-month',
+    '.year-title',
+    '.month-lbl',
+    '.entry .date',
+    '.entry .text',
+    '.entry .pill',
+    '.badge-pill .label',
+    '.caption strong',
+    '.caption .file',
+  ];
+
+  function applyDict(map, htmlMap) {
+    // textContent swaps
+    TEXT_SELECTORS.forEach(sel => {
+      document.querySelectorAll(sel).forEach(el => {
+        const cur = el.textContent.trim();
+        if (map[cur] !== undefined) {
+          el.textContent = map[cur];
+        }
+      });
+    });
+    // innerHTML swaps for .headline
+    document.querySelectorAll('.headline').forEach(el => {
+      // Normalizamos comillas y espacios para emparejar
+      const cur = el.innerHTML.trim();
+      if (htmlMap[cur] !== undefined) {
+        el.innerHTML = htmlMap[cur];
+      }
+    });
+  }
+
+  const dlAllBtn = document.getElementById('dlAll');
+  const baseAllCount = document.querySelectorAll('.gallery > div [data-export]').length;
+
+  function refreshDownloadButtonLabels(lang) {
+    if (dlAllBtn) {
+      dlAllBtn.textContent = lang === 'en'
+        ? `⬇ Download all (${baseAllCount})`
+        : `⬇ Descargar todas (${baseAllCount})`;
+    }
+    document.querySelectorAll('.dl-btn').forEach(btn => {
+      const m = btn.textContent.match(/\((\d+×\d+)\)/);
+      const dim = m ? m[1] : '';
+      btn.textContent = lang === 'en'
+        ? `⬇ Download PNG (${dim})`
+        : `⬇ Descargar PNG (${dim})`;
+    });
+  }
+
+  function setLang(lang) {
+    const current = document.documentElement.getAttribute('lang') || 'es';
+    if (current === lang) return;
+    if (lang === 'en') {
+      applyDict(T, H);
+      document.documentElement.setAttribute('lang', 'en');
+      document.title = 'EmotionsMap — Promotional images for social media';
+    } else {
+      applyDict(T_REV, H_REV);
+      document.documentElement.setAttribute('lang', 'es');
+      document.title = 'EmotionsMap — Imágenes promocionales para redes sociales';
+    }
+    document.querySelectorAll('.lang-toggle button').forEach(b => {
+      const isActive = b.dataset.lang === lang;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+    refreshDownloadButtonLabels(lang);
+    try { localStorage.setItem('promoLang', lang); } catch (e) {}
+  }
+
+  document.querySelectorAll('.lang-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => setLang(btn.dataset.lang));
+  });
+
+  // Restaurar idioma persistido
+  let saved = 'es';
+  try { saved = localStorage.getItem('promoLang') || 'es'; } catch (e) {}
+  if (saved === 'en') setLang('en');
+})();
+</script>
+
+</body>
+</html>
