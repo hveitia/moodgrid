@@ -83,9 +83,11 @@
     display: flex;
     container-type: inline-size;
   }
-  .promo.square    { aspect-ratio: 1 / 1;       border-radius: 1.7cqw; flex-direction: column; }
-  .promo.story     { aspect-ratio: 9 / 16;      border-radius: 1.7cqw; flex-direction: column; }
-  .promo.landscape { aspect-ratio: 1200 / 630;  border-radius: 1.2cqw; flex-direction: row; }
+  .promo.square    { aspect-ratio: 1 / 1;       border-radius: 0; flex-direction: column; }
+  .promo.story     { aspect-ratio: 9 / 16;      border-radius: 0; flex-direction: column; }
+  .promo.landscape { aspect-ratio: 1200 / 630;  border-radius: 0; flex-direction: row; }
+  .promo.landscape.wide-16x9 { aspect-ratio: 16 / 9; }
+  .promo.landscape.linkedin-format { aspect-ratio: 1200 / 627; }
 
   /* ── Variant backgrounds ─────────────────────────────────────────── */
   .v1 { background: radial-gradient(ellipse at top right, #9CC09A 0%, var(--brand-red) 50%, var(--brand-red-dark) 100%); }
@@ -715,20 +717,62 @@
     color: #ccc;
   }
 
-  .lang-toggle {
-    position: fixed;
-    top: 16px;
-    right: 16px;
-    z-index: 1000;
-    background: rgba(20, 20, 20, 0.92);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid #333;
-    border-radius: 999px;
-    padding: 4px;
+  html { scroll-behavior: smooth; }
+
+  .topnav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(15, 15, 15, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid #2a2a2a;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+  }
+  .topnav-brand {
+    font-weight: 800;
+    font-size: 13px;
+    color: #fff;
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+    flex-shrink: 0;
+  }
+  .topnav-links {
     display: flex;
     gap: 2px;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+    overflow-x: auto;
+    flex: 1;
+    scrollbar-width: thin;
+    scrollbar-color: #444 transparent;
+  }
+  .topnav-links::-webkit-scrollbar { height: 4px; }
+  .topnav-links::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+  .topnav-links a {
+    text-decoration: none;
+    color: #999;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background 150ms ease, color 150ms ease;
+  }
+  .topnav-links a:hover { color: #fff; background: #2a2a2a; }
+  .topnav-links a.active { color: #000; background: #fff; }
+
+  .section-divider { scroll-margin-top: 70px; }
+
+  .lang-toggle {
+    background: rgba(40, 40, 40, 0.85);
+    border: 1px solid #333;
+    border-radius: 999px;
+    padding: 3px;
+    display: flex;
+    gap: 2px;
+    flex-shrink: 0;
   }
   .lang-toggle button {
     border: 0;
@@ -748,25 +792,66 @@
     background: #fff;
     color: #000;
   }
+
+  .copy-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .copy-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #3a3a3a;
+    background: #1f1f1f;
+    color: #cfcfcf;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+  }
+  .copy-btn:hover:not(:disabled) {
+    background: #2a2a2a;
+    color: #fff;
+    border-color: #555;
+  }
+  .copy-btn.copied {
+    background: rgba(136, 180, 134, 0.18);
+    color: #a0d39e;
+    border-color: rgba(136, 180, 134, 0.6);
+  }
 </style>
 </head>
 <body>
 
-<div class="lang-toggle" role="tablist" aria-label="Idioma / Language">
-  <button type="button" data-lang="es" class="active" role="tab" aria-selected="true">ES</button>
-  <button type="button" data-lang="en" role="tab" aria-selected="false">EN</button>
-</div>
+<nav class="topnav">
+  <div class="topnav-brand">EmotionsMap · Promo</div>
+  <div class="topnav-links">
+    <a href="#sec-ig"    data-section="ig">Instagram</a>
+    <a href="#sec-story" data-section="story">Stories</a>
+    <a href="#sec-fb"    data-section="fb">Facebook</a>
+    <a href="#sec-x"     data-section="x">X · BlueSky</a>
+    <a href="#sec-li"    data-section="li">LinkedIn</a>
+  </div>
+  <div class="lang-toggle" role="tablist" aria-label="Idioma / Language">
+    <button type="button" data-lang="es" class="active" role="tab" aria-selected="true">ES</button>
+    <button type="button" data-lang="en" role="tab" aria-selected="false">EN</button>
+  </div>
+</nav>
 
 <div class="header">
   <h1>EmotionsMap — Imágenes promocionales para redes</h1>
-  <p>5 mensajes × 3 formatos · listas para Instagram y Facebook (post, story, link share)</p>
-  <div class="meta">15 imágenes · paleta sage #88B486 / cream #FAF8F4 / acento #90AFCF</div>
+  <p>5 mensajes × 5 formatos · listas para Instagram, Facebook, X, BlueSky y LinkedIn</p>
+  <div class="meta">25 imágenes · paleta sage #88B486 / cream #FAF8F4 / acento #90AFCF</div>
 </div>
 
 <!-- ============================================================
      SECTION 1 · INSTAGRAM POST CUADRADO 1080×1080
      ============================================================ -->
-<div class="section-divider">
+<div class="section-divider" id="sec-ig">
   <h2>Instagram · Post cuadrado</h2>
   <p>También válido para post de Facebook</p>
   <div class="badge">1080 × 1080 px</div>
@@ -992,7 +1077,7 @@
 <!-- ============================================================
      SECTION 2 · STORY VERTICAL 1080×1920
      ============================================================ -->
-<div class="section-divider">
+<div class="section-divider" id="sec-story">
   <h2>Stories · Instagram &amp; Facebook</h2>
   <p>Mismo formato sirve para IG Stories, IG Reels cover y FB Stories</p>
   <div class="badge">1080 × 1920 px</div>
@@ -1222,7 +1307,7 @@
 <!-- ============================================================
      SECTION 3 · POST HORIZONTAL 1200×630
      ============================================================ -->
-<div class="section-divider">
+<div class="section-divider" id="sec-fb">
   <h2>Facebook · Post / Link share</h2>
   <p>Formato horizontal para grupos de Facebook y Open Graph</p>
   <div class="badge">1200 × 630 px</div>
@@ -1448,6 +1533,464 @@
 
 </div>
 
+<!-- ============================================================
+     SECTION 4 · X (TWITTER) & BLUESKY 1600×900
+     ============================================================ -->
+<div class="section-divider" id="sec-x">
+  <h2>X &amp; BlueSky · Post</h2>
+  <p>Formato 16:9 universal para X (Twitter) y BlueSky</p>
+  <div class="badge">1600 × 900 px</div>
+</div>
+
+<div class="gallery landscape">
+
+  <!-- V1 X — Mosaico -->
+  <div>
+    <div class="promo landscape wide-16x9 v1" data-export="1" data-width="1600" data-height="900">
+      <div class="blob" style="background: rgba(144,175,207,0.22); width: 35%; height: 70%; top: -15%; right: -8%;"></div>
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Mosaico mensual</span>
+        <h2 class="headline">Tu mes,<br>en <span class="accent">colores</span>.</h2>
+        <p class="sub">Un toque al día. Tu año emocional cobra forma.</p>
+        <div><span class="cta">Descúbrelo →</span></div>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-grid">
+          <div class="grid-header">
+            <span class="grid-month">Mayo · 2026</span>
+            <span class="grid-share">↗</span>
+          </div>
+          <div class="grid-weekdays">
+            <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+          </div>
+          <div class="grid-cells">
+            <span class="cell empty"></span><span class="cell empty"></span><span class="cell empty"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell excellent"></span><span class="cell good"></span>
+            <span class="cell neutral"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell excellent"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell excellent"></span>
+            <span class="cell good"></span><span class="cell neutral"></span><span class="cell difficult"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell good"></span><span class="cell excellent"></span>
+            <span class="cell excellent"></span><span class="cell excellent"></span><span class="cell good"></span><span class="cell neutral"></span><span class="cell good"></span><span class="cell excellent today"></span><span class="cell empty"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V1 · Mosaico mensual</strong><br><span class="file">x-01-mosaico.png</span></div>
+  </div>
+
+  <!-- V2 X — Year in Pixels -->
+  <div>
+    <div class="promo landscape wide-16x9 v2" data-export="1" data-width="1600" data-height="900">
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Year in pixels</span>
+        <h2 class="headline">365 días.<br>Una <span class="accent">pantalla</span>.</h2>
+        <p class="sub">Mira tu año entero. Detecta patrones que solo tú ves.</p>
+        <div><span class="cta">Ver mi año →</span></div>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-year">
+          <div class="year-header">
+            <span class="year-title">Mi Año en Píxeles</span>
+            <span class="year-num">2026</span>
+          </div>
+          <div class="year-grid">
+            <div class="month-row"><span class="month-lbl">Ene</span><div class="month-cells">
+              <span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Feb</span><div class="month-cells">
+              <span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Mar</span><div class="month-cells">
+              <span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel bad"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Abr</span><div class="month-cells">
+              <span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">May</span><div class="month-cells">
+              <span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel bad"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Jun</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Jul</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Ago</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Sep</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Oct</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Nov</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Dic</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V2 · Year in Pixels</strong><br><span class="file">x-02-year-pixels.png</span></div>
+  </div>
+
+  <!-- V3 X — Privacidad -->
+  <div>
+    <div class="promo landscape wide-16x9 v3" data-export="1" data-width="1600" data-height="900">
+      <div class="blob" style="background: rgba(144,175,207,0.18); width: 35%; height: 70%; bottom: -15%; left: -10%;"></div>
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Privacidad por diseño</span>
+        <h2 class="headline">Tu diario,<br><span class="accent">solo tuyo</span>.</h2>
+        <p class="sub">Sin nube. Sin cuenta. Tus emociones se quedan en tu teléfono.</p>
+        <div><span class="cta">Empieza →</span></div>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-privacy">
+          <div class="pic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div class="pic center">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="2" y1="2" x2="22" y2="22"/>
+              <path d="M5.78 5.78A4 4 0 0 0 9 13h9.26"/>
+              <path d="M21 13a4 4 0 0 0-3-3.87"/>
+              <path d="M11 4a4 4 0 0 1 5 3"/>
+            </svg>
+          </div>
+          <div class="pic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V3 · Privacidad</strong><br><span class="file">x-03-privacidad.png</span></div>
+  </div>
+
+  <!-- V4 X — Diario -->
+  <div>
+    <div class="promo landscape wide-16x9 v4" data-export="1" data-width="1600" data-height="900">
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Mi diario</span>
+        <h2 class="headline">Lo que viviste,<br><span class="accent">a un toque</span>.</h2>
+        <p class="sub">Diario integrado. Busca momentos en tus reflexiones.</p>
+        <div><span class="cta">Probar gratis →</span></div>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-journal">
+          <div class="entry">
+            <span class="dot excellent"></span>
+            <div class="body">
+              <div class="date">vie · 8 mayo</div>
+              <div class="text">"arizona, viaje, panas"</div>
+            </div>
+            <span class="pill">Excelente</span>
+          </div>
+          <div class="entry">
+            <span class="dot excellent"></span>
+            <div class="body">
+              <div class="date">jue · 7 mayo</div>
+              <div class="text">"lodestar, gorilla, bbq"</div>
+            </div>
+            <span class="pill">Excelente</span>
+          </div>
+          <div class="entry">
+            <span class="dot good"></span>
+            <div class="body">
+              <div class="date">mié · 6 mayo</div>
+              <div class="text">"trabajo remoto"</div>
+            </div>
+            <span class="pill">Bien</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V4 · Diario</strong><br><span class="file">x-04-diario.png</span></div>
+  </div>
+
+  <!-- V5 X — Descarga -->
+  <div>
+    <div class="promo landscape wide-16x9 v5" data-export="1" data-width="1600" data-height="900">
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Disponible ya</span>
+        <h2 class="headline">Descarga<br><span class="accent">gratis</span>.</h2>
+        <p class="sub">Empieza a mapear tu año emocional hoy.</p>
+        <div class="badges" style="justify-content: flex-start;">
+          <span class="badge-pill">
+            <svg viewBox="0 0 384 512" fill="#fff"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zM277 117.3c20.7-24.7 18.7-47.7 18.5-55.7-.2 0-.7 0-3.7-1.3-7.5 4.3-32.2 16.6-46.7 39.5-15.4 24.8-15.6 50.7-15.6 51.3 1.7.3 3.4.6 5 .8 13.7-1.4 28.5-9.4 42.5-34.6z"/></svg>
+            <span><span class="label">Descarga en</span><span class="name">App Store</span></span>
+          </span>
+          <span class="badge-pill">
+            <svg viewBox="0 0 512 512"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z" fill="#fff"/></svg>
+            <span><span class="label">Disponible en</span><span class="name">Google Play</span></span>
+          </span>
+        </div>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-app">
+          <img class="big-icon" src="../assets/moodgrid.png" alt="">
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V5 · Descarga</strong><br><span class="file">x-05-descarga.png</span></div>
+  </div>
+
+</div>
+
+<!-- ============================================================
+     SECTION 5 · LINKEDIN POST 1200×627
+     ============================================================ -->
+<div class="section-divider" id="sec-li">
+  <h2>LinkedIn · Post</h2>
+  <p>Formato 1200×627 (Open Graph) — ideal para link share y posts inline</p>
+  <div class="badge">1200 × 627 px</div>
+</div>
+
+<div class="gallery landscape">
+
+  <!-- V1 LI — Mosaico -->
+  <div>
+    <div class="promo landscape linkedin-format v1" data-export="1" data-width="1200" data-height="627">
+      <div class="blob" style="background: rgba(144,175,207,0.22); width: 35%; height: 70%; top: -15%; right: -8%;"></div>
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Mosaico mensual</span>
+        <h2 class="headline">Tu mes,<br>en <span class="accent">colores</span>.</h2>
+        <p class="sub">Un toque al día. Tu año emocional cobra forma.</p>
+        <div><span class="cta">Descúbrelo →</span></div>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-grid">
+          <div class="grid-header">
+            <span class="grid-month">Mayo · 2026</span>
+            <span class="grid-share">↗</span>
+          </div>
+          <div class="grid-weekdays">
+            <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+          </div>
+          <div class="grid-cells">
+            <span class="cell empty"></span><span class="cell empty"></span><span class="cell empty"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell excellent"></span><span class="cell good"></span>
+            <span class="cell neutral"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell excellent"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell excellent"></span>
+            <span class="cell good"></span><span class="cell neutral"></span><span class="cell difficult"></span><span class="cell good"></span><span class="cell excellent"></span><span class="cell good"></span><span class="cell excellent"></span>
+            <span class="cell excellent"></span><span class="cell excellent"></span><span class="cell good"></span><span class="cell neutral"></span><span class="cell good"></span><span class="cell excellent today"></span><span class="cell empty"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V1 · Mosaico mensual</strong><br><span class="file">li-01-mosaico.png</span></div>
+  </div>
+
+  <!-- V2 LI — Year in Pixels -->
+  <div>
+    <div class="promo landscape linkedin-format v2" data-export="1" data-width="1200" data-height="627">
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Year in pixels</span>
+        <h2 class="headline">365 días.<br>Una <span class="accent">pantalla</span>.</h2>
+        <p class="sub">Mira tu año entero. Detecta patrones que solo tú ves.</p>
+        <div><span class="cta">Ver mi año →</span></div>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-year">
+          <div class="year-header">
+            <span class="year-title">Mi Año en Píxeles</span>
+            <span class="year-num">2026</span>
+          </div>
+          <div class="year-grid">
+            <div class="month-row"><span class="month-lbl">Ene</span><div class="month-cells">
+              <span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Feb</span><div class="month-cells">
+              <span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Mar</span><div class="month-cells">
+              <span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel bad"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Abr</span><div class="month-cells">
+              <span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel difficult"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel good"></span><span class="pixel neutral"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">May</span><div class="month-cells">
+              <span class="pixel neutral"></span><span class="pixel difficult"></span><span class="pixel bad"></span><span class="pixel difficult"></span><span class="pixel neutral"></span><span class="pixel good"></span><span class="pixel good"></span><span class="pixel excellent"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Jun</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Jul</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Ago</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Sep</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Oct</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Nov</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+            <div class="month-row"><span class="month-lbl">Dic</span><div class="month-cells">
+              <span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span><span class="pixel empty"></span>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V2 · Year in Pixels</strong><br><span class="file">li-02-year-pixels.png</span></div>
+  </div>
+
+  <!-- V3 LI — Privacidad -->
+  <div>
+    <div class="promo landscape linkedin-format v3" data-export="1" data-width="1200" data-height="627">
+      <div class="blob" style="background: rgba(144,175,207,0.18); width: 35%; height: 70%; bottom: -15%; left: -10%;"></div>
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Privacidad por diseño</span>
+        <h2 class="headline">Tu diario,<br><span class="accent">solo tuyo</span>.</h2>
+        <p class="sub">Sin nube. Sin cuenta. Tus emociones se quedan en tu teléfono.</p>
+        <div><span class="cta">Empieza →</span></div>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-privacy">
+          <div class="pic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div class="pic center">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="2" y1="2" x2="22" y2="22"/>
+              <path d="M5.78 5.78A4 4 0 0 0 9 13h9.26"/>
+              <path d="M21 13a4 4 0 0 0-3-3.87"/>
+              <path d="M11 4a4 4 0 0 1 5 3"/>
+            </svg>
+          </div>
+          <div class="pic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V3 · Privacidad</strong><br><span class="file">li-03-privacidad.png</span></div>
+  </div>
+
+  <!-- V4 LI — Diario -->
+  <div>
+    <div class="promo landscape linkedin-format v4" data-export="1" data-width="1200" data-height="627">
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Mi diario</span>
+        <h2 class="headline">Lo que viviste,<br><span class="accent">a un toque</span>.</h2>
+        <p class="sub">Diario integrado. Busca momentos en tus reflexiones.</p>
+        <div><span class="cta">Probar gratis →</span></div>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-journal">
+          <div class="entry">
+            <span class="dot excellent"></span>
+            <div class="body">
+              <div class="date">vie · 8 mayo</div>
+              <div class="text">"arizona, viaje, panas"</div>
+            </div>
+            <span class="pill">Excelente</span>
+          </div>
+          <div class="entry">
+            <span class="dot excellent"></span>
+            <div class="body">
+              <div class="date">jue · 7 mayo</div>
+              <div class="text">"lodestar, gorilla, bbq"</div>
+            </div>
+            <span class="pill">Excelente</span>
+          </div>
+          <div class="entry">
+            <span class="dot good"></span>
+            <div class="body">
+              <div class="date">mié · 6 mayo</div>
+              <div class="text">"trabajo remoto"</div>
+            </div>
+            <span class="pill">Bien</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V4 · Diario</strong><br><span class="file">li-04-diario.png</span></div>
+  </div>
+
+  <!-- V5 LI — Descarga -->
+  <div>
+    <div class="promo landscape linkedin-format v5" data-export="1" data-width="1200" data-height="627">
+      <div class="text-zone">
+        <div class="brand">
+          <img class="brand-icon" src="../assets/moodgrid.png" alt="">
+          EmotionsMap
+        </div>
+        <span class="eyebrow">Disponible ya</span>
+        <h2 class="headline">Descarga<br><span class="accent">gratis</span>.</h2>
+        <p class="sub">Empieza a mapear tu año emocional hoy.</p>
+        <div class="badges" style="justify-content: flex-start;">
+          <span class="badge-pill">
+            <svg viewBox="0 0 384 512" fill="#fff"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zM277 117.3c20.7-24.7 18.7-47.7 18.5-55.7-.2 0-.7 0-3.7-1.3-7.5 4.3-32.2 16.6-46.7 39.5-15.4 24.8-15.6 50.7-15.6 51.3 1.7.3 3.4.6 5 .8 13.7-1.4 28.5-9.4 42.5-34.6z"/></svg>
+            <span><span class="label">Descarga en</span><span class="name">App Store</span></span>
+          </span>
+          <span class="badge-pill">
+            <svg viewBox="0 0 512 512"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z" fill="#fff"/></svg>
+            <span><span class="label">Disponible en</span><span class="name">Google Play</span></span>
+          </span>
+        </div>
+      </div>
+      <div class="visual-zone">
+        <div class="visual-app">
+          <img class="big-icon" src="../assets/moodgrid.png" alt="">
+        </div>
+      </div>
+    </div>
+    <div class="caption"><strong>V5 · Descarga</strong><br><span class="file">li-05-descarga.png</span></div>
+  </div>
+
+</div>
+
 <div class="footer">
   Edita textos y colores en <code>aso/promo-social.html</code>.<br><br>
   <strong>Cómo usar:</strong> abre el HTML desde un servidor local
@@ -1587,14 +2130,18 @@
   const T = {
     // Página
     'EmotionsMap — Imágenes promocionales para redes': 'EmotionsMap — Promotional images for social media',
-    '5 mensajes × 3 formatos · listas para Instagram y Facebook (post, story, link share)': '5 messages × 3 formats · ready for Instagram and Facebook (post, story, link share)',
-    '15 imágenes · paleta sage #88B486 / cream #FAF8F4 / acento #90AFCF': '15 images · sage #88B486 / cream #FAF8F4 / accent #90AFCF palette',
+    '5 mensajes × 4 formatos · listas para Instagram, Facebook, X y BlueSky': '5 messages × 4 formats · ready for Instagram, Facebook, X and BlueSky',
+    '20 imágenes · paleta sage #88B486 / cream #FAF8F4 / acento #90AFCF': '20 images · sage #88B486 / cream #FAF8F4 / accent #90AFCF palette',
     'Instagram · Post cuadrado': 'Instagram · Square post',
     'También válido para post de Facebook': 'Also works as a Facebook post',
     'Stories · Instagram & Facebook': 'Stories · Instagram & Facebook',
     'Mismo formato sirve para IG Stories, IG Reels cover y FB Stories': 'Same format works for IG Stories, IG Reels covers and FB Stories',
     'Facebook · Post / Link share': 'Facebook · Post / Link share',
     'Formato horizontal para grupos de Facebook y Open Graph': 'Landscape format for Facebook groups and Open Graph',
+    'X & BlueSky · Post': 'X & BlueSky · Post',
+    'Formato 16:9 universal para X (Twitter) y BlueSky': '16:9 universal format for X (Twitter) and BlueSky',
+    'LinkedIn · Post': 'LinkedIn · Post',
+    'Formato 1200×627 (Open Graph) — ideal para link share y posts inline': '1200×627 (Open Graph) format — ideal for link share and inline posts',
     // Eyebrows
     'Mosaico mensual': 'Monthly mosaic',
     'Year in pixels': 'Year in pixels',
@@ -1661,6 +2208,16 @@
     'fb-post-03-privacidad.png': 'fb-post-03-privacy-en.png',
     'fb-post-04-diario.png': 'fb-post-04-journal-en.png',
     'fb-post-05-descarga.png': 'fb-post-05-download-en.png',
+    'x-01-mosaico.png': 'x-01-mosaic-en.png',
+    'x-02-year-pixels.png': 'x-02-year-pixels-en.png',
+    'x-03-privacidad.png': 'x-03-privacy-en.png',
+    'x-04-diario.png': 'x-04-journal-en.png',
+    'x-05-descarga.png': 'x-05-download-en.png',
+    'li-01-mosaico.png': 'li-01-mosaic-en.png',
+    'li-02-year-pixels.png': 'li-02-year-pixels-en.png',
+    'li-03-privacidad.png': 'li-03-privacy-en.png',
+    'li-04-diario.png': 'li-04-journal-en.png',
+    'li-05-descarga.png': 'li-05-download-en.png',
   };
 
   // Headlines (innerHTML)
@@ -1763,6 +2320,352 @@
   let saved = 'es';
   try { saved = localStorage.getItem('promoLang') || 'es'; } catch (e) {}
   if (saved === 'en') setLang('en');
+
+  // Active section highlight para la navbar
+  const sections = document.querySelectorAll('.section-divider[id]');
+  const navLinks = document.querySelectorAll('.topnav-links a[data-section]');
+  if (sections.length && navLinks.length && 'IntersectionObserver' in window) {
+    const linkBySection = {};
+    navLinks.forEach(a => { linkBySection[a.dataset.section] = a; });
+    const setActive = (id) => {
+      navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+    };
+    const io = new IntersectionObserver((entries) => {
+      // El primero que entra en el viewport (de arriba a abajo) gana
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+      if (visible) setActive(visible.target.id);
+    }, { rootMargin: '-72px 0px -55% 0px', threshold: 0 });
+    sections.forEach(s => io.observe(s));
+  }
+})();
+</script>
+
+<script>
+(function() {
+  const COPIES = {
+    v1: {
+      es: {
+        long: `Tu mes, en colores.
+
+Un toque al día y tu año emocional cobra forma frente a tus ojos. Detecta patrones que solo tú puedes ver.
+
+Descarga gratis: emotionsmap.com/get
+
+#SaludMental #BienestarEmocional #DiarioEmocional #MoodTracker #YearInPixels #Mindfulness #Autocuidado #SaludMentalImporta #EmotionsMap`,
+        short: `Tu mes, en colores.
+Un toque al día y tu año emocional toma forma.
+
+emotionsmap.com/get
+
+#SaludMental #MoodTracker`,
+        linkedin: `Llevo un año registrando mi estado de ánimo con un toque al día. Lo que aprendí: los patrones no se ven en una semana — se ven cuando un año cabe en una pantalla.
+
+EmotionsMap convierte tu año emocional en un mosaico. Sin métricas raras, sin "scores de felicidad", sin enviar tus datos a la nube.
+
+Gratis para iOS y Android: emotionsmap.com/get
+
+#SaludMental #BienestarEmocional #Mindfulness #Autoconocimiento #BienestarDigital`,
+      },
+      en: {
+        long: `Your month, in color.
+
+One tap a day and your emotional year takes shape before your eyes. Spot patterns only you can see.
+
+Free download: emotionsmap.com/get
+
+#MentalHealth #MentalHealthMatters #MoodTracker #YearInPixels #Mindfulness #SelfCare #EmotionalWellbeing #JournalingDaily #EmotionsMap`,
+        short: `Your month, in color.
+One tap a day and your emotional year takes shape.
+
+emotionsmap.com/get
+
+#MentalHealth #MoodTracker`,
+        linkedin: `A year of tagging my mood with one tap a day taught me one thing: emotional patterns don't show up in a week. They show up when an entire year fits on one screen.
+
+EmotionsMap turns your emotional year into a mosaic. No metrics, no "happiness scores", no data leaving your phone.
+
+Free for iOS and Android: emotionsmap.com/get
+
+#MentalHealth #EmotionalIntelligence #Mindfulness #DigitalWellbeing #SelfAwareness`,
+      },
+    },
+    v2: {
+      es: {
+        long: `365 días. Una pantalla.
+
+Mira tu año entero como un mosaico. Detecta patrones, ciclos y rachas que solo tú ves.
+
+Descarga gratis: emotionsmap.com/get
+
+#YearInPixels #SaludMental #BienestarEmocional #MoodTracker #DiarioEmocional #AñoEmocional #Mindfulness #Autocuidado #EmotionsMap`,
+        short: `365 días. Una pantalla.
+Tu año emocional como un mosaico.
+
+emotionsmap.com/get
+
+#YearInPixels #SaludMental`,
+        linkedin: `365 días es mucho tiempo para sentir. Es muy poco si solo tienes números para resumirlo.
+
+La visualización "Year in Pixels" lleva años en la cultura del journaling porque resuelve exactamente eso: cada día es un pixel, cada mes una fila, el año entero cabe en una pantalla.
+
+EmotionsMap implementa esa idea con tu paleta personal de emociones. Detectas ciclos que antes no veías, te das cuenta de qué meses te cuestan más — y todo se queda en local, sin que nadie más vea tu mosaico.
+
+Gratis: emotionsmap.com/get
+
+#SaludMental #BienestarEmocional #Mindfulness #InteligenciaEmocional #Autoconocimiento`,
+      },
+      en: {
+        long: `365 days. One screen.
+
+See your whole year as a mosaic. Spot patterns, cycles and streaks only you can see.
+
+Free download: emotionsmap.com/get
+
+#YearInPixels #MentalHealth #MoodTracker #JournalingDaily #SelfAwareness #EmotionalWellbeing #Mindfulness #DataViz #EmotionsMap`,
+        short: `365 days. One screen.
+Your emotional year as a mosaic.
+
+emotionsmap.com/get
+
+#YearInPixels #MentalHealth`,
+        linkedin: `365 days is a long time to feel. It's a very short time if all you have are numbers to summarize it.
+
+The "Year in Pixels" visualization has been a journaling staple for years because it solves exactly that: each day is a pixel, each month a row, the whole year fits on one screen.
+
+EmotionsMap implements that idea with your personal emotion palette. You spot cycles you couldn't see before, you notice which months are heavier — and it all stays local, nobody else sees your mosaic.
+
+Free: emotionsmap.com/get
+
+#MentalHealth #EmotionalIntelligence #Mindfulness #SelfAwareness #DigitalWellbeing`,
+      },
+    },
+    v3: {
+      es: {
+        long: `Tu diario, solo tuyo.
+
+Sin nube. Sin cuenta. Sin email para registrarte. Tus emociones se quedan en tu teléfono — donde deben estar.
+
+Descarga gratis: emotionsmap.com/get
+
+#PrivacidadDigital #SaludMental #DiarioPersonal #SinNube #Autocuidado #BienestarDigital #DiarioEmocional #PrivacyByDesign #EmotionsMap`,
+        short: `Tu diario, solo tuyo.
+Sin nube. Sin cuenta. Tus emociones se quedan en tu teléfono.
+
+emotionsmap.com/get
+
+#PrivacidadDigital #SaludMental`,
+        linkedin: `Cada vez que una app de salud mental me pide crear cuenta y subir mis datos a "la nube", cierro la app.
+
+No es paranoia. Es que tus emociones no son datos de marketing.
+
+EmotionsMap se diseñó al revés: sin cuenta, sin email, sin nube, sin tracking. Todo se queda en tu dispositivo, cifrado por el propio sistema operativo. Si pierdes el teléfono, pierdes los datos — y para mí ese es el precio justo a cambio de saber que nadie más los tiene.
+
+Gratis, iOS + Android: emotionsmap.com/get
+
+#PrivacyByDesign #PrivacidadDigital #SaludMental #BienestarDigital #SoberaniaDigital`,
+      },
+      en: {
+        long: `Your journal. Yours alone.
+
+No cloud. No account. No email signup. Your feelings stay on your phone — where they belong.
+
+Free download: emotionsmap.com/get
+
+#PrivacyByDesign #MentalHealth #DigitalPrivacy #SelfCare #JournalingDaily #DigitalWellbeing #OfflineFirst #PrivateJournal #EmotionsMap`,
+        short: `Your journal. Yours alone.
+No cloud. No account. Your feelings stay on your phone.
+
+emotionsmap.com/get
+
+#PrivacyByDesign #MentalHealth`,
+        linkedin: `Every time a mental health app asks me to create an account and sync my data to "the cloud", I close the app.
+
+It's not paranoia. It's that your feelings aren't marketing data.
+
+EmotionsMap was designed the other way around: no account, no email, no cloud, no tracking. Everything stays on your device, encrypted by the OS itself. Lose your phone, lose the data — and to me that's the fair price for knowing nobody else has them.
+
+Free, iOS + Android: emotionsmap.com/get
+
+#PrivacyByDesign #DigitalPrivacy #MentalHealth #DigitalWellbeing #DataSovereignty`,
+      },
+    },
+    v4: {
+      es: {
+        long: `Lo que viviste, a un toque.
+
+Diario integrado con búsqueda. Anota momentos, busca recuerdos y vuelve a ellos cuando los necesites.
+
+Descarga gratis: emotionsmap.com/get
+
+#DiarioEmocional #Journaling #SaludMental #BienestarEmocional #Mindfulness #Autocuidado #DiarioPersonal #ReflexiónDiaria #EmotionsMap`,
+        short: `Lo que viviste, a un toque.
+Diario con búsqueda. Anota momentos y vuelve a ellos cuando quieras.
+
+emotionsmap.com/get
+
+#Journaling #SaludMental`,
+        linkedin: `Hace meses anoté en mi diario: "viaje arizona, panas". No pensé que volvería a leerlo.
+
+Hoy, mirando el mes de mayo, lo busqué en EmotionsMap. Aparecieron tres días seguidos marcados como "excelente" con esa misma nota corta. No necesitaba más contexto — sabía exactamente qué fue.
+
+Esa es la idea: un diario integrado que no te exige escribir párrafos. Una frase basta. La búsqueda te lleva al recuerdo cuando lo necesites.
+
+emotionsmap.com/get
+
+#Journaling #SaludMental #Autoconocimiento #ReflexionPersonal #BienestarEmocional`,
+      },
+      en: {
+        long: `What you lived, one tap away.
+
+Built-in journal with search. Capture moments, search memories, and revisit them whenever you need.
+
+Free download: emotionsmap.com/get
+
+#JournalingDaily #MentalHealth #SelfReflection #Mindfulness #SelfCare #DigitalJournal #DailyJournal #EmotionalWellbeing #EmotionsMap`,
+        short: `What you lived, one tap away.
+Journal with search. Capture moments and revisit them anytime.
+
+emotionsmap.com/get
+
+#JournalingDaily #MentalHealth`,
+        linkedin: `Months ago I wrote in my journal: "arizona trip, friends". I didn't think I'd ever read it again.
+
+Today, looking back at May, I searched for it in EmotionsMap. Three consecutive days came up — all marked "excellent", all with that same short note. I didn't need more context — I knew exactly what it was.
+
+That's the idea: a built-in journal that doesn't ask you to write paragraphs. One sentence is enough. Search brings the memory back when you need it.
+
+emotionsmap.com/get
+
+#JournalingDaily #MentalHealth #SelfAwareness #PersonalReflection #EmotionalWellbeing`,
+      },
+    },
+    v5: {
+      es: {
+        long: `Empieza a mapear tu año emocional hoy.
+
+EmotionsMap es gratis, privado y disponible en español e inglés. Sin cuentas, sin nube, sin tracking.
+
+Descárgalo: emotionsmap.com/get
+App Store · Google Play
+
+#SaludMental #BienestarEmocional #MoodTracker #YearInPixels #DiarioEmocional #Mindfulness #Autocuidado #AppGratis #EmotionsMap`,
+        short: `Mapea tu año emocional. Gratis, privado, en ES + EN.
+
+emotionsmap.com/get
+App Store · Google Play
+
+#SaludMental #MoodTracker`,
+        linkedin: `Si llevas un año diciendo "tengo que empezar a anotar cómo me siento" pero nunca pasas del primer día, el problema no eres tú. Es la fricción.
+
+La mayoría de apps de mood tracking te piden 5 datos al inicio, te muestran 8 gráficos y te empujan a una cuenta premium. Eso mata la inercia.
+
+EmotionsMap funciona al revés: un toque para registrar, cero cuenta, cero ads premium, cero datos en la nube. Gratis en iOS y Android.
+
+emotionsmap.com/get
+
+#SaludMental #BienestarEmocional #Mindfulness #BienestarDigital #ProductividadPersonal`,
+      },
+      en: {
+        long: `Start mapping your emotional year today.
+
+EmotionsMap is free, private and available in English and Spanish. No accounts, no cloud, no tracking.
+
+Get it: emotionsmap.com/get
+App Store · Google Play
+
+#MentalHealth #MoodTracker #YearInPixels #JournalingDaily #SelfCare #Mindfulness #FreeApp #EmotionalWellbeing #EmotionsMap`,
+        short: `Map your emotional year. Free, private, in EN + ES.
+
+emotionsmap.com/get
+App Store · Google Play
+
+#MentalHealth #MoodTracker`,
+        linkedin: `If you've spent a year saying "I should start tracking how I feel" but never get past day one, the problem isn't you. It's the friction.
+
+Most mood-tracking apps ask you for 5 data points up front, show you 8 charts, and push you toward a premium account. That kills momentum.
+
+EmotionsMap works the other way: one tap to log, zero account, zero ads, zero data in the cloud. Free on iOS and Android.
+
+emotionsmap.com/get
+
+#MentalHealth #DigitalWellbeing #Mindfulness #SelfCare #ProductivityTools`,
+      },
+    },
+  };
+
+  const VARIANT_CLASSES = ['v1', 'v2', 'v3', 'v4', 'v5'];
+
+  const FEEDBACK = {
+    es: { copied: '✓ Copiado', error: '✗ Error', ig: '📋 IG / FB', xb: '📋 X / BlueSky', li: '📋 LinkedIn' },
+    en: { copied: '✓ Copied',  error: '✗ Error', ig: '📋 IG / FB', xb: '📋 X / BlueSky', li: '📋 LinkedIn' },
+  };
+
+  const KIND_TO_PLATFORM = { long: 'long', short: 'short', linkedin: 'linkedin' };
+  const KIND_TO_LABEL    = { long: 'ig',   short: 'xb',    linkedin: 'li' };
+
+  function currentLang() {
+    return document.documentElement.getAttribute('lang') === 'en' ? 'en' : 'es';
+  }
+
+  async function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } finally { document.body.removeChild(ta); }
+  }
+
+  function makeCopyBtn(variant, kind, originalLabel) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'copy-btn';
+    btn.dataset.variant = variant;
+    btn.dataset.kind = kind;
+    btn.textContent = originalLabel;
+    btn.addEventListener('click', async () => {
+      const lang = currentLang();
+      const platformKey = KIND_TO_PLATFORM[btn.dataset.kind] || 'long';
+      const text = COPIES[variant] && COPIES[variant][lang] && COPIES[variant][lang][platformKey];
+      if (!text) return;
+      try {
+        await copyText(text);
+        btn.textContent = FEEDBACK[lang].copied;
+        btn.classList.add('copied');
+      } catch (e) {
+        btn.textContent = FEEDBACK[lang].error;
+      }
+      setTimeout(() => {
+        const labelKey = KIND_TO_LABEL[btn.dataset.kind] || 'ig';
+        btn.textContent = FEEDBACK[currentLang()][labelKey];
+        btn.classList.remove('copied');
+      }, 1400);
+    });
+    return btn;
+  }
+
+  document.querySelectorAll('.gallery > div').forEach(wrap => {
+    const promo = wrap.querySelector('.promo');
+    const caption = wrap.querySelector('.caption');
+    if (!promo || !caption) return;
+    const variant = VARIANT_CLASSES.find(v => promo.classList.contains(v));
+    if (!variant || !COPIES[variant]) return;
+
+    const lang = currentLang();
+    const row = document.createElement('div');
+    row.className = 'copy-row';
+    row.appendChild(makeCopyBtn(variant, 'long',     FEEDBACK[lang].ig));
+    row.appendChild(makeCopyBtn(variant, 'short',    FEEDBACK[lang].xb));
+    row.appendChild(makeCopyBtn(variant, 'linkedin', FEEDBACK[lang].li));
+    caption.appendChild(row);
+  });
 })();
 </script>
 
