@@ -47,6 +47,14 @@ const Map<String, String> esEs = {
   'profile.stats.error_loading': 'Error al cargar estadísticas',
   'profile.settings.title': 'Configuración',
   'profile.settings.language.title': 'Idioma',
+  'profile.settings.reminder.title': 'Recordatorio diario',
+  'profile.settings.reminder.subtitle.on': 'Todos los días a las @time',
+  'profile.settings.reminder.subtitle.off': 'Activalo para no perder tu racha',
+  'profile.settings.reminder.permission_denied':
+      'Activá las notificaciones desde los ajustes del sistema',
+  'profile.settings.reminder.notification.title': '¿Cómo te fue hoy?',
+  'profile.settings.reminder.notification.body':
+      'Tomate un momento para registrar tu estado de ánimo.',
   'profile.settings.security.title': 'Seguridad',
   'profile.settings.security.subtitle': 'Configura tu PIN de seguridad',
   'profile.settings.signout.title': 'Cerrar sesión',
@@ -135,7 +143,7 @@ const Map<String, String> esEs = {
   'drawer.item.about.subtitle': 'Información de la app',
   'drawer.item.help.title': 'Ayuda',
   'drawer.item.help.subtitle': 'Guía de uso',
-  'drawer.version': 'Versión @version (@build)',
+  'drawer.version': 'Versión @version',
 
   // About dialog
   'about.title': 'Acerca de EmotionsMap',
@@ -195,7 +203,7 @@ const Map<String, String> esEs = {
   'recovery.button.send': 'Enviar enlace',
   'recovery.success.title': 'Email enviado',
   'recovery.success.message':
-      'Revisa tu bandeja de entrada para restablecer tu contraseña.',
+      'Revisa tu bandeja de entrada para restablecer tu contraseña. Si no lo encuentras, revisa también la carpeta de spam o correo no deseado.',
   'recovery.error.missing_email': 'Por favor ingresa tu email',
   'recovery.error.generic':
       'No se pudo enviar el email. Intenta nuevamente.',
@@ -207,6 +215,15 @@ const Map<String, String> esEs = {
   'register.error.passwords_mismatch': 'Las contraseñas no coinciden',
   'register.button.submit': 'Crear cuenta',
   'register.link.signin': '¿Ya tienes cuenta? Inicia sesión',
+  'update.title': 'Actualización disponible',
+  'update.message':
+      'Hay una versión más reciente de EmotionsMap con mejoras importantes. Para seguir usando la app necesitas actualizarla desde la tienda.',
+  'update.button': 'Actualizar ahora',
+
+  'register.email_notice.title': 'Usa un email real',
+  'register.email_notice.message':
+      'Asegúrate de registrarte con un email real al que tengas acceso. Lo usaremos para acciones críticas de tu cuenta en el futuro, como recuperar tu contraseña.',
+  'register.email_notice.button': 'Entendido',
 
   // Journal
   'journal.title': 'Mi Diario',

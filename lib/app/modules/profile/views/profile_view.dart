@@ -7,6 +7,7 @@ import 'package:moodgrid/app/core/widgets/ad_banner.dart';
 import 'package:moodgrid/app/modules/auth/controllers/auth_controller.dart';
 import 'package:moodgrid/app/modules/profile/controllers/profile_controller.dart';
 import 'package:moodgrid/app/modules/profile/widgets/language_selector_tile.dart';
+import 'package:moodgrid/app/modules/profile/widgets/reminder_settings_tile.dart';
 import 'package:moodgrid/app/routes/app_routes.dart';
 
 class ProfileView extends GetView<ProfileController> {
@@ -273,6 +274,8 @@ class ProfileView extends GetView<ProfileController> {
             child: Column(
               children: [
                 const LanguageSelectorTile(),
+                const Divider(height: 1),
+                const ReminderSettingsTile(),
                 const Divider(height: 1),
                 ListTile(
                   leading: Container(

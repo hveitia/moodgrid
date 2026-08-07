@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:moodgrid/app/core/services/locale_service.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
+import 'package:moodgrid/app/core/widgets/language_sheet.dart';
 import 'package:moodgrid/app/routes/app_routes.dart';
 
 class LandingView extends StatelessWidget {
@@ -16,6 +18,29 @@ class LandingView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: Obx(() {
+                  final isSpanish = LocaleService
+                          .instance.currentLocaleRx.value.languageCode ==
+                      'es';
+                  return TextButton.icon(
+                    onPressed: () => showLanguageSheet(context),
+                    icon: Icon(
+                      Icons.language,
+                      size: 20,
+                      color: AppColors.textSecondary,
+                    ),
+                    label: Text(
+                      isSpanish ? 'ES' : 'EN',
+                      style: TextStyle(
+                        color: AppColors.textSecondary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  );
+                }),
+              ),
               const Spacer(),
 
               Image.asset(

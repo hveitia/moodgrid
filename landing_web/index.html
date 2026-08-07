@@ -43,25 +43,108 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "MobileApplication",
-      "name": "EmotionsMap",
-      "operatingSystem": "iOS, Android",
-      "applicationCategory": "HealthApplication",
-      "description": "Log your daily mood with a visual grid. Discover emotional patterns, write in your journal, and take care of your mental health.",
-      "url": "https://emotionsmap.com/",
-      "image": "https://emotionsmap.com/og-image-v2.png",
-      "inLanguage": ["en", "es"],
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "downloadUrl": "https://apps.apple.com/app/feelmap/id6756886570",
-      "installUrl": "https://play.google.com/store/apps/details?id=com.hveitia.moodgrid.moodgrid",
-      "author": {
-        "@type": "Organization",
-        "name": "EmotionsMap"
-      }
+      "@graph": [
+        {
+          "@type": "MobileApplication",
+          "@id": "https://emotionsmap.com/#app",
+          "name": "EmotionsMap",
+          "operatingSystem": "iOS, Android",
+          "applicationCategory": "HealthApplication",
+          "description": "Log your daily mood with a visual grid. Discover emotional patterns, write in your journal, and take care of your mental health. 100% private and offline.",
+          "url": "https://emotionsmap.com/",
+          "image": "https://emotionsmap.com/og-image-v2.png",
+          "inLanguage": ["en", "es"],
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "featureList": [
+            "Monthly mood mosaic",
+            "Year in pixels",
+            "Journal with search",
+            "Word cloud",
+            "Mood statistics and streaks",
+            "PIN lock",
+            "JSON export and import"
+          ],
+          "downloadUrl": "https://apps.apple.com/app/feelmap/id6756886570",
+          "installUrl": "https://play.google.com/store/apps/details?id=com.hveitia.moodgrid.moodgrid",
+          "author": {
+            "@type": "Organization",
+            "@id": "https://emotionsmap.com/#org"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://emotionsmap.com/#org",
+          "name": "EmotionsMap",
+          "url": "https://emotionsmap.com/",
+          "logo": "https://emotionsmap.com/favicon.png"
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://emotionsmap.com/#website",
+          "name": "EmotionsMap",
+          "url": "https://emotionsmap.com/",
+          "inLanguage": ["en", "es"],
+          "publisher": { "@id": "https://emotionsmap.com/#org" }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://emotionsmap.com/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is EmotionsMap free?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, EmotionsMap is free to download and use. All core features are available from day one."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is my data safe?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Your data is stored locally on your device in an encrypted SQLite database. Nothing is uploaded to any server. You can lock the app with a PIN and export backups whenever you want."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I export my data?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. You can export your full history as a JSON file for backup. You can also generate images of your year in pixels or a specific month to share."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is it available on iOS and Android?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, on the App Store for iPhone and Google Play for Android. The experience is the same on both platforms."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does it need an internet connection?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. EmotionsMap works 100% offline. You only need internet for the initial download."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How is the word cloud built?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We analyze the words in your daily reflections locally on your device. Size shows frequency and color reflects the average mood associated with each word."
+              }
+            }
+          ]
+        }
+      ]
     }
     </script>
   </head>

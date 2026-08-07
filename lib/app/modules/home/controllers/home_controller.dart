@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:moodgrid/app/core/services/ads_service.dart';
+import 'package:moodgrid/app/core/services/analytics_service.dart';
 import 'package:moodgrid/app/core/utils/date_format_helper.dart';
 import 'package:moodgrid/app/core/utils/snackbar_helper.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
@@ -111,6 +113,26 @@ class HomeController extends GetxController {
         kind: AppSnackKind.success,
         duration: const Duration(seconds: 2),
       );
+
+      // Interstitial solo tras escribir una reflexion nueva o editada,
+      // nunca tras el registro rapido de mood. Respeta el cap del servicio.
+      final wroteReflection = comment != null &&
+          comment.trim().isNotEmpty &&
+          comment != existingRecord?.comment;
+
+      unawaited(AnalyticsService.instance.logMoodLogged(
+        colorIndex: colorIndex,
+        hasComment: comment != null && comment.trim().isNotEmpty,
+        isUpdate: existingRecord != null,
+      ));
+      if (wroteReflection) {
+        unawaited(AnalyticsService.instance
+            .logReflectionSaved(length: comment.trim().length));
+      }
+
+      if (wroteReflection) {
+        await AdsService.instance.showInterstitialIfAllowed();
+      }
     } catch (e) {
       appSnackBar(
         title: 'common.error'.tr,
@@ -128,6 +150,8 @@ class HomeController extends GetxController {
       isLoading.value = true;
       await _databaseHelper.deleteRecordByDate(date);
       await loadRecords();
+
+      unawaited(AnalyticsService.instance.logMoodDeleted());
 
       appSnackBar(
         title: 'common.success'.tr,
@@ -154,6 +178,9 @@ class HomeController extends GetxController {
 
       // Primero terminar el loading antes de mostrar el diálogo de compartir
       isLoading.value = false;
+
+      unawaited(
+          AnalyticsService.instance.logDataExported(recordCount: records.length));
 
       // Compartir archivo
       await SharePlus.instance.share(
@@ -191,6 +218,9 @@ class HomeController extends GetxController {
       final importedCount = await _databaseHelper.importFromFile(file);
 
       await loadRecords();
+
+      unawaited(AnalyticsService.instance
+          .logDataImported(recordCount: importedCount));
 
       appSnackBar(
         title: 'common.success'.tr,

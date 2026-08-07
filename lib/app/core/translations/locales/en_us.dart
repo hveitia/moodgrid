@@ -47,6 +47,14 @@ const Map<String, String> enUs = {
   'profile.stats.error_loading': 'Failed to load statistics',
   'profile.settings.title': 'Settings',
   'profile.settings.language.title': 'Language',
+  'profile.settings.reminder.title': 'Daily reminder',
+  'profile.settings.reminder.subtitle.on': 'Every day at @time',
+  'profile.settings.reminder.subtitle.off': 'Turn it on to keep your streak',
+  'profile.settings.reminder.permission_denied':
+      'Enable notifications in your system settings',
+  'profile.settings.reminder.notification.title': 'How are you feeling today?',
+  'profile.settings.reminder.notification.body':
+      'Take a moment to log your mood.',
   'profile.settings.security.title': 'Security',
   'profile.settings.security.subtitle': 'Set up your security PIN',
   'profile.settings.signout.title': 'Sign out',
@@ -195,7 +203,7 @@ const Map<String, String> enUs = {
   'recovery.button.send': 'Send link',
   'recovery.success.title': 'Email sent',
   'recovery.success.message':
-      'Check your inbox to reset your password.',
+      'Check your inbox to reset your password. If you can\'t find it, check your spam or junk folder too.',
   'recovery.error.missing_email': 'Please enter your email',
   'recovery.error.generic': 'Could not send the email. Please try again.',
 
@@ -206,6 +214,15 @@ const Map<String, String> enUs = {
   'register.error.passwords_mismatch': 'Passwords do not match',
   'register.button.submit': 'Create account',
   'register.link.signin': 'Already have an account? Sign in',
+  'update.title': 'Update available',
+  'update.message':
+      'A newer version of EmotionsMap with important improvements is available. To keep using the app you need to update it from the store.',
+  'update.button': 'Update now',
+
+  'register.email_notice.title': 'Use a real email',
+  'register.email_notice.message':
+      'Make sure you sign up with a real email you have access to. It will be used for critical account actions in the future, such as recovering your password.',
+  'register.email_notice.button': 'Got it',
 
   // Journal
   'journal.title': 'My Journal',

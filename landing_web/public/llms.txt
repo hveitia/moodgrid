@@ -1,0 +1,40 @@
+# EmotionsMap
+
+> EmotionsMap is a free mood tracker app for iOS and Android. Log your daily mood with one tap on a visual grid inspired by GitHub's contribution graph ("year in pixels"), write journal entries, and discover emotional patterns over time. 100% private: all data stays on the device (local SQLite), no account required, works fully offline.
+
+EmotionsMap is designed for people who want a simple, private way to track their emotional wellbeing without cloud sync, sign-ups, or data collection. Available in English and Spanish.
+
+## Key facts
+
+- Price: free to download and use (iOS App Store and Google Play)
+- Platforms: iPhone (iOS) and Android
+- Privacy: all data stored locally on the device in SQLite; nothing is uploaded to any server; no account, email, or phone number required; no data is sold or shared with third parties
+- Offline: works 100% offline after the initial download
+- Languages: English and Spanish
+
+## Features
+
+- Monthly mosaic: each month as a colorful grid where every cell is a day painted with your mood (Excellent, Good, Neutral, Difficult, Bad)
+- Year in pixels: 365 days of moods on a single screen
+- Journal with search: write daily reflections and search through them
+- Word cloud: most-used words from your journal, colored by the average mood associated with each word, computed locally on the device
+- Statistics: mood distribution, streaks, most productive month
+- PIN lock: protect the journal with a PIN
+- Export and import: full history as JSON backup, or share images of your year/month
+
+## Links
+
+- [Homepage](https://emotionsmap.com/)
+- [Download (auto-detects platform)](https://emotionsmap.com/get)
+- [App Store](https://apps.apple.com/app/feelmap/id6756886570)
+- [Google Play](https://play.google.com/store/apps/details?id=com.hveitia.moodgrid.moodgrid)
+- [Privacy policy](https://emotionsmap.com/privacy)
+- [Terms of service](https://emotionsmap.com/terms)
+- [Support](https://emotionsmap.com/support)
+
+## FAQ
+
+- Is EmotionsMap free? Yes, free to download and use; all core features are available from day one.
+- Is my data safe? Data is stored locally on the device in an encrypted SQLite database; nothing is uploaded to any server; the app can be locked with a PIN.
+- Can I export my data? Yes, the full history can be exported as JSON, and the year or a month can be exported as an image.
+- Does it need internet? No, it works 100% offline; internet is only needed for the initial download.

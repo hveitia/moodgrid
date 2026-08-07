@@ -1,0 +1,11 @@
+{
+  "parameters": {
+    "version": {
+      "defaultValue": {
+        "value": "1.0.0"
+      },
+      "description": "Minimum required app version. Devices running a lower version show a blocking update dialog that links to the stores.",
+      "valueType": "STRING"
+    }
+  }
+}

@@ -5,6 +5,7 @@ plugins {
     id("com.android.application")
     // START: FlutterFire Configuration
     id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
     // END: FlutterFire Configuration
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
@@ -24,6 +25,8 @@ android {
     ndkVersion = "29.0.14033849"
 
     compileOptions {
+        // Requerido por flutter_local_notifications para programar avisos.
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -41,9 +44,9 @@ android {
             }
         }
         minSdk = 29
-        targetSdk = 35
-        versionCode = 5
-        versionName = "2.0.0"
+        targetSdk = 36
+        versionCode = 8
+        versionName = "4.0.0"
     }
 
     signingConfigs {
@@ -68,4 +71,8 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:moodgrid/app/core/services/ads_service.dart';
+import 'package:moodgrid/app/core/services/analytics_service.dart';
 import 'package:moodgrid/app/core/utils/date_format_helper.dart';
 import 'package:moodgrid/app/core/utils/snackbar_helper.dart';
 import 'package:moodgrid/app/core/values/app_colors.dart';
@@ -39,6 +41,14 @@ class ReflectionsController extends GetxController {
     super.onInit();
     loadStatistics();
     loadYearRecords();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    // Interstitial de transicion al entrar a la pantalla de analisis.
+    // El cap del servicio (2 por sesion, gap de 3 min) evita abusos.
+    AdsService.instance.showInterstitialIfAllowed();
   }
 
   Future<void> loadStatistics() async {
@@ -86,6 +96,11 @@ class ReflectionsController extends GetxController {
 
     // Calcular rachas
     _calculateStreaks(recordsWithComments);
+
+    unawaited(AnalyticsService.instance.logStreak(
+      current: currentStreak.value,
+      longest: longestStreak.value,
+    ));
 
     // Mes con más comentarios
     _calculateTopMonth(recordsWithComments);

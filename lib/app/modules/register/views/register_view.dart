@@ -18,11 +18,48 @@ class _RegisterViewState extends State<RegisterView> {
   final _authController = Get.find<AuthController>();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showEmailNotice();
+    });
+  }
+
+  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  void _showEmailNotice() {
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Row(
+          children: [
+            Icon(Icons.mark_email_read_outlined,
+                color: Theme.of(context).colorScheme.primary),
+            const SizedBox(width: 12),
+            Expanded(child: Text('register.email_notice.title'.tr)),
+          ],
+        ),
+        content: Text(
+          'register.email_notice.message'.tr,
+          style: const TextStyle(height: 1.5),
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Get.back(),
+            child: Text('register.email_notice.button'.tr),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    );
   }
 
   Future<void> _register() async {

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:moodgrid/app/core/services/ads_service.dart';
 import 'package:moodgrid/app/core/utils/text_processor.dart';
 import 'package:moodgrid/app/data/models/daily_record.dart';
 import 'package:moodgrid/app/data/models/word_cloud_item.dart';
@@ -17,6 +18,14 @@ class WordCloudController extends GetxController {
   void onInit() {
     super.onInit();
     loadWordCloud();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    // Interstitial de transicion al entrar a la pantalla de analisis.
+    // El cap del servicio (2 por sesion, gap de 3 min) evita abusos.
+    AdsService.instance.showInterstitialIfAllowed();
   }
 
   Future<void> loadWordCloud() async {

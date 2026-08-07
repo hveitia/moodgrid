@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:moodgrid/app/core/utils/snackbar_helper.dart';
+import 'package:moodgrid/app/core/values/app_colors.dart';
 import 'package:moodgrid/app/modules/auth/controllers/auth_controller.dart';
 import 'package:moodgrid/app/routes/app_routes.dart';
 
@@ -16,6 +16,7 @@ class _LoginViewState extends State<LoginView> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _authController = Get.find<AuthController>();
+  bool _recoveryEmailSent = false;
 
   @override
   void dispose() {
@@ -157,15 +158,12 @@ class _LoginViewState extends State<LoginView> {
       await _authController.sendPasswordResetEmail(
         controller.text.trim(),
       );
-      // Cerrar primero la bottom sheet para que el SnackBar quede limpio.
       if (Get.isBottomSheetOpen ?? false) {
         Get.back();
       }
-      appSnackBar(
-        title: 'recovery.success.title'.tr,
-        message: 'recovery.success.message'.tr,
-        kind: AppSnackKind.success,
-      );
+      if (mounted) {
+        setState(() => _recoveryEmailSent = true);
+      }
     } catch (e) {
       // Error ya mostrado por AuthController; el sheet permanece abierto
       // para que el usuario pueda corregir el email.
@@ -186,6 +184,13 @@ class _LoginViewState extends State<LoginView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                if (_recoveryEmailSent) ...[
+                  _RecoveryEmailBanner(
+                    onDismiss: () =>
+                        setState(() => _recoveryEmailSent = false),
+                  ),
+                  const SizedBox(height: 16),
+                ],
                 const SizedBox(height: 32),
 
                 Center(
@@ -263,6 +268,61 @@ class _LoginViewState extends State<LoginView> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _RecoveryEmailBanner extends StatelessWidget {
+  final VoidCallback onDismiss;
+
+  const _RecoveryEmailBanner({required this.onDismiss});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.moodExcellent.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppColors.moodExcellent.withValues(alpha: 0.4),
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.mark_email_read_outlined,
+            color: AppColors.moodExcellent,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'recovery.success.title'.tr,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'recovery.success.message'.tr,
+                  style: const TextStyle(height: 1.4),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: onDismiss,
+            child: const Padding(
+              padding: EdgeInsets.all(4),
+              child: Icon(Icons.close, size: 18),
+            ),
+          ),
+        ],
       ),
     );
   }
